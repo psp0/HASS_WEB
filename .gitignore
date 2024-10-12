@@ -1,0 +1,48 @@
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore vendor directory (Composer dependencies)
+vendor/
+
+# Ignore environment files (sensitive info)
+.env
+
+# Ignore cache and log files
+cache/
+logs/
+
+# Ignore user-uploaded files (optional)
+uploads/
+
+# Ignore IDE-specific files (e.g., for VSCode or PhpStorm)
+.vscode/
+.idea/
+
+# Ignore compiled code and build artifacts
+*.class
+*.log
+
+# Ignore temporary files
+*.tmp
+*.swp
+*.bak
+
+# Ignore specific PHPStorm files
+/.phpstorm.meta.php
+
+# Ignore Composer lock file (optional, depends on workflow)
+composer.lock
+
+# Ignore PHPUnit result files
+.phpunit.result.cache
+
+# Ignore node modules (if using Node.js with PHP project)
+node_modules/
+
+# Ignore SASS/SCSS cache files (if using SASS for styles)
+.sass-cache/
+
+.fuse_*
+
+config.php
