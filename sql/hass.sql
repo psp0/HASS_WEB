@@ -9,13 +9,12 @@ CREATE TABLE "customer" (
 
 CREATE TABLE "request" (
 	"request_id"	NUMBER(10)		NOT NULL,
-	"customer_id"	NUMBER(10)		NOT NULL,
+	"subscription_id"	NUMBER(10)		NOT NULL,
 	"date_created"	DATE		NOT NULL,
 	"date_edited"	DATE		NULL,
 	"type"	VARCHAR2(20)		NOT NULL,
 	"status"	VARCHAR2(20)		NOT NULL,
-	"comment"	VARCHAR2(100)		NULL,
-	"model_id"	NUMBER(10)		NULL
+	"comment"	VARCHAR2(100)		NULL
 );
 
 CREATE TABLE "product" (
@@ -44,9 +43,9 @@ CREATE TABLE "visit" (
 CREATE TABLE "subscription" (
 	"subscription_id"	NUMBER(10)		NOT NULL,
 	"customer_id"	NUMBER(10)		NOT NULL,
-	"serial_number"	VARCHAR2(50)		NOT NULL,
-	"subscription_date"	NUMBER(10)		NOT NULL,
-	"return_date"	NUMBER(10)		NULL,
+	"model_id"	NUMBER(10)		NOT NULL,
+	"subscription_date"	DATE		NULL,
+	"expired_date"	DATE		NULL,
 	"date_created"	DATE		NOT NULL
 );
 
@@ -63,8 +62,7 @@ CREATE TABLE "model" (
 	"manufacturer"	VARCHAR2(50)		NOT NULL,
 	"category"	VARCHAR2(50)		NOT NULL,
 	"release_year"	NUMBER(4)		NOT NULL,
-	"stock_qty"	NUMBER(10)		NOT NULL,
-	"monthly_fee"	NUMBER(10,2)		NOT NULL
+	"yearly_fee"	NUMBER(10,2)		NOT NULL
 );
 
 CREATE TABLE "model_rating" (
@@ -137,6 +135,11 @@ CREATE TABLE "request_preference_date" (
 	"prefer_date"	DATE		NOT NULL
 );
 
+CREATE TABLE "subscription_product" (
+	"subscription_id"	NUMBER(10)		NOT NULL,
+	"serial_number"	VARCHAR2(50)		NOT NULL
+);
+
 ALTER TABLE "customer" ADD CONSTRAINT "PK_CUSTOMER" PRIMARY KEY (
 	"customer_id"
 );
@@ -194,7 +197,7 @@ ALTER TABLE "model_common_spec" ADD CONSTRAINT "PK_MODEL_COMMON_SPEC" PRIMARY KE
 	"model_id"
 );
 
-ALTER TABLE "product_repair_detail" ADD CONSTRAINT "PK_prd_REPAIR_DETAIL" PRIMARY KEY (
+ALTER TABLE "product_repair_detail" ADD CONSTRAINT "PK_PRODUCT_REPAIR_DETAIL" PRIMARY KEY (
 	"serial_number"
 );
 
@@ -206,6 +209,10 @@ ALTER TABLE "request_preference_date" ADD CONSTRAINT "PK_REQUEST_PREFERENCE_DATE
 	"preference_id"
 );
 
+ALTER TABLE "subscription_product" ADD CONSTRAINT "PK_SUBSCRIPTION_PRODUCT" PRIMARY KEY (
+	"subscription_id"
+);
+
 ALTER TABLE "customer_auth" ADD CONSTRAINT "FK_cstmr_TO_cstmr_auth" FOREIGN KEY (
 	"customer_id"
 )
@@ -213,7 +220,7 @@ REFERENCES "customer" (
 	"customer_id"
 );
 
-ALTER TABLE "model_rating" ADD CONSTRAINT "FK_cstmr_TO_model_rating" FOREIGN KEY (
+ALTER TABLE "model_rating" ADD CONSTRAINT "FK_cstmr_TO_mdl_rating" FOREIGN KEY (
 	"customer_id"
 )
 REFERENCES "customer" (
@@ -275,3 +282,19 @@ ALTER TABLE "customer_address" ADD CONSTRAINT "FK_cstmr_TO_cstmr_address" FOREIG
 REFERENCES "customer" (
 	"customer_id"
 );
+
+ALTER TABLE "subscription_product" ADD CONSTRAINT "FK_sub_TO_sub_product" FOREIGN KEY (
+	"subscription_id"
+)
+REFERENCES "subscription" (
+	"subscription_id"
+);
+
+CREATE SEQUENCE "r_seq" START WITH 1 INCREMENT BY 1 NOCACHE;
+CREATE SEQUENCE "rpd_seq" START WITH 1 INCREMENT BY 1 NOCACHE;
+CREATE SEQUENCE "v_seq" START WITH 1 INCREMENT BY 1 NOCACHE;
+CREATE SEQUENCE "w_seq" START WITH 1 INCREMENT BY 1 NOCACHE;
+CREATE SEQUENCE "s_seq" START WITH 1 INCREMENT BY 1 NOCACHE;
+CREATE SEQUENCE "c_seq" START WITH 1 INCREMENT BY 1 NOCACHE;
+CREATE SEQUENCE "m_seq" START WITH 1 INCREMENT BY 1 NOCACHE;
+CREATE SEQUENCE "prd_seq" START WITH 1 INCREMENT BY 1 NOCACHE;
