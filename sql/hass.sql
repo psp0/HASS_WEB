@@ -79,8 +79,7 @@ CREATE TABLE "model_aircleaner_spec" (
 	"filter_type"	VARCHAR2(20)		NOT NULL,
 	"pm_sensor"	VARCHAR2(20)		NOT NULL,
 	"filter_grade"	VARCHAR2(10)		NOT NULL,
-	"ccm_grade"	VARCHAR2(2)		NOT NULL,
-	"cadr"	NUMBER(5, 1)		NOT NULL
+	"coverage_area"	NUMBER(5, 1)		NOT NULL
 );
 
 CREATE TABLE "model_tv_spec" (
