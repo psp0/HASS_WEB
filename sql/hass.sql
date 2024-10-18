@@ -1,8 +1,8 @@
 CREATE TABLE CUSTOMERS (
 	"customer_id"	NUMBER(10)		NOT NULL,
 	"customer_name"	VARCHAR2(20)		NOT NULL,
-	"main_phone_number"	VARCHAR(20)		NOT NULL,
-	"sub_phone_number"	VARCHAR(20)		NULL,
+	"main_phone_number"	VARCHAR2(20)		NOT NULL,
+	"sub_phone_number"	VARCHAR2(20)		NULL,
 	"date_created"	DATE		NOT NULL,
 	"date_edited"	DATE		NULL
 );
