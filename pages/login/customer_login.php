@@ -1,21 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>고객 로그인</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f0f0f0;
-        }
-
+<style>
         .login-container {
             background-color: white;
             padding: 20px;
@@ -101,13 +84,17 @@
             background-color: #45a049; 
         }
     </style>
-</head>
-<body>
+    
+<?php
+require '../../config.php';
+include BASE_PATH . '/includes/customer_header.php';
+?>
+    
     <div class="login-container">
         <div class="header-container">
             <h2>고객 로그인</h2>
-            <a href="pages/login/worker_login.php" class="login-button">기사 로그인</a>
-            <a href="pages/login/company_login.php" class="login-button">회사 로그인</a>
+            <a href="<?php echo TEAM_PATH; ?>/pages/login/worker_login.php" class="login-button">기사 로그인</a>
+            <a href="<?php echo TEAM_PATH; ?>/pages/login/company_login.php" class="login-button">회사 로그인</a>       
         </div>
 
         <form action="pages/login/login_main.php" method="POST">
@@ -119,5 +106,7 @@
             </div>
         </form>
     </div>
-</body>
-</html>
+
+    <?php
+    include BASE_PATH . '/includes/footer.php';
+?>
