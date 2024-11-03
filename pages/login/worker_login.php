@@ -1,21 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>고객 로그인</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f0f0f0;
-        }
-
+<style>
         .login-container {
             background-color: white;
             padding: 20px;
@@ -46,7 +29,6 @@
             border-radius: 5px;
             text-decoration: none;
             font-size: 14px;
-            cursor: pointer;
         }
 
         .login-button:hover {
@@ -60,36 +42,70 @@
             font-size: 16px;
         }
 
-        .login-container button {
-            padding: 10px;
+        .button-container {
+            display: flex; 
+            justify-content: space-between; 
+            margin-top: 10px; 
+            font-size: 14px;
+        }
+
+        .button-container button {
+            padding: 8px;
             background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            width: 50%;
-            margin-top: 10px;
+            flex: 1; 
+            margin: 0 5px; 
         }
 
-        .login-container button:hover {
+        .button-container button:hover {
             background-color: #45a049;
         }
+
+        .signup-button {
+            padding: 10px; 
+            background-color: gray; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            text-decoration: none; 
+            display: flex; 
+            justify-content: center;
+            align-items: center; 
+            flex: 1; 
+            margin: 0 5px; 
+            font-size: 14px;
+        }
+
+        .signup-button:hover {
+            background-color: #45a049; 
+        }
     </style>
-</head>
-<body>
+    
+<?php
+require '../../config.php';
+include BASE_PATH . '/includes/worker_header.php';
+?>
+    
 
     <div class="login-container">
         <div class="header-container">
             <h2>기사 로그인</h2>
-            <a href="pages/login/login_main.php" class="login-button">고객 로그인</a>
-            <a href="pages/login/company_login.php" class="login-button">회사 로그인</a>
+            <a href="<?php echo TEAM_PATH; ?>/pages/login/customer_login.php" class="login-button">고객 로그인</a>     
+            <a href="<?php echo TEAM_PATH; ?>/pages/login/company_login.php" class="login-button">회사 로그인</a>
         </div>
 
         <form action="pages/login/worker_login.php" method="POST">
             <input type="text" name="id" placeholder="ID" required>
             <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">로그인</button>
+            <div class="button-container">
+                <button type="submit">로그인</button>                
+            </div>
         </form>
     </div>
-</body>
-</html>
+    <?php
+    include BASE_PATH . '/includes/footer.php';
+?>

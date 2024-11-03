@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>회원가입</title>
-    <style>
+
+<style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -111,6 +106,7 @@
             vertical-align: super; 
         }
     </style>
+
     <script>
         function openPostcode() {
             new daum.Postcode({
@@ -138,9 +134,12 @@
         });
     }
     </script>
-</head>
 
-<body>
+
+<?php
+require '../../config.php';
+include BASE_PATH . '/includes/customer_header.php';
+?>
     <div class="signup-container">
         <form action="pages/login/signup.php" method="POST">
             <label for="userID">ID <span class="required">*</span></label> 
@@ -174,5 +173,7 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
-</body>
-</html>
+    
+    <?php
+    include BASE_PATH . '/includes/footer.php';
+?>
