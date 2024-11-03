@@ -122,14 +122,27 @@
         }
 
         function checkDuplicate() {
-            ;
-        }
+        var userID = document.querySelector('input[name="id"]').value;
+
+        $.ajax({
+            url: "/check_duplicate.php", // 서버에 중복확인 요청을 보낼 PHP 파일
+            type: "POST",
+            data: { id: userID },
+            success: function(response) {
+                if (response === "exists") {
+                    alert("이미 사용 중인 ID입니다.");
+                } else if (response === "available") {
+                    alert("사용 가능한 ID입니다.");
+                }
+            }
+        });
+    }
     </script>
 </head>
 
 <body>
     <div class="signup-container">
-        <form action="/signup" method="POST">
+        <form action="pages/login/signup.php" method="POST">
             <label for="userID">ID <span class="required">*</span></label> 
             <div class="postal-container"> 
                 <input type="text" name="id">
