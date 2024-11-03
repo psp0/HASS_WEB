@@ -1,6 +1,6 @@
 <?php
 require 'config.php';
-include BASE_PATH . '/includes/header.php';
+include BASE_PATH . '/includes/customer_header.php';
 ?>
 
     <div class="container">
