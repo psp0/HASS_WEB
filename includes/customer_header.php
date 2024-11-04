@@ -50,6 +50,10 @@
 <body>
 <header>
         <h1><a href="<?php echo TEAM_PATH; ?>/index.php">HASS</a></h1>
+        <a href="<?php echo TEAM_PATH; ?>/pages/customer/model/air_cleaner.php" class="icon-button">공기청정기 구독</a>           
+        <a href="<?php echo TEAM_PATH; ?>/pages/customer/model/dryer.php" class="icon-button">건조기 구독</a>           
+        <a href="<?php echo TEAM_PATH; ?>/pages/customer/model/tv.php" class="icon-button">TV 구독</a>           
+        <a href="<?php echo TEAM_PATH; ?>/pages/customer/model/washing_machine.php" class="icon-button">세탁기 구독</a>           
         <div class="button-container">
             <a href="<?php echo TEAM_PATH; ?>/pages/login/customer_login.php" class="login-button">로그인</a>
             <a href="<?php echo TEAM_PATH; ?>/pages/customer/my_info/my_info.php" class="icon-button" title="나의 정보">          
