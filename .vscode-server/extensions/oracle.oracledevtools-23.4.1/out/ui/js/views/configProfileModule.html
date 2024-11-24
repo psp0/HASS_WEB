@@ -1,0 +1,66 @@
+<div class="dbmsCloudBody">
+
+  <div class="dbmsCloudBodyHeaderContainer">
+    <oj-label slot="label">
+      <label class="compilerDlgHeader">
+        <oj-bind-text value="[[labelTexts.configureAIProfilesTitle]]"></oj-bind-text>
+      </label>
+    </oj-label>
+  </div>
+
+  <!-- conn name and username -->
+  <div class="dbmsCloudBodyInputContainer">
+    <!-- description -->
+    <div style="padding: 16px 0px;">
+      <label class="llmConfigSubHeader">
+          <oj-bind-text value="[[labelTexts.fullDesc]]"></oj-bind-text>
+      </label>
+    </div>
+    <!-- connection name -->
+    <div class="oj-flex dbmsCloudInputItem" style="padding-top: 8px;">
+      <div class="oj-flex-item dbmsCloudInputLabel">
+        <oj-label slot="label" for="connNameCbId">
+          <label class="leftalign">
+            <p><oj-bind-text value="[[labelTexts.connectionName]]"></oj-bind-text></p>
+          </label>
+        </oj-label>
+      </div>
+      <div class="oj-flex-item dbmsCloudInputValue">
+        <oj-combobox-one id="connNameCbId" options="[[connectionNamesDP]]" value="{{connectionNameValue}}"
+          on-value-changed="[[onConnectionNameChanged]]" maximum-result-count="0"
+          onkeydown='javascript: if((event.key != "Tab")){ return false;}' onCut="return false;"
+          onpaste="return false;"></oj-combobox-one>
+      </div>
+    </div>
+    <!-- username -->
+    <div class="oj-flex dbmsCloudInputItem">
+      <div class="oj-flex-item dbmsCloudInputLabel">
+        <oj-label slot="label" for="connectedUser">
+          <label class="leftalign">
+            <p><oj-bind-text value="[[labelTexts.username]]"></oj-bind-text></p>
+          </label>
+        </oj-label>
+      </div>
+      <div class="oj-flex-item dbmsCloudInputValue">
+        <oj-input-text id="connectedUser" value="[[connectedUser]]" disabled="true"></oj-input-text>
+        <oj-bind-if test="[[isGettingUser]]">
+          <oj-progress-circle size="sm" value="-1" style="padding-left: 5px;"></oj-progress-circle>
+        </oj-bind-if>
+      </div>
+    </div>
+    
+  </div>
+
+  <div id="profileTabRowId">
+    <oj-tab-bar id="configProfileTabBar" selection="{{selectedTab}}" data="[[tabDataProvider]]" edge="top" on-selection-changed="[[onTabChanged]]">
+      <template slot="itemTemplate" data-oj-as="item">
+        <a href="#">
+          <oj-bind-text value="[[item.data.name]]"> </oj-bind-text>
+        </a>
+      </template>
+    </oj-tab-bar>
+  </div>
+  <oj-module config='[[moduleConfig]]' style="background-color: transparent !important" ></oj-module>
+
+</div>
+<oj-messages position="[[msgPos]]" messages="[[messagesDataProvider]]" display="notification"></oj-messages>

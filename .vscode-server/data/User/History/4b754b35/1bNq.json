@@ -1,0 +1,9 @@
+{
+    "workbench.colorTheme": "Visual Studio Light",
+    "explorer.confirmDelete": false,
+    "remote.SSH.remotePlatform": {
+        "203.249.87.58": "linux"
+    },
+    "breadcrumbs.enabled": false,
+    "editor.stickyScroll.enabled": false
+}

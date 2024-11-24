@@ -1,0 +1,79 @@
+
+ <template id="dataTemplate" data-oj-as='ds'>   
+      <div class="templateRoot">
+           <!--Please take care of enclosing div elements inside this template while merging or changing otherwise things will stop working. -->
+       
+        <oj-bind-if test="{{ds.data.dataSourceType === 2}}">
+          <div :id="[['module'+ ds.observableIndex()]]">
+            <!--If data source is grid type show UI as as per datagrid -->
+            <div :id="[['module'+ ds.data.queryId]]"
+              data-bind="ojModule: { name: 'queryResultsModule' , params : { gridData : ds.data , moduleRenderingCompleted :ds. moduleRenderingCompleted,  index : ds.observableIndex ,  uiMode : uiDisplayMode }}">
+            </div> 
+            <div class="spacer2"></div>
+          </div>
+        </oj-bind-if>
+        <oj-bind-if test="{{ds.data.dataSourceType === 3}}">
+          <div :id="[['module'+ ds.observableIndex()]]">
+            <!--If data source is code object output type show UI as as per code object -->
+            <div :id="[['module'+ ds.data.queryId]]"
+              data-bind="ojModule: { name: 'codeObjectResultModule' , params : { codeObjectResults : ds.data , moduleRenderingCompleted : ds.moduleRenderingCompleted, index : ds.observableIndex }}">
+            </div>
+          </div>
+        </oj-bind-if>
+        <oj-bind-if test="{{ds.data.dataSourceType === 4}}">
+          <div :id="[['explainModule'+ ds.observableIndex()]]">
+            <!--If data source is grid type show UI as as per datagrid -->
+            <div :id="[['explainModule'+ ds.data.queryId]]"
+              data-bind="ojModule: { name: 'explainPlanQueryResultsModule' , params : { gridData : ds.data , moduleRenderingCompleted :ds. moduleRenderingCompleted,  index : ds.observableIndex ,  uiMode : uiDisplayMode }}">
+            </div>             
+          </div>
+        </oj-bind-if>
+        <oj-bind-if test="{{ds.data.dataSourceType === 5}}">
+          <div :id="[['executionModule'+ ds.observableIndex()]]">
+            <!--If data source is grid type show UI as as per datagrid -->
+            <div :id="[['executionModule'+ ds.data.queryId]]"
+              data-bind="ojModule: { name: 'executionPlanQueryResultsModule' , params : { gridData : ds.data , moduleRenderingCompleted :ds. moduleRenderingCompleted,  index : ds.observableIndex ,  uiMode : uiDisplayMode }}">
+            </div>             
+          </div>
+        </oj-bind-if>    
+        <oj-bind-if test="{{ds.data.dataSourceType === 100}}">
+          <div id="realTimeSqlMonitoringDetail">
+            <div id="realTimeSqlMonitoringDetailBody"
+              data-bind="ojModule: { name: 'realTimeSqlMonitoringDetail' , params : { data: ds.data }}">
+            </div>             
+          </div>
+        </oj-bind-if>    
+      </div>
+    </template>
+<!-- Do'nt show progress bar for Execution Module -->
+<!-- <oj-bind-if test="{{ds.data.dataSourceType != 5}}"> -->
+<div  :class="topbarContainer"
+data-bind="ojModule: { name: 'messagesModule' , params : {  executing : executing , cancelHandler: cancelHandler}}"> 
+</div>
+<!-- </oj-bind-if> -->
+<div id = "customResultContainer">
+</div>
+<div id = "sqlContainer" style="display:none">
+</div>
+<div id = "exeSQLContainer" style="display:none">
+</div>
+
+
+ 
+<div id="bottom"></div>
+<oj-messages position="[[msgPos]]" messages="[[messagesDataprovider]]" display="notification"></oj-messages>
+<oj-dialog id="inputParamDialog" style="display:none;width: 75vw; height: 75vh;" on-oj-close="[[onDialogClose]]"
+  resize-behavior="resizable" cancel-behavior="escape" dialog-title="[[inputDialogLabel]]">
+  <div slot="body">
+  
+    <div data-bind="ojModule: { name: currentDialogName , params : runInputArgDialogParameters }"  style="overflow:hidden;">
+    </div>
+  </div>
+  <div slot="footer">
+    <oj-button id="okButton" on-oj-action="[[onOkButtonClick]]">  <span> <oj-bind-text value="{{okButtonLabelField}}"> </oj-bind-text>  </span>
+    </oj-button>
+    <oj-button id="cancelButton" on-oj-action="[[onCancelButtonClick]]"> <span> <oj-bind-text value="{{cancelButtonField}}"> </oj-bind-text>   </span>
+    </oj-button>
+  </div>
+</oj-dialog>
+

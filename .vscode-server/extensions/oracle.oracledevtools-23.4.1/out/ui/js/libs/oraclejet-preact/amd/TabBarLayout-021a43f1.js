@@ -1,0 +1,2 @@
+define(['exports', 'preact/jsx-runtime', './Flex-f2984cda', './useTabBarContext-97ac9d7a'], (function(e,a,t,r){"use strict";e.TabBarLayout=function(e){const{children:n,display:o,layout:i}=e,u=r.useTabBarContext();return a.jsx(r.TabBarContext.Provider,{value:{...u,display:o,layout:i},children:a.jsx(t.Flex,{direction:"row",gap:"8x",flex:"1 0 auto",children:n})})}}));
+//# sourceMappingURL=TabBarLayout-021a43f1.js.map

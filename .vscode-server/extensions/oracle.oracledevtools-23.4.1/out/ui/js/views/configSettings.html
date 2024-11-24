@@ -1,0 +1,45 @@
+<div id="settingsBar">
+<oj-button :id="[[userScopeBtnId]]" chroming="borderless" :class="{{userScopeBtnStyle}}"
+  on-oj-action='[[onUserScopeBtnClick]]' disabled="[[!userScopeEnabled()]]">
+  <span>
+    <oj-bind-text value="[[userScopeBtnLabel]]"></oj-bind-text>
+  </span>
+</oj-button>
+<oj-bind-if test="[[workspaceScopeAvailable()]]">
+  <oj-button :id="[[workspaceScopeBtnId]]" chroming="borderless" :class="{{workspaceScopeBtnStyle}}"
+    on-oj-action='[[onWorkspaceScopeBtnClick]]' disabled="[[!workspaceScopeEnabled()]]">
+    <span>
+      <oj-bind-text value="[[workspaceScopeBtnLabel]]"></oj-bind-text>
+    </span>
+  </oj-button>
+</oj-bind-if>
+<oj-bind-if test="[[folderScopeAvailable()]]">
+  <oj-button :id="[[folderScopeBtnId]]" chroming="borderless" :class="{{folderScopeBtnStyle}}"
+    on-oj-action='[[onFolderScopeBtnClick]]' disabled="[[!workspaceFolderScopeEnabled()]]">
+    <span>
+      <oj-bind-text value="[[folderScopeBtnLabel]]"></oj-bind-text>
+    </span>
+    <span slot='endIcon' class="oj-fwk-icon oj-fwk-icon-arrow-s oj-component-icon"></span>
+  </oj-button>
+</oj-bind-if>
+<div>
+  <oj-menu :id="[[folderScopeMenuId]]" aria-labelledby="[[folderScopeBtnId]]" on-oj-menu-action="[[onFolderScopeSelect]]"
+    open-options.launcher="[[folderScopeBtnId]]">
+    <oj-bind-for-each data="[[configurationTargets]]">
+      <template>
+        <oj-option :id="[[folderScopeMenuOptionId + $current.data.value]]" value="[[$current.data.value]]">
+          <oj-bind-if test="[[configurationTarget() === $current.data.value]]">
+            <span class="oj-fwk-icon oj-fwk-icon-checkmark oj-component-icon" style="font-size: 1.3em;"
+              slot="startIcon"></span>
+          </oj-bind-if>
+          <oj-bind-if test="[[configurationTarget() !== $current.data.value]]">
+            <span class="oj-fwk-icon" style="font-size: 1.3em;" slot="startIcon"></span>
+          </oj-bind-if>
+          <oj-bind-text value="[[$current.data.label]]"></oj-bind-text>
+        </oj-option>
+      </template>
+    </oj-bind-for-each>
+  </oj-menu>
+</div>
+<oj-popup id="tooltipPopup"> </oj-popup>
+</div>

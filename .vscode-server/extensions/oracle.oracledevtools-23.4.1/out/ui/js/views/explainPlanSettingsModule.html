@@ -1,0 +1,156 @@
+<div id="explainPlanBody" class="explainPlanSettingsBody">
+        <div >
+                <div class="explainPlanHeaderItems">
+                        <div>
+                                <label class="filtersh1">
+                                        <oj-bind-text value="[[uiHeaderText]]"></oj-bind-text>
+                                </label>
+                        </div>
+                        <div class="explainSubHeaderContainer">
+                                <div>
+                                        <label class="dialogSubHeader">
+                                                <oj-bind-text value="[[subHeader]]"></oj-bind-text>
+                                        </label>
+                                </div>
+                        </div>
+                        <div id="configSettingsModule" class="oj-flex">
+                                <oj-module config="[[settingsConfig]]"
+                                        style="background-color: transparent !important"></oj-module>
+                        </div>
+                </div>
+        </div>
+        <div class="oj-flex explainTabContainer" id="explainPlanTabBody">
+                <div id="tabBarContainer" class="oj-flex-item">
+                        <oj-tab-bar selection="{{currentTab}}" data="{{tabDP}}" edge="start" display="all"
+                                on-selection-changed="[[onTabSelectionChanged]]" disabled="[[isSaving]]">
+                                <template slot="itemTemplate" data-oj-as="item">
+                                        <li class="tabBarItem" :id="[[item.data.value+'Id']]">
+                                                <a href="#">
+                                                        <oj-bind-text value="[[item.data.label]]"></oj-bind-text>
+                                                </a>
+                                        </li>
+                                </template>
+                        </oj-tab-bar>
+                </div>
+                <div class="oj-flex-item settingControlsContainer">
+                        <div class="explainPlanSettingHeader" id="headerContainer" style="padding-left: 24px;">
+                                <h1 class="explainSettingh11"><oj-bind-text value="[[explainPlanStr]]"></oj-bind-text></h1>
+                        </div>
+                        <div style="padding: 15px 24px;">
+                                <div id="controlDivBeforeList">
+                                        <oj-bind-if test="[[isDbmsPlan]]">
+                                                <div class="flex">
+                                                        <div class="flex-item" style="max-width:15em;">
+                                                                <oj-label for="formatType" slot="label">
+                                                                        <label class="leftalign">
+                                                                                <p>
+                                                                                        <oj-bind-text value="[[formatTypeLabel]]">
+                                                                                        </oj-bind-text>
+                                                                                </p>
+                                                                        </label>
+                                                                </oj-label>
+                                                        </div>
+                                                        <div class="flex-item">
+                                                                <oj-combobox-one id='formatType' options="[[formatOptions]]"
+                                                                        value="{{formatValue}}"
+                                                                        onkeydown='javascript: if((event.key != "Tab")){ return false;}'
+                                                                        on-value-changed="[[onFormatTypeChanged]]"
+                                                                        onpaste="return false;" onCut="return false" slot="value">
+                                                                </oj-combobox-one>
+
+                                                        </div>
+                                                </div>
+                                                <div class="flex">
+                                                        <div class="flex-item">
+                                                                <oj-checkboxset value="{{customiseKeywordsValue}}"
+                                                                id="customiseCheckbox" slot="value" style="width:fit-content !important;" on-value-changed="[[oncustomiseChanged]]">
+                                                                        <oj-option value='[[strYes]]'>
+                                                                                <span>
+                                                                                        <oj-bind-text value='[[customiseKeywordsLabel]]'>
+                                                                                        </oj-bind-text>
+                                                                                </span>
+                                                                        </oj-option>
+                                                                </oj-checkboxset>
+                                                        </div>
+                                                </div>
+                                        </oj-bind-if>
+                                        <oj-bind-if test="[[isDbmsPlan()===false]]">
+                                                <div class="flex">
+                                                        <div class="flex-item">
+                                                                <oj-checkboxset label-hint=" " value="{{showAllColumnsValue}}"
+                                                                        id="showAllColumnsCheckbox" slot="value" style="width:fit-content !important;"
+                                                                        >
+                                                                        <oj-option id="showAll" value='[[strYes]]'>
+                                                                                <span>
+                                                                                        <oj-bind-text value='[[showAllColumnsLabel]]'>
+                                                                                        </oj-bind-text>
+                                                                                </span>
+                                                                        </oj-option>
+                                                                </oj-checkboxset>
+                                                        </div>
+                                                </div>
+                                        </oj-bind-if>
+                                </div>
+                                <oj-bind-if test="[[currentTab() === dbmsExplainPlanTabValue]]">
+                                        <div class="flex">
+                                                <div class="flex-item">
+                                                        <oj-checkboxset id="explainColListBox" class="dbmsExplainList" style="max-height:260px;"
+                                                       disabled="[[disableKeywordList]]" on-value-changed="[[onKeywordValueChanged]]"
+                                                        options="{{explainKeywordListDp}}" value="{{keywordSelection}}"
+                                                        ></oj-checkboxset>
+                                                </div>
+                                        </div>
+                                </oj-bind-if>
+                                <oj-bind-if test="[[currentTab() === dbmsExecutionPlanTabValue]]">
+                                        <div class="flex">
+                                                <div class="flex-item">
+                                                        <oj-checkboxset id="executionColListBox" class="dbmsExplainList" style="max-height:310px;"
+                                                        disabled="[[disableKeywordList]]" on-value-changed="[[onKeywordValueChanged]]"
+                                                         options="{{executionKeywordListDp}}" value="{{keywordSelection}}"
+                                                         ></oj-checkboxset>
+                                                </div>
+                                        </div>
+                                </oj-bind-if>
+                                <oj-bind-if test="[[currentTab() === explainPlanTabValue]]">
+                                        <div class="flex">
+                                                <div class="flex-item">
+                                                        <oj-checkboxset id="explainColListBox" class="explainPlanList" 
+                                                         on-value-changed="[[onColumnValueChanged]]"
+                                                         options="{{explainColumnListDp}}" value="{{columnSelection}}"
+                                                         ></oj-checkboxset>
+                                                </div>
+                                        </div>
+                                </oj-bind-if>
+                                <oj-bind-if test="[[currentTab() === executionPlanTabValue]]">
+                                        <div class="flex">
+                                                <div class="flex-item">
+                                                        <div class="flex-item">
+                                                                <oj-checkboxset id="executionnColListBox" class="explainPlanList" 
+                                                                 on-value-changed="[[onColumnValueChanged]]"
+                                                                 options="{{executionColumnListDp}}" value="{{columnSelection}}"
+                                                                 ></oj-checkboxset>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                </oj-bind-if>
+                        </div>
+                </div>
+        </div>
+        <div class="oj-flex tabBarFooterRegion">
+
+                <div class="tabFooterButtonContainer oj-flex-item">
+                        <oj-button id="saveButton" class="oj-button-lg buttonGridItem tabFooterButton"
+                                on-oj-action="[[onSave]]" disabled="[[saveButtonDisable()]]">
+                                <oj-bind-text value="[[saveStr]]"></oj-bind-text>
+                        </oj-button>
+                        <oj-button id="resetButton" class="oj-button-lg buttonGridItem tabFooterButton"
+                                on-oj-action="[[onReset]]">
+                                <oj-bind-text value="[[resetStr]]"></oj-bind-text>
+                        </oj-button>
+                        <oj-bind-if test="[[isSaving]]">
+                                <oj-progress-circle size="md" id="progressCircle" value="-1"></oj-progress-circle>
+                        </oj-bind-if>
+                </div>
+        </div>
+</div>
+<oj-messages position="[[msgPos]]" messages="[[messagesDataprovider]]" display="notification"></oj-messages> 

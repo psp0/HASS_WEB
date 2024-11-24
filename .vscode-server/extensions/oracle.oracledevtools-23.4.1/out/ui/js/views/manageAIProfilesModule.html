@@ -1,0 +1,253 @@
+<oj-dialog id="editObjectListDialog" dialog-title="Object List" cancel-behavior="escape">
+    <div slot="header" class="filterDialogTitleHeader">
+        <h1 class="dialogHeader">
+            <oj-bind-text value="Object List"></oj-bind-text>
+        </h1>
+    </div>
+    <div slot="body">
+        <div class="oj-flex dbmsCloudInputItem">
+            <div class="oj-flex-item dbmsCloudInputLabel">
+                <oj-label slot="label" for="schemas">
+                    <label class="leftalign">
+                        <p><oj-bind-text value="[[labelTexts.schema]]"></oj-bind-text></p>
+                    </label>
+                </oj-label>
+            </div>
+            <div class="oj-flex-item dbmsCloudInputValue">
+                <oj-combobox-one id="schemas" aria-label="Schema" options="[[schemasDP]]" value="{{schema}}" on-value-changed="[[onSchemaChanged]]"
+                    maximum-result-count="0"
+                    onkeydown='javascript: if((event.key != "Tab")){ return false;}' onCut="return false;" onpaste="return false;"></oj-combobox-one>
+                    <oj-bind-if test="[[isGetSchemasInProgress]]">
+                        <oj-progress-circle size="sm" value="-1" style="padding-left: 5px;"></oj-progress-circle>
+                </oj-bind-if>
+            </div>
+        </div>
+
+        <div class="dbmsCloudInputItem">
+            <oj-radioset
+                id="tablesViewsRadio"
+                value="{{typeListed}}"
+                class="oj-choice-direction-row"
+                aria-label="Display Tables or Views" 
+                on-value-changed="[[onTypeListedChanged]]">
+                <oj-option value="[[objListTablesType]]">
+                    <oj-bind-text value="[[labelTexts.tables]]"></oj-bind-text>
+                </oj-option>
+                <oj-option value="[[objListViewsType]]">
+                    <oj-bind-text value="[[labelTexts.views]]"></oj-bind-text>
+                </oj-option>
+            </oj-radioset>
+        </div>
+
+        <div class="oj-flex" >
+
+            <div id="objectsList" class="flex-item" style="margin-right: 6px;">
+                <div id="objectsSearchBar">
+                    <oj-input-text id="searchBar" aria-label="Filter Object List" value="{{searchText}}" placeholder="Filter..." on-raw-value-changed="[[onSearching]]"></oj-input-text>
+                </div>
+
+                <div id="objectsChkboxes">
+                    <oj-bind-if test="[[isGettingObjects || isUpdatingObjects]]">
+                        <oj-progress-circle size="sm" value="-1" style="padding-left: 5px;"></oj-progress-circle>
+                    </oj-bind-if>
+
+                    <oj-bind-if test="[[showSelectAll]]">
+                        <div id="objectListSelectAllDiv">
+                            <oj-checkboxset value="{{selectAllComputed}}" class="visCollCheckbox" id="objectListSelectAllCheckBox">
+                                <oj-option value="[[labelTexts.yes]]">
+                                    <h1 class="selectAllH1"><oj-bind-text value="[[labelTexts.selectAll]]"></oj-bind-text></h1>
+                                </oj-option>
+                            </oj-checkboxset>
+                        </div>
+                    </oj-bind-if>
+                    
+                    <div id="objectTableDivId">
+                        <oj-list-view
+                            id="objectTable" 
+                            class="oj-listview-item-padding-off"
+                            aria-label="Object List"
+                            data="[[computedObjectTableDP]]"
+                            selection-mode="multiple"
+                            selected="{{selectedRows}}"
+                            on-selected-changed="[[onSelectedChanged]]"
+                            gridlines.item="hidden"
+                            scroll-policy="loadMoreOnScroll"
+                            scroll-policy-options.fetch-size="20"
+                            scroll-policy-options.max-count="10000">
+                            <template slot="itemTemplate" data-oj-as="item">
+                                <oj-list-item-layout>
+                                    <div slot="leading">
+                                        <span><oj-bind-text value="[[item.data.value]]"></oj-bind-text></span>
+                                    </div>
+                                    <oj-selector
+                                        slot="selector"
+                                        selected-keys="{{selectedRows}}"
+                                        row-key="[[item.data.value]]"
+                                        aria-label="Use Object"
+                                    ></oj-selector>
+                                </oj-list-item-layout>
+                            </template>
+                        </oj-list-view>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-item">
+                <oj-text-area id="objectsListResult" class="selectAISampleCode" aria-label="Selected Objects" rows="18" readonly="true" value="[[objectListStringValue]]">
+                </oj-text-area>
+            </div>
+
+        </div>
+
+    </div>
+    <div slot="footer">
+        <oj-button id="objectListOkBtn" on-oj-action="[[onOkEditObjList]]">
+            <oj-bind-text value="[[labelTexts.ok]]"></oj-bind-text>
+        </oj-button>
+        <oj-button id="objectListClearBtn" on-oj-action="[[onClearObjectList]]">
+            <oj-bind-text value="[[labelTexts.clearAll]]"></oj-bind-text>
+        </oj-button>
+        <oj-button id="objectListCancelBtn" on-oj-action="[[onCancelEditObjList]]">
+            <oj-bind-text value="[[labelTexts.cancel]]"></oj-bind-text>
+        </oj-button>
+    </div>
+</oj-dialog>
+
+<div id="manageProfileModule">
+
+    <div class="dbmsCloudBodyHeaderContainer">
+        <oj-label slot="label">
+            <label class="compilerDlgHeader">
+                <oj-bind-text value="[[labelTexts.manageProfile]]"></oj-bind-text>
+            </label>
+        </oj-label>
+    </div>
+    
+    <div class="dbmsCloudBodyInputContainer">
+
+        <div class="oj-flex dbmsCloudInputItem">
+            <div class="oj-flex-item dbmsCloudInputLabel">
+                <oj-label slot="label" for="profileNameId">
+                    <label class="leftalign">
+                        <p><oj-bind-text value="[[labelTexts.profileName]]"></oj-bind-text></p>
+                    </label>
+                </oj-label>
+            </div>
+            <div class="oj-flex-item dbmsCloudInputValue">
+                <oj-input-text id="profileNameId" value="{{profileName}}" on-raw-value-changed="[[onProfileNameChanged]]"></oj-input-text>
+            </div>
+        </div>
+
+        <div class="oj-flex dbmsCloudInputItem">
+            <div class="oj-flex-item dbmsCloudInputLabel">
+                <oj-label slot="label" for="credential">
+                    <label class="leftalign">
+                        <p><oj-bind-text value="[[labelTexts.credentialName]]"></oj-bind-text></p>
+                    </label>
+                </oj-label>
+            </div>
+            <div class="oj-flex-item dbmsCloudInputValue">
+                <oj-combobox-one id="credential" aria-label="Credential Name" options="[[credentialsDP]]" value="{{credential}}"
+                    maximum-result-count="0" slot="value" on-value-changed="[[onCredentialChanged]]"
+                    onkeydown='javascript: if((event.key != "Tab")){ return false;}' onCut="return false;" onpaste="return false;"></oj-combobox-one>
+                <oj-bind-if test="[[isGetCredentialsInProgress]]">
+                    <oj-progress-circle size="sm" value="-1" style="padding-left: 5px;"></oj-progress-circle>
+                </oj-bind-if>
+            </div>
+        </div>
+
+        <div class="oj-flex dbmsCloudInputItem">
+            <div class="oj-flex-item dbmsCloudInputLabel">
+                <oj-label slot="label" for="providersCbId">
+                    <label class="leftalign">
+                        <p><oj-bind-text value="[[labelTexts.provider]]"></oj-bind-text></p>
+                    </label>
+                </oj-label>
+            </div>
+            <div class="oj-flex-item dbmsCloudInputValue">
+                <oj-combobox-one id="providersCbId" aria-label="Provider" options="[[providers]]" value="{{provider}}" on-value-changed="[[onProviderChanged]]"
+                onkeydown='javascript: if((event.key != "Tab")){ return false;}' onCut="return false;" onpaste="return false;"></oj-combobox-one>
+            </div>
+        </div>
+        
+        <div class="oj-flex dbmsCloudInputItem">
+            <div class="oj-flex-item dbmsCloudInputLabel">
+                <oj-label slot="label" for="modelsCbId">
+                    <label class="leftalign">
+                        <p><oj-bind-text value="[[labelTexts.model]]"></oj-bind-text></p>
+                    </label>
+                </oj-label>
+            </div>
+            <div class="oj-flex-item dbmsCloudInputValue">
+                <oj-combobox-one id="modelsCbId" aria-label="Model" options="[[modelsDP]]" value="{{model}}" on-value-changed="[[onModelChanged]]"
+                onkeydown='javascript: if((event.key != "Tab")){ return false;}' onCut="return false;" onpaste="return false;"></oj-combobox-one>
+            </div>
+        </div>
+
+        <div class="oj-flex dbmsCloudInputItem">
+            <div class="oj-flex-item dbmsCloudInputLabel">
+                <oj-label slot="label" for="objectListStringValueDiv">
+                    <label class="leftalign">
+                        <p><oj-bind-text value="[[labelTexts.objectList]]"></oj-bind-text></p>
+                    </label>
+                </oj-label>
+            </div>
+            <div class="oj-flex oj-flex-item dbmsCloudInputValue">
+                <div id="objectListStringValueDiv" class="oj-flex-item" on-mouseover="[[openObjListTooltip]]" on-mouseout="[[closeObjListTooltip]]">
+                    <oj-input-text disabled="true" aria-label="Selected Objects" value="[[objectListString]]"></oj-input-text>
+                    <oj-popup id="objectListPopupId" class="toolTipPopUp" on-oj-animate-start="[[preventAnimation]]"
+                    auto-dismiss="focusLoss" modality="modeless" position.my.horizontal="start" position.my.vertical="bottom"
+                    position.at.horizontal="end" position.at.vertical="top" position.collision="flipfit">
+                        <oj-bind-text value="[[objectListString]]"></oj-bind-text>
+                    </oj-popup>
+                </div>
+                <div class="oj-flex-item" id="editObjectsBtnDiv">
+                    <oj-button id="editObjectsBtn" aria-label="Edit Object List" class='oj-button-lg' style="margin-left:6px;" on-oj-action="[[onOpenProfileDialog]]">
+                        <oj-bind-text value="[[labelTexts.ellipse]]"></oj-bind-text>
+                    </oj-button>
+                </div> 
+            </div>
+        </div>
+        
+        <div class="oj-flex dbmsCloudInputItem">
+            <div class="oj-flex-item dbmsCloudInputLabel">
+                <oj-label></oj-label>
+            </div>
+            <div class="oj-flex-item dbmsCloudInputValue">
+                <oj-button id='saveButton' class='oj-button-lg' style="margin-right:5px;" disabled="[[saveButtonDisabled()]]"
+                    on-oj-action="[[onSave]]">
+                    <oj-bind-text value="[[labelTexts.save]]"></oj-bind-text>
+                </oj-button>
+                <oj-bind-if test="[[isSaving]]">
+                    <oj-progress-circle size="sm" value="-1"></oj-progress-circle>
+                </oj-bind-if>
+            </div>
+        </div>
+
+        <div class="oj-flex dbmsCloudInputItem">
+            <div class="oj-flex-item dbmsCloudInputLabel">
+            <oj-label></oj-label>
+            </div>
+            <div class="oj-flex-item dbmsCloudInputValue" flex-direction="row">
+            <oj-checkboxset id="showSQLCheckbox" value="{{showSQLOption}}">
+                <oj-option value="Yes"><oj-bind-text value="[[labelTexts.showSQL]]"></oj-bind-text></oj-option>
+            </oj-checkboxset>
+            </div>
+        </div>
+
+        <oj-bind-if test="[[doShowSQL()]]">
+            <div class="dbmsCloudInputItem">
+                <oj-text-area id="profileSampleCode" aria-label="PL/SQL to Create Profile" class="selectAISampleCode" rows="15" readonly="true" value='[[sampleCode]]'
+                    oncontextmenu="return false">
+                </oj-text-area>
+            </div>
+            <div class="dbmsCloudInputItem">
+                <oj-button id='copyButton' class='oj-button-lg' on-oj-action='[[onCopySampleCode]]' style="margin-right:5px;">
+                  <oj-bind-text value="[[labelTexts.copy]]"></oj-bind-text>
+                </oj-button>
+              </div>
+        </oj-bind-if>
+
+    </div>
+
+</div>

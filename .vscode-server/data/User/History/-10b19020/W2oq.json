@@ -1,0 +1,174 @@
+{
+  "window.commandCenter": false,
+  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx1G -Xms100m -javaagent:\"/root/.vscode-server/extensions/gabrielbb.vscode-lombok-1.0.1/server/lombok.jar\"",
+  "settingsSync.ignoredExtensions": ["ms-vscode-remote.remote-wsl", "coenraads.bracket-pair-colorizer-2"],
+  "prettier.printWidth": 120,
+  "terminal.integrated.mouseWheelScrollSensitivity": 0.2,
+  "terminal.integrated.enableMultiLinePasteWarning": false,
+  "[java]": {
+    "editor.defaultFormatter": "redhat.java"
+  },
+  "[go]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "golang.go"
+  },
+  "go.goroot": "/usr/local/go",
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": true,
+    "markdown": true,
+    "scminput": false
+  },
+  "editor.mouseWheelScrollSensitivity": 1.8,
+  "security.workspace.trust.untrustedFiles": "open",
+  "security.workspace.trust.banner": "always",
+  "leetcode.hint.configWebviewMarkdown": false,
+  "leetcode.workspaceFolder": "/mnt/external/leetcode",
+  "leetcode.defaultLanguage": "python3",
+  "editor.minimap.enabled": false,
+  "leetcode.problems.sortStrategy": "Frequency (Ascending)",
+  "leetcode.filePath": {
+    "default": {
+      "folder": "",
+      "filename": "${id}.${kebab-case-name}.${ext}"
+    }
+  },
+  "leetcode.hint.commandShortcut": false,
+  "window.zoomLevel": 1,
+  "leetcode.nodePath": "node-v21.6.1-linux-x64/bin/node",
+  "terminal.integrated.defaultProfile.windows": "",
+  "terminal.integrated.defaultProfile.osx": "zsh",
+
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.shell.linux": "/bin/zsh",
+  "github.copilot.advanced": {},
+  "workbench.colorTheme": "Quiet Light",
+  "git.autofetch": true,
+  "gitlens.graph.minimap.enabled": false,
+  "eslint.nodePath": "~/node-v21.6.1-linux-x64/bin/node",
+  "leetcode.endpoint": "leetcode",
+  "leetcode.editor.shortcuts": ["description", "submit", "test", "solution"],
+  "terminal.integrated.profiles.osx": {
+    "bash": {
+      "path": "bash",
+      "args": ["-l"],
+      "icon": "terminal-bash"
+    },
+    "zsh": {
+      "path": "zsh",
+      "args": ["-i"]
+    },
+    "fish": {
+      "path": "fish",
+      "args": ["-l"]
+    },
+    "tmux": {
+      "path": "tmux",
+      "icon": "terminal-tmux"
+    },
+    "pwsh": {
+      "path": "pwsh",
+      "icon": "terminal-powershell"
+    }
+  },
+  "leetcode.hint.commentDescription": false,
+  "workbench.sideBar.location": "right",
+  "terminal.integrated.profiles.linux": {
+    "bash": {
+      "path": "bash",
+      "icon": "terminal-bash"
+    },
+    "zsh": {
+      "path": "/usr/bin/zsh"
+    },
+    "fish": {
+      "path": "fish"
+    },
+    "tmux": {
+      "path": "tmux",
+      "icon": "terminal-tmux"
+    },
+    "pwsh": {
+      "path": "pwsh",
+      "icon": "terminal-powershell"
+    },
+    "sh": {
+      "path": "/bin/sh"
+    }
+  },
+  "terminal.integrated.automationProfile.windows": {},
+  "gitlens.views.branches.branches.layout": "list",
+  "json.format.enable": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "diffEditor.ignoreTrimWhitespace": false,
+  "diffEditor.hideUnchangedRegions.enabled": true,
+  "terminal.integrated.automationProfile.linux": {},
+
+  "debug.javascript.defaultRuntimeExecutable": {
+    "pwa-node": "node"
+  },
+  "npm.packageManager": "npm",
+  "terminal.integrated.lineHeight": 0.3,
+  "editor.formatOnSave": true,
+  "notebook.formatOnSave.enabled": true,
+  "workbench.settings.applyToAllProfiles": [
+    "editor.fontFamily"
+  ],
+  "editor.unicodeHighlight.invisibleCharacters": false,
+  "oracledevtools.connectionConfiguration.configFilesFolder": "/home/zora/Oracle/network/admin",
+  "[oraclesql]": {
+    "editor.suggest.showSnippets": true,
+    "editor.quickSuggestions": {
+      "comments": "on",
+      "strings": "on",
+      "other": "on"
+    }
+  },
+  "oracledevtools.connectionConfiguration.walletFileFolder": "/home/zora/Oracle/network/admin",
+  "oracledevtools.bookmarkFileFolder": "/home/zora/Oracle/oracle.oracledevtools",
+  "oracledevtools.download.otherFolder": "/home/zora/downloads",
+  "oracledevtools.connections": [
+    {
+      "authenticationType": 2,
+      "dBAPrivilege": "None",
+      "userID": "SYSTEM",
+      "passwordSaved": true,
+      "dataSource": "localhost:1521/XE",
+      "connectionType": 2,
+      "databaseHostName": "localhost",
+      "databasePortNumber": "1521",
+      "databaseServiceName": "XE",
+      "tnsAdmin": "/home/zora/Oracle/network/admin",
+      "name": "SYSTEM.XE",
+      "color": "none",
+      "currentSchema": "",
+      "addSettingsScopeToConnectionName": false,
+      "addCurrentSchemaToConnectionName": false,
+      "filters": [],
+      "useCompatibleNamesDirectoryPath": true,
+      "passwordStore": "Secret Storage"
+    },
+    {
+      "authenticationType": 2,
+      "dBAPrivilege": "None",
+      "userID": "SYSTEM",
+      "passwordSaved": false,
+      "dataSource": "localhost:1521/XE",
+      "connectionType": 2,
+      "databaseHostName": "localhost",
+      "databasePortNumber": "1521",
+      "databaseServiceName": "XE",
+      "tnsAdmin": "/home/zora/Oracle/network/admin",
+      "name": "SYSTEM.XE.1",
+      "color": "none",
+      "currentSchema": "",
+      "addSettingsScopeToConnectionName": false,
+      "addCurrentSchemaToConnectionName": false,
+      "filters": [],
+      "useCompatibleNamesDirectoryPath": true
+    }
+  ],
+  "dart.flutterSdkPath": "/home/zora/Android/flutter",
+  "terminal.external.linuxExec": "/usr/bin/zsh",
+  "workbench.editor.empty.hint": "hidden"
+}

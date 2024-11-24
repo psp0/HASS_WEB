@@ -1,0 +1,135 @@
+<oj-dialog id="showSQLDialogID" dialog-title="Explain Plan SQL" aria-describedby="desc" position.my.horizontal="start"
+  position.my.vertical="top" position.at.horizontal="start" position.at.vertical="top" position.my.vertical="top"
+  position.offset.y="30" position.offset.x="0" cancel-behavior="icon" modality="modeless">
+  <div slot="body">
+    <div id="explainPlanSQLID" tabindex="0">
+    </div>
+  </div>
+  <!-- <div slot="footer">
+    <oj-button id="okButton" on-oj-action="[[close]]">OK</oj-button>
+  </div> -->
+</oj-dialog>
+
+<oj-bind-if test="[[noData() === false]]">
+<div style="margin-bottom:10px;min-width: 100%;margin-top:5px;" oncontextmenu="return false">
+  <div class="recordRow" oncontextmenu="return false">
+
+    <oj-bind-if test="[[showExplainSQL() === true]]">
+      <oj-button style="margin-left: 3px;" chroming='borderless' id='showSQLBtn' display='icons' on-oj-action="[[showSQL]]">
+        <span slot='startIcon' class="icon-sql"></span>
+        <oj-bind-text value="{{showSQLabel}}"></oj-bind-text>
+      </oj-button>
+    </oj-bind-if>
+    <oj-bind-if test="[[showExplainSQL() === false]]">
+      <oj-button chroming='borderless' id='hideSQLBtn' display='icons' on-oj-action="[[showSQL]]">
+        <span slot='startIcon' class="icon-sql"></span>
+        <oj-bind-text value="{{hideSQLabel}}"></oj-bind-text>
+      </oj-button>
+    </oj-bind-if>
+    <!-- Show Copy -->
+    <oj-button style="margin-right: 3px;" chroming='borderless' id='copyBtn' display='icons' on-oj-action="[[copyAllToClipBoard]]">
+      <span slot='startIcon' class="icon-copy"></span>
+      <oj-bind-text value="[[CopyLabel]]"></oj-bind-text>
+    </oj-button>
+    <!-- Save Format -->
+    <oj-label for="select" style="padding-top: 5px;padding-left: 5px;padding-right: 10px;">Save as:</oj-label>
+    <oj-combobox-one id="select" options="[[formats]]" value="{{selectedSaveFormat}}" on-keydown="[[disableInput]]"
+      class="saveAsCombo" onpaste="return false" onCut="return false">
+    </oj-combobox-one>
+    <oj-bind-if test="[[isSaving() === false]]">
+      <oj-button style="margin-left: 3px;" chroming='borderless' id="saveBtn" display='icons' class="colorCorrection"
+        on-oj-action="[[handleSave]]">
+        <span slot='startIcon' class="icon-save"></span>
+        <oj-bind-text value="[[SaveLabel]]"> </oj-bind-text>
+      </oj-button>
+    </oj-bind-if>
+    <oj-bind-if test="[[isSaving() === true]]">
+      <oj-progress-circle size="sm" id="progressCircle" value="-1"></oj-progress-circle>
+    </oj-bind-if>
+    <oj-bind-if test="[[isCopying() === true]]">
+      <oj-progress-circle size="sm" id="progressCircle" value="-1" style="padding-left: 5px;"></oj-progress-circle>
+    </oj-bind-if>
+  </div>
+
+  <oj-bind-if test="[[isTextMode() === true]]">
+    <div class='normalMessage break-word'>
+      <pre style='font-family: monospace;white-space: pre;'>
+      <oj-bind-text value="[[dbmsExplainPlanData()]]"></oj-bind-text>
+    </pre>
+    </div>
+    <!-- <div id="describeResult-container" class="descTableBody">
+        <oj-bind-dom config="[[dbmsPlanResult]]"></oj-bind-dom>
+      </div> -->
+  </oj-bind-if>
+
+  <oj-bind-if test="[[isTextMode() === false]]">
+    <div style="height:81vh;max-height: 81vh;">
+      <oj-table :id="[[explainPlanTableId]]" accessibility.row-header="name" data="[[dataProvider]]" 
+        display="grid" aria-label="Explain Plan Results Table" style="min-height: 80vh; max-height: 80vh;"
+        columns-default="[[columnsDefault]]" columns="[[columns]]" class="oj-sm-width-full selectQueryResult explainPlanTable"
+        on-oj-animate-start="[[preventTableAnimation]]">
+        <template data-oj-as="cell" slot="cellTemplate" style="white-space:nowrap">
+          <div :id="[[`cellContainer_`+explainPlanTableId+`_${cell.key}_${cell.columnIndex}`]]"
+            on-mouseover="[[() => tooltipOpen(explainPlanTableId+`_${cell.key}_${cell.columnIndex}`,event,cell.data)]]"
+            on-mouseout="[[() => tooltipClose(explainPlanTableId+`_${cell.key}_${cell.columnIndex}`)]]"
+            on-mousemove="[[() => updatePosition(explainPlanTableId+`_${cell.key}_${cell.columnIndex}`,event)]]">
+            <span :id="[[`cell_`+explainPlanTableId+`_${cell.key}_${cell.columnIndex}`]]" class="user">
+              <oj-bind-if test="[[cell.columnKey == 'OPERATION']]">
+                <oj-row-expander data-oj-clickthrough="disabled" context="[[cell]]"></oj-row-expander>
+                <span>
+                  <oj-bind-text value="[[cell.row[cell.columnKey]]]"></oj-bind-text>
+                </span>
+              </oj-bind-if>
+
+              <oj-bind-if test="[[cell.columnKey != 'OPERATION']]">
+                <oj-bind-text value="[[cell.row[cell.columnKey]]]"> </oj-bind-text>
+              </oj-bind-if>
+            </span>
+
+            <oj-popup :id="[[`tooltip_`+explainPlanTableId+`_${cell.key}_${cell.columnIndex}`]]"
+              auto-dismiss="focusLoss" modality="modeless" on-oj-animate-start="[[startAnimationListener]]"
+              position.my.horizontal="start" position.my.vertical="top" position.at.horizontal="end"
+              position.at.vertical="bottom" position.collision="flipfit" position.offset.x="7" position.offset.y="8">
+              <oj-bind-text value="[[cell.row[cell.columnKey]]]"></oj-bind-text>
+            </oj-popup>
+          </div>
+        </template>
+
+        <oj-menu :id="[[`copyMenu_`+explainPlanTableId]]" slot="contextMenu" class="copyMenu"
+          on-oj-action="[[copyCellData]]" on-oj-before-open="[[checkCellContext]]"
+          on-oj-animate-start="[[startAnimationListener]]" on-oj-close="[[removeCellHighlight]]"
+          on-oj-open="[[addCellHighlight]]">
+          <oj-option value="">Copy</oj-option>
+        </oj-menu>
+      </oj-table>
+    </div>
+  </oj-bind-if>
+</div>
+</oj-bind-if>
+<oj-bind-if test="[[noData() === true]]">
+  <div class="resetPreTag">
+    <div id="noDataexplainPlanSQLID">
+    </div>
+  <oj-bind-text value="{{noDataLabel}}"></oj-bind-text>
+  </div>
+</oj-bind-if>
+<!--Table column header renderer-->
+<!-- <script type="text/html" id="headerColumn">
+      <th title="">
+        <div :id="[[$context.componentElement.id+`_hdr`+$context.columnIndex]]" 
+          on-mouseover ="[[() =>$parent.tooltipOpen($context.componentElement.id+`_hdr`+$context.columnIndex,event, $context.data)]]"
+          on-mouseout="[[() => $parent.tooltipClose($context.componentElement.id+`_hdr`+$context.columnIndex)]]"
+          on-mousemove="[[() => $parent.updatePosition($context.componentElement.id+`_hdr`+$context.columnIndex,event)]]"> 
+          <oj-bind-text value="[[$context.data]]"></oj-bind-text>
+          
+          <oj-popup :id="[[`tooltip_`+$context.componentElement.id+`_hdr`+$context.columnIndex]]" 
+            auto-dismiss="focusLoss" modality="modeless"
+            on-oj-animate-start="[[$parent.startAnimationListener]]" position.my.horizontal="start" position.my.vertical="top"
+            position.at.horizontal="end" position.at.vertical="bottom" position.collision="flipfit" position.offset.x="11"
+            position.offset.y="15">
+              <oj-bind-text value="[[$context.data]]"></oj-bind-text>
+          </oj-popup>
+        </div>
+      </th>
+    </script> -->
+

@@ -1,0 +1,43 @@
+<link type="text/css" rel="stylesheet" href="css/rtsm.css"/>
+
+<oj-bind-if test="[[resultsDataModel.requestStatus() == 'ScriptStarted']]">
+  <div id="statementExecutionStarted" class="oj-flex oj-sm-align-items-center oj-sm-margin-6x" style ="white-space: pre-line;">
+    <div class="oj-flex oj-sm-align-items-start oj-sm-flex-direction-column">
+      <oj-bind-text value="[[`${lc.rtsmStatementDetailExecutionStarted}`]]"></oj-bind-text>
+      <oj-progress-circle style="margin: 10px; align-self: center;color: red" size="md" value="-1"></oj-progress-circle>
+    </div>
+  </div>
+</oj-bind-if>
+<oj-bind-if test="[[resultsDataModel.requestStatus() == 'ScriptExecutionError']]">
+  <div id="statementExecutionStarted" class="oj-flex oj-sm-align-items-center oj-sm-margin-6x" 
+  style ="white-space: pre-line; color: var(--vscode-editorWarning-foreground);">
+    <div class="oj-flex oj-sm-align-items-start oj-sm-flex-direction-column">
+      <oj-bind-text value="[[resultsDataModel.error]]"></oj-bind-text>
+    </div>
+  </div>
+</oj-bind-if>
+<!--oj-bind-if test="[[resultsDataModel.requestStatus() == 'ScriptFinished']]">
+  <div id="statementExecutionFinished" class="oj-flex oj-sm-align-items-center oj-sm-margin-6x">
+    <div class="oj-flex oj-sm-align-items-start oj-sm-flex-direction-column">
+      <oj-bind-text value="[[`${lc.rtsmStatementDetailExecutionFinished}`]]"></oj-bind-text>
+      <oj-progress-circle style="margin: 10px; align-self: center;color: blue;" size="md" value="-1"></oj-progress-circle>
+    </div>
+  </div>
+</oj-bind-if-->
+<oj-bind-if test="[[resultsDataModel.requestStatus() == 'ScriptNotStarted']]">
+  <div id="statementExecutionNotStarted" class="oj-flex oj-sm-align-items-center oj-sm-margin-6x" style ="white-space: pre-line;">
+    <oj-bind-text value="[[`${lc.rtsmStatementDetailTitle}`]]"></oj-bind-text>
+  </div>
+</oj-bind-if>
+<oj-bind-if test="[[resultsDataModel.requestStatus() == 'ScriptInfoReceived']]">
+  <div id="statementExecutionNotStarted" class="oj-flex oj-sm-align-items-center oj-sm-margin-6x" style ="white-space: pre-line;">
+    <oj-bind-text value="[[`${lc.rtsmStatementDetailGettingReport}`]]"></oj-bind-text>
+  </div>
+</oj-bind-if>
+<oj-bind-if test="[[resultsDataModel.requestStatus() == 'ScriptReportReceived']]">
+  <iFrame id="statementDetailReport" class="rtsm-detail-panel-body">
+      <span>
+        <oj-bind-text value="[[`${lc.rtsmStatementDetailTitle}`]]"></oj-bind-text>
+      </span>
+  </iFrame>
+</oj-bind-if>

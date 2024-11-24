@@ -1,0 +1,9 @@
+{
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "workbench.iconTheme": "material-icon-theme",
+    "window.openFoldersInNewWindow": "off",
+    "php.validate.executablePath": "",
+    "remote.SSH.remotePlatform": {
+        "203.249.87.58": "linux"
+    }
+}

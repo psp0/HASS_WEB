@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>air_cleaner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css" rel="stylesheet">
+    <!-- 스타일은 생략 -->
+</head>
+<body>
+    <div class="main-container">
+        <!-- 필터와 모델 데이터 표시 영역은 생략 -->
+        <div class="content-panel">
+            <div id="selected-filters" class="selected-filters">
+                <button id="reset-filters" style="margin-left: 10px;">&#8635;</button>
+            </div>
+            <div class="model-container" id="model-container">
+                <div class="data-container"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
+    <script>
+        function collectFilters() {
+            const filters = {};
+            document.querySelectorAll('.checkbox-group input[type="checkbox"]').forEach(checkbox => {
+                if (checkbox.checked) {
+                    const group = checkbox.closest('.panel').previousElementSibling.textContent.trim();
+                    if (!filters[group]) filters[group] = [];
+                    filters[group].push(checkbox.value);
+                }
+            });
+            const sliderValues = subscriptionSlider.noUiSlider.get();
+            filters['subscription_min'] = parseInt(sliderValues[0]);
+            filters['subscription_max'] = parseInt(sliderValues[1]);
+            return filters;
+        }
+
+        function applyFilters() {
+            const filters = collectFilters();
+            fetch('http://203.249.87.58/2_team/2_team5/jinhyung/pages/customer/model/air_test_api.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(filters)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector('.data-container').innerHTML = data.html;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        document.querySelectorAll('.checkbox-group input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', applyFilters);
+        });
+        subscriptionSlider.noUiSlider.on('change', applyFilters);
+    </script>
+</body>
+</html>

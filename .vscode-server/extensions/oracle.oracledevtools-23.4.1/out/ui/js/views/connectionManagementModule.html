@@ -1,0 +1,1146 @@
+<div class="connDlgBody">
+        <div>
+                <label class="connDlgHeader">
+                        <oj-bind-text value='[[uiHeaderText]]'></oj-bind-text>
+                </label>
+
+                <oj-button chroming='borderless' id='copyBtn' display='icons' on-oj-action="[[onHelp]]">
+                        <span slot='startIcon' class="connectionInfoIcon">
+                        </span>
+                        <oj-bind-text value="[[connectionUILabelTexts.helpLabel]]"></oj-bind-text>
+                </oj-button>
+        </div>
+
+        <div id="configSettingsModule" class="oj-flex">
+                <oj-module config="[[settingsConfig]]" style="background-color: transparent !important"></oj-module>
+        </div>
+
+        <hr class="hrstyle" />
+        <div class="flex" style="margin-top: 10px">
+                <div class="flex-item">
+                        <oj-label for="conType" slot="label" id="conTypeLabelID">
+                                <label class="leftalign">
+                                        <p>
+                                                <oj-bind-text value='[[connectionUILabelTexts.connectionTypeLabel]]'>
+                                                </oj-bind-text>
+                                                <oj-bind-if test="[[connInfoRequred.connectionType]]">
+                                                        <span class="required">
+                                                                <oj-bind-text
+                                                                        value='[[connectionUILabelTexts.requiredText]]'>
+                                                                </oj-bind-text>
+                                                        </span>
+                                                </oj-bind-if>
+                                        </p>
+                                </label>
+                                <oj-popup id="tooltip-popup-conTypeLabelID" class = "toolTipPopUp">
+                                        <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                </oj-popup>
+                        </oj-label>
+                </div>
+                <div class="flex-item" id="tooltip-container-conType">
+                        <oj-combobox-one value="{{connectionType}}"
+                                onkeydown='javascript: if((event.key != "Tab")){ return false;}'
+                                on-value-changed="[[connectionTypeChangedHandler]]"
+                                disabled='[[!creatingNewConnection()]]' onpaste="return false;" onCut="return false"
+                                oncontextmenu="return false" on-mouseenter="[[() => tooltipOpen(event)]]"
+                                on-mouseleave="[[() => tooltipClose(event)]]" id="conType" slot="value"
+                                maximum-result-count="0">
+                                <oj-bind-for-each data="[[connectionTypes]]">
+                                        <template>
+                                                <oj-option :id="[[`conType-`+$current.index]]"
+                                                        on-mouseleave="[[() => tooltipClose(event)]]"
+                                                        on-mouseenter="[[() => tooltipOpen(event)]]"
+                                                        value="[[$current.data.value]]">
+                                                        <oj-bind-text value="[[$current.data.label]]"></oj-bind-text>
+                                                </oj-option>                                               
+                                                
+                                                <oj-popup :id="[[`tooltip-popup-`+`conType-`+$current.index]]" class = "toolTipPopUp"
+                                                        auto-dismiss="focusLoss" modality="modeless"
+                                                        on-oj-animate-start="[[startAnimationListener]]"
+                                                        position.my.horizontal="start" position.my.vertical="top"
+                                                        position.at.horizontal="end" position.at.vertical="bottom"
+                                                        position.collision="flipfit" position.offset.x="7"
+                                                        position.offset.y="8">                                                       
+                                                        <oj-bind-text value="[[$current.data.label]]"></oj-bind-text>
+                                                        
+                                                </oj-popup>
+                                        </template>
+                                </oj-bind-for-each>
+                        </oj-combobox-one>
+                        <oj-popup id="tooltip-popup-conType" auto-dismiss="focusLoss" modality="modeless" class = "toolTipPopUp"
+                                on-oj-animate-start="[[startAnimationListener]]" position.my.horizontal="start"
+                                position.my.vertical="top" position.at.horizontal="end" position.at.vertical="bottom"
+                                position.collision="flipfit" position.offset.x="7" position.offset.y="8">
+                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                        </oj-popup>
+                </div>
+                <div class="flex-item"></div>
+        </div>
+        <oj-bind-if test="[[connectionType() === basicConnectionType]]">
+                <div class="flex">
+                        <div class="flex-item">
+                                <oj-label for="dbName" slot="label" id="dbNameLabelID">
+                                        <label class="leftalign">
+                                                <p>
+                                                        <oj-bind-text
+                                                                value='[[connectionUILabelTexts.dbHostNameLabel]]'>
+                                                        </oj-bind-text>
+                                                        <oj-bind-if
+                                                                test="[[connInfoRequred.dbHostName && !isFailedToParseDS()]]">
+                                                                <span class="required">
+                                                                        <oj-bind-text
+                                                                                value='[[connectionUILabelTexts.requiredText]]'>
+                                                                        </oj-bind-text>
+                                                                </span>
+                                                        </oj-bind-if>
+                                                </p>
+                                        </label>
+                                        <oj-popup id="tooltip-popup-dbNameLabelID" class = "toolTipPopUp">
+                                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                        </oj-popup>
+                                </oj-label>
+                        </div>
+                        <div class="flex-item" id="tooltip-container-dbName">
+                                <oj-input-text value='{{dbHostName}}' on-raw-value-changed='[[onRawValueChanged]]'
+                                        placeholder='[[connInfoPlaceHolderTexts.dbHostName]]'
+                                        disabled="[[isFailedToParseDS()]]" id='dbName' slot="value">
+                                </oj-input-text>
+                                <oj-popup id="tooltip-popup-dbName" class = "toolTipPopUp">
+                                        <oj-bind-text value="{{dbHostName}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item"></div>
+                </div>
+                <div class="flex">
+                        <div class="flex-item">
+                                <oj-label for="portNum" slot="label" id="portNumLabelID">
+                                        <label class="leftalign">
+                                                <p>
+                                                        <oj-bind-text value='[[connectionUILabelTexts.dbPortNumLabel]]'>
+                                                        </oj-bind-text>
+                                                        <oj-bind-if
+                                                                test="[[connInfoRequred.dbPortNum && !isFailedToParseDS()]]">
+                                                                <span class="required">
+                                                                        <oj-bind-text
+                                                                                value='[[connectionUILabelTexts.requiredText]]'>
+                                                                        </oj-bind-text>
+                                                                </span>
+                                                        </oj-bind-if>
+                                                </p>
+                                        </label>
+                                        <oj-popup id="tooltip-popup-portNumLabelID" class = "toolTipPopUp">
+                                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                        </oj-popup>
+                                </oj-label>
+                        </div>
+                        <div class="flex-item" id="tooltip-container-portNum">
+                                <oj-input-text value='{{dbPortNum}}' on-raw-value-changed='[[onRawValueChanged]]'
+                                        placeholder='[[connInfoPlaceHolderTexts.dbPortNum]]'
+                                        disabled="[[isFailedToParseDS()]]" id='portNum' slot="value">
+                                </oj-input-text>
+                                <oj-popup id="tooltip-popup-portNum" class = "toolTipPopUp">
+                                        <oj-bind-text value="{{dbPortNum}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item"></div>
+                </div>
+                <div class="flex">
+                        <div class="flex-item">
+                                <oj-label for="serviceName" slot="label" id="serviceNameLabelID">
+                                        <label class="leftalign">
+                                                <p>
+                                                        <oj-bind-text
+                                                                value='[[connectionUILabelTexts.dbServiceNameLabel]]'>
+                                                        </oj-bind-text>
+                                                        <oj-bind-if
+                                                                test="[[connInfoRequred.dbServiceName && !isFailedToParseDS()]]">
+                                                                <span class="required">
+                                                                        <oj-bind-text
+                                                                                value='[[connectionUILabelTexts.requiredText]]'>
+                                                                        </oj-bind-text>
+                                                                </span>
+                                                        </oj-bind-if>
+                                                </p>
+                                        </label>
+                                        <oj-popup id="tooltip-popup-serviceNameLabelID" class = "toolTipPopUp">
+                                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                        </oj-popup>
+                                </oj-label>
+                        </div>
+                        <div class="flex-item" id="tooltip-container-serviceName">
+                                <oj-input-text value='{{dbServiceName}}' on-raw-value-changed='[[onRawValueChanged]]'
+                                        placeholder='[[connInfoPlaceHolderTexts.dbServiceName]]'
+                                        disabled="[[isFailedToParseDS()]]" id='serviceName' slot="value">
+                                </oj-input-text>
+                                <oj-popup id="tooltip-popup-serviceName" class = "toolTipPopUp">
+                                        <oj-bind-text value="{{dbServiceName}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item"></div>
+                </div>
+                <div class="flex">
+                        <div class="flex-item">
+                                <oj-label for="ezConnectStringTextBox" slot="label" id="ezConnectStringTextBoxLabelID">
+                                        <label class="leftalign">
+                                                <p>
+                                                        <oj-bind-text
+                                                                value='[[connectionUILabelTexts.ezConnectStringLabel]]'>
+                                                        </oj-bind-text>
+                                                        <oj-bind-if test="[[connInfoRequred.ezConnectString]]">
+                                                                <span class="required">
+                                                                        <oj-bind-text
+                                                                                value='[[connectionUILabelTexts.requiredText]]'>
+                                                                        </oj-bind-text>
+                                                                </span>
+                                                        </oj-bind-if>
+                                                </p>
+                                        </label>
+                                        <oj-popup id="tooltip-popup-ezConnectStringTextBoxLabelID" class = "toolTipPopUp">
+                                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                        </oj-popup>
+                                </oj-label>
+                        </div>
+                        <div class="flex-item" id="tooltip-container-ezConnectStringTextBox">
+                                <oj-input-text id='ezConnectStringTextBox' value='{{ezConnectString}}' readonly="true"
+                                        slot="value">
+                                </oj-input-text>
+                                <oj-popup id="tooltip-popup-ezConnectStringTextBox" class = "toolTipPopUp">
+                                        <oj-bind-text value="{{ezConnectString}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item" id="tooltip-container-copyEasyConnectStringButton">
+                                <oj-button id="copyEasyConnectStringButton" display="icons" on-oj-action='[[onCopyEasyConnectString]]'
+                                        disabled="[[!ezConnectString() && !isFailedToParseDS()]]"
+                                        style="padding-left: 5px;">
+                                        <!-- <span slot='startIcon' class="demo-icon-font demo-copy-icon-24"></span> -->
+                                        <oj-bind-text value='[[connectionUILabelTexts.copyConnectionString]]'>
+                                        </oj-bind-text>
+                                </oj-button>
+                                <oj-popup id="tooltip-popup-copyEasyConnectStringButton" class = "toolTipPopUp">
+                                        <oj-bind-text value='[[connectionUILabelTexts.copyConnectionStringToolTip]]'></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                </div>
+        </oj-bind-if>
+        <oj-bind-if test="[[connectionType() === tnsConnectionType || connectionType() === ldapConnectionType]]">
+                <div class="flex">
+                        <div class="flex-item">
+                                <oj-label for="tnsAdminLocation" slot="label" id="tnsAdminLocationLabelID">
+                                        <label class="leftalign">
+                                                <p>
+                                                        <oj-bind-text
+                                                                value='[[connectionUILabelTexts.tnsAdminLocationLabel]]'>
+                                                        </oj-bind-text>
+                                                        <oj-bind-if test="[[connInfoRequred.tnsAdminLocation]]">
+                                                                <span class="required">
+                                                                        <oj-bind-text
+                                                                                value='[[connectionUILabelTexts.requiredText]]'>
+                                                                        </oj-bind-text>
+                                                                </span>
+                                                        </oj-bind-if>
+                                                </p>
+                                        </label>
+                                        <oj-popup id="tooltip-popup-tnsAdminLocationLabelID" class = "toolTipPopUp">
+                                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                        </oj-popup>
+                                </oj-label>
+                        </div>
+                        <div class="flex-item" id="tooltip-container-tnsAdminLocation">
+
+                                <oj-input-text value='{{tnsAdminLocation}}'
+                                        on-value-changed='[[tnsLocationChangeHandler]]' id='tnsAdminLocation'
+                                        placeholder='[[connInfoPlaceHolderTexts.tnsAdminLocation]]' slot="value">
+                                </oj-input-text>
+                                <oj-popup id="tooltip-popup-tnsAdminLocation" class = "toolTipPopUp">
+                                        <oj-bind-text value="{{tnsAdminLocation}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item">
+                                <oj-button display="icons" on-oj-action='[[onBrowseTNSLocation]]' id="browseTNSLocationBtn"
+                                        style="padding-left: 5px;">
+                                        <oj-bind-text value='[[connectionUILabelTexts.browse]]'></oj-bind-text>
+                                </oj-button>
+                        </div>
+                </div>
+                <div class="flex">
+                        <div class="flex-item">
+                                <oj-label for="tnsAliasesID" slot="label" id="tnsAliasesLabelID">
+                                        <label class="leftalign">
+                                                <p>
+                                                        <oj-bind-text value='[[connectionUILabelTexts.tnsAliasLabel]]'>
+                                                        </oj-bind-text>
+                                                        <oj-bind-if test="[[connInfoRequred.tnsAlias]]">
+                                                                <span class="required">
+                                                                        <oj-bind-text
+                                                                                value='[[connectionUILabelTexts.requiredText]]'>
+                                                                        </oj-bind-text>
+                                                                </span>
+                                                        </oj-bind-if>
+                                                </p>
+                                        </label>
+                                </oj-label>
+                                <oj-popup id="tooltip-popup-tnsAliasesLabelID" class = "toolTipPopUp">
+                                        <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        
+                        <oj-bind-if test="[[connectionType() === tnsConnectionType]]">
+                                <div class="flex-item" id="tooltip-container-tnsAliasesID">
+                                        <oj-combobox-one value="{{tnsAlias}}" options="[[tnsAliases]]"                                            
+                                                onpaste="return false;" onCut="return false"
+                                                oncontextmenu="return false" on-mouseenter="[[() => tooltipOpen(event)]]"
+                                                on-mouseleave="[[() => tooltipClose(event)]]" id="tnsAliasesID" slot="value"
+                                                maximum-result-count="0">                                                                                              
+                                        </oj-combobox-one>
+                                        <oj-popup id="tooltip-popup-tnsAliasesID" auto-dismiss="focusLoss" modality="modeless" class = "toolTipPopUp"
+                                                on-oj-animate-start="[[startAnimationListener]]" position.my.horizontal="start"
+                                                position.my.vertical="top" position.at.horizontal="end" position.at.vertical="bottom"
+                                                position.collision="flipfit" position.offset.x="7" position.offset.y="8">
+                                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                        </oj-popup>
+                                </div>
+                        </oj-bind-if>
+
+                        <oj-bind-if test="[[connectionType() === ldapConnectionType]]">
+                                <div class="flex-item" id="tooltip-container-ldapServerTextID">
+                                        <oj-input-text value='{{tnsAlias}}' on-raw-value-changed='[[onRawValueChanged]]'                                                
+                                                id="ldapServerTextID" slot="value">
+                                        </oj-input-text>                                
+                                        <oj-popup id="tooltip-popup-ldapServerTextID" class = "toolTipPopUp">
+                                                <oj-bind-text value="{{tnsAlias}}"></oj-bind-text>
+                                        </oj-popup>
+                                </div>
+                        </oj-bind-if>                        
+
+                        <div class="flex-item" id="tooltip-container-enableWalletOptions"></div>
+                </div>
+                <div class="flex">
+                        <div class="flex-item"></div>
+                        <div class="flex-item">
+                                <oj-checkboxset label-hint=" " value="{{enableWalletFileOptions}}"
+                                        id="enableWalletOptions" slot="value">
+                                        <oj-option id="enableWallet" value="yes">
+                                                <oj-bind-text
+                                                        value='[[connectionUILabelTexts.enableWalletFileLocationLabel]]'>
+                                                </oj-bind-text>
+                                        </oj-option>
+                                </oj-checkboxset>
+                                <oj-popup id="tooltip-popup-enableWalletOptions" class = "toolTipPopUp">
+                                        <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item"></div>
+                </div>
+                <oj-bind-if test="[[enableSeps()]]">
+                        <div class="flex">
+                                <div class="flex-item"></div>
+                                <div class="flex-item">
+                                        <oj-checkboxset label-hint=" " value="{{enableConnCredsFromWalletFileOptions}}"
+                                                id="enableConnCredsFromWalletOptions" disabled="[[!enableSeps()]]" slot="value">
+                                                <oj-option id="enableConnCredsFromWallet" value="yes">
+                                                        <oj-bind-text
+                                                                value='[[connectionUILabelTexts.enableConnCredsFromWalletFileLabel]]'>
+                                                        </oj-bind-text>
+                                                </oj-option>
+                                        </oj-checkboxset>
+                                        <oj-popup id="tooltip-popup-enableConnCredsFromWalletOptions" class = "toolTipPopUp">
+                                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                        </oj-popup>
+                                        
+                                </div>
+                                <div class="flex-item"></div>
+                        </div>
+                </oj-bind-if>
+                <div class="flex">
+                        <div class="flex-item">
+                                <oj-label for="walletFileLocationText" disabled="[[!enableWalletFile()]]" slot="label"
+                                        id="walletFileLocationTextLabelID">
+                                        <label class="leftalign">
+                                                <p>
+                                                        <oj-bind-text
+                                                                value='[[connectionUILabelTexts.walletFileLocationLabel]]'>
+                                                        </oj-bind-text>
+                                                        <oj-bind-if
+                                                                test="[[connInfoRequred.walletFileLocation && enableWalletFile]]">
+                                                                <span class="required">
+                                                                        <oj-bind-text
+                                                                                value='[[connectionUILabelTexts.requiredText]]'>
+                                                                        </oj-bind-text>
+                                                                </span>
+                                                        </oj-bind-if>
+                                                </p>
+                                        </label>
+                                        <oj-popup id="tooltip-popup-walletFileLocationTextLabelID" class = "toolTipPopUp">
+                                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                        </oj-popup>
+                                </oj-label>
+                        </div>
+                        <div class="flex-item" id="tooltip-container-walletFileLocationText">
+                                <oj-input-text value='{{walletFileLocation}}'
+                                        placeholder='[[connInfoPlaceHolderTexts.walletFileLocation]]'
+                                        disabled="[[!enableWalletFile()]]" id='walletFileLocationText'
+                                        on-raw-value-changed='[[onRawValueChanged]]' slot="value">
+                                </oj-input-text>
+                                <oj-popup id="tooltip-popup-walletFileLocationText" class = "toolTipPopUp">
+                                        <oj-bind-text value="{{walletFileLocation}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item">
+                                <oj-button display="icons" disabled="[[!enableWalletFile()]]" id="browseWalletFileLocationBtn"
+                                        on-oj-action='[[onBrowseWalletFileLocation]]' style="padding-left: 5px;">
+                                        <oj-bind-text value='[[connectionUILabelTexts.browse]]'></oj-bind-text>
+                                </oj-button>
+                        </div>
+                </div>
+        </oj-bind-if>
+        <oj-bind-if test="[[connectionType() === odpConnectionType]]">
+                <div class="flex">
+                        <div class="flex-item">
+                                <oj-label for="odpConnectString" slot="label" id="odpConnectStringLabelID">
+                                        <label class="leftalign">
+                                                <p>
+                                                        <oj-bind-text
+                                                                value='[[connectionUILabelTexts.odpnetConnStringLabel]]'>
+                                                        </oj-bind-text>
+                                                        <oj-bind-if test="[[connInfoRequred.odpnetConnString]]">
+                                                                <span class="required">
+                                                                        <oj-bind-text
+                                                                                value='[[connectionUILabelTexts.requiredText]]'>
+                                                                        </oj-bind-text>
+                                                                </span>
+                                                        </oj-bind-if>
+                                                </p>
+                                        </label>
+                                </oj-label>
+                                <oj-popup id="tooltip-popup-odpConnectStringLabelID" class = "toolTipPopUp">
+                                        <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item" id="tooltip-container-odpConnectString">
+                                <oj-text-area value='{{odpnetConnString}}' on-raw-value-changed='[[onRawValueChanged]]'
+                                        id="odpConnectString"
+                                        placeholder='[[connInfoPlaceHolderTexts.odpnetConnString]]'
+                                        on-mouseenter="[[() => tooltipOpen(event)]]"
+                                        on-mouseleave="[[() => tooltipClose(event)]]" slot="value" rows="5">
+                                </oj-text-area>
+                                <oj-popup id="tooltip-popup-odpConnectString" class = "toolTipPopUp">
+                                        <oj-bind-text value="{{odpnetConnString}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item"></div>
+                </div>
+        </oj-bind-if>
+        <oj-bind-if test="[[connectionType() === advancedConnectionType]]">
+                <div class="flex">
+                        <div class="flex-item">
+                                <oj-label for="ezConnectPlusString" slot="label" id="ezConnectPlusStringLabelID">
+                                        <label class="leftalign">
+                                                <p>
+                                                        <oj-bind-text
+                                                                value='[[connectionUILabelTexts.ezConnectPlusStringLabel]]'>
+                                                        </oj-bind-text>
+                                                        <oj-bind-if test="[[connInfoRequred.ezConnectPlusString]]">
+                                                                <span class="required">
+                                                                        <oj-bind-text
+                                                                                value='[[connectionUILabelTexts.requiredText]]'>
+                                                                        </oj-bind-text>
+                                                                </span>
+                                                        </oj-bind-if>
+                                                </p>
+                                        </label>
+                                        <oj-popup id="tooltip-popup-ezConnectPlusStringLabelID" class = "toolTipPopUp">
+                                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                        </oj-popup>
+                                </oj-label>
+                        </div>
+                        <div class="flex-item" id="tooltip-container-ezConnectPlusString">
+                                <oj-text-area value='{{ezConnectPlusString}}'
+                                        on-raw-value-changed='[[onRawValueChanged]]' id="ezConnectPlusString"
+                                        placeholder='[[connInfoPlaceHolderTexts.ezConnectPlusString]]' slot="value"
+                                        rows="5">
+                                </oj-text-area>
+                                <oj-popup id="tooltip-popup-ezConnectPlusString" class = "toolTipPopUp">
+                                        <oj-bind-text value="{{ezConnectPlusString}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item"></div>
+                </div>
+        </oj-bind-if>
+
+        <oj-bind-if test="[[connectionType() !== odpConnectionType]]">
+                <div class="flex">
+                        <div class="flex-item">
+                                <oj-label for="authenticationTypes" slot="label" id="authenticationTypesLabelID">
+                                        <label class="leftalign">
+                                                <p>
+                                                        <oj-bind-text
+                                                                value='[[connectionUILabelTexts.authenticationTypeLabel]]'>
+                                                        </oj-bind-text>
+                                                        <oj-bind-if test="[[connInfoRequred.authenticationType]]">
+                                                                <span class="required">
+                                                                        <oj-bind-text
+                                                                                value='[[connectionUILabelTexts.requiredText]]'>
+                                                                        </oj-bind-text>
+                                                                </span>
+                                                        </oj-bind-if>
+                                                </p>
+                                        </label>
+                                        <oj-popup id="tooltip-popup-authenticationTypesLabelID" class = "toolTipPopUp">
+                                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                        </oj-popup>
+                                </oj-label>
+                        </div>
+
+
+
+                        <div class="flex-item" id="tooltip-container-authenticationTypes">
+                                <oj-combobox-one id="authenticationTypes" 
+                                        value="{{authenticationType}}"
+                                        onkeydown='javascript: if((event.key != "Tab")){ return false;}'
+                                        onpaste="return false;" onCut="return false" oncontextmenu="return false"
+                                        slot="value" 
+                                        maximum-result-count="0" 
+                                        on-mouseenter="[[() => tooltipOpen(event)]]"
+                                        on-mouseleave="[[() => tooltipClose(event)]]">
+
+                                        <oj-bind-for-each data="[[authenticationTypes]]">
+                                                <template>
+                                                        <oj-option :id="[[`authType-`+$current.index]]"
+                                                                on-mouseleave="[[() => tooltipClose(event)]]"
+                                                                on-mouseenter="[[() => tooltipOpen(event)]]"
+                                                                value="[[$current.data.value]]">
+                                                                <oj-bind-text value="[[$current.data.label]]">
+                                                                </oj-bind-text>
+                                                        </oj-option>
+                                                        <oj-popup class = "toolTipPopUp"
+                                                                :id="[[`tooltip-popup-`+`authType-`+$current.index]]"
+                                                                auto-dismiss="focusLoss" modality="modeless"
+                                                                on-oj-animate-start="[[startAnimationListener]]"
+                                                                position.my.horizontal="start"
+                                                                position.my.vertical="top" position.at.horizontal="end"
+                                                                position.at.vertical="bottom"
+                                                                position.collision="flipfit" position.offset.x="7"
+                                                                position.offset.y="8">                                                               
+                                                                <oj-bind-text value="[[$current.data.label]]"></oj-bind-text>
+                                                        </oj-popup>
+                                                </template>
+                                        </oj-bind-for-each>
+
+                                </oj-combobox-one>
+                                <oj-popup id="tooltip-popup-authenticationTypes" auto-dismiss="focusLoss" class = "toolTipPopUp"
+                                        modality="modeless" on-oj-animate-start="[[startAnimationListener]]"
+                                        position.my.horizontal="start" position.my.vertical="top"
+                                        position.at.horizontal="end" position.at.vertical="bottom"
+                                        position.collision="flipfit" position.offset.x="7" position.offset.y="8">
+                                        <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item"></div>
+                </div>
+                <div class="flex">
+                        <div class="flex-item">
+                                <oj-label for="userNameText" slot="label" id="userNameTextLabelID">
+                                        <label class="leftalign">
+                                                <p>
+                                                        <oj-bind-text value='[[connectionUILabelTexts.userIdLabel]]'>
+                                                        </oj-bind-text>
+                                                        <oj-bind-if test="[[connInfoRequred.userId]]">
+                                                                <span class="required">
+                                                                        <oj-bind-text
+                                                                                value='[[connectionUILabelTexts.requiredText]]'>
+                                                                        </oj-bind-text>
+                                                                </span>
+                                                        </oj-bind-if>
+                                                </p>
+                                        </label>
+                                        <oj-popup id="tooltip-popup-userNameTextLabelID" class = "toolTipPopUp">
+                                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                        </oj-popup>
+                                </oj-label>
+                        </div>
+                        <div class="flex-item" id="tooltip-container-userNameText">
+                                <oj-input-text value='{{userId}}' on-raw-value-changed='[[onRawValueChanged]]'
+                                        placeholder='[[connInfoPlaceHolderTexts.userId]]' on-blur='[[updateUserId]]'
+                                        id="userNameText" slot="value">
+                                </oj-input-text>
+                                <oj-popup id="tooltip-popup-userNameText" class = "toolTipPopUp">
+                                        <oj-bind-text value="{{userId}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item"></div>
+                </div>
+                <div class="flex">
+                        <div class="flex-item">
+                                <oj-label for="passwordText" slot="label" id="passwordTextLabelID">
+                                        <label class="leftalign">
+                                                <p>
+                                                        <oj-bind-text value='[[connectionUILabelTexts.passwordLabel]]'>
+                                                        </oj-bind-text>
+                                                        <oj-bind-if
+                                                                test="[[connInfoRequred.password && !osAuthentication() && !useProxyAuthentication()]]">
+                                                                <span class="required">
+                                                                        <oj-bind-text
+                                                                                value='[[connectionUILabelTexts.requiredText]]'>
+                                                                        </oj-bind-text>
+                                                                </span>
+                                                        </oj-bind-if>
+                                                </p>
+                                        </label>
+                                        <oj-popup id="tooltip-popup-passwordTextLabelID" class = "toolTipPopUp">
+                                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                        </oj-popup>
+                                </oj-label>
+                        </div>
+                        <div class="flex-item" id="tooltip-container-passwordText">
+                                <oj-input-password value="{{password}}" on-raw-value-changed='[[onRawValueChanged]]'
+                                        disabled="[[osAuthentication()]]" id="passwordText"
+                                        on-mouseenter="[[() => tooltipOpen(event)]]"
+                                        on-mouseleave="[[() => tooltipClose(event)]]" slot="value">
+                                </oj-input-password>
+                                <oj-popup id="tooltip-popup-passwordText" auto-dismiss="focusLoss" modality="modeless" class = "toolTipPopUp"
+                                        on-oj-animate-start="[[startAnimationListener]]" position.my.horizontal="start"
+                                        position.my.vertical="top" position.at.horizontal="end"
+                                        position.at.vertical="bottom" position.collision="flipfit" position.offset.x="7"
+                                        position.offset.y="8">
+                                        <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item"></div>
+                </div>
+                <div class="flex">
+                        <div class="flex-item"></div>
+                        <div class="flex-item" id="tooltip-container-savePasswordOptions">
+                                <oj-checkboxset label-hint=" " value="{{savePasswordOptions}}" id="savePasswordOptions">
+                                        <oj-option id="savePwd" value="yes" disabled="[[osAuthentication()]]">
+                                                <oj-bind-text value='[[connectionUILabelTexts.savePasswordLabel]]'>
+                                                </oj-bind-text>
+                                        </oj-option>
+                                </oj-checkboxset>
+                                <oj-popup id="tooltip-popup-savePasswordOptions" class = "toolTipPopUp">
+                                        <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item"></div>
+                </div>
+
+        </oj-bind-if>
+        <div class="flex">
+                <div class="flex-item"></div>
+                <div class="flex-item" id="tooltip-container-setasDefaultConn">
+                        <oj-checkboxset label-hint=" " value="{{setasDefaultOptions}}" id="setasDefaultConn">
+                                <oj-option id="defConn" value="yes">
+                                        <oj-bind-text value='[[connectionUILabelTexts.setasDefaultLabel]]'>
+                                        </oj-bind-text>
+                                </oj-option>
+                        </oj-checkboxset>
+                        <oj-popup id="tooltip-popup-setasDefaultConn" class = "toolTipPopUp">
+                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                        </oj-popup>
+                </div>
+                <div class="flex-item"></div>
+        </div>
+        <oj-bind-if test="[[!showMoreProps()]]">
+                <div class="flex">
+                        <div class="flex-item">
+                                <oj-label for="connectionName1" slot="label" id="connectionName1LabelID">
+                                        <label class="leftalign">
+                                                <p>
+                                                        <oj-bind-text
+                                                                value='[[connectionUILabelTexts.connectionNameLabel]]'>
+                                                        </oj-bind-text>
+                                                        <oj-bind-if
+                                                                test="[[connInfoRequred.connectionName && creatingNewConnection()]]">
+                                                                <span class="required">
+                                                                        <oj-bind-text
+                                                                                value='[[connectionUILabelTexts.requiredText]]'>
+                                                                        </oj-bind-text>
+                                                                </span>
+                                                        </oj-bind-if>
+                                                </p>
+                                        </label>
+                                        <oj-popup id="tooltip-popup-connectionName1LabelID" class = "toolTipPopUp">
+                                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                        </oj-popup>
+                                </oj-label>
+                        </div>
+                        <div class="flex-item" id="tooltip-container-connectionName1">
+                                <oj-input-text value='{{connectionNameParsed}}' id="connectionName1"
+                                        placeholder='[[connInfoPlaceHolderTexts.connectionName]]'
+                                        on-raw-value-changed='[[onRawValueChanged]]' slot="value">
+                                </oj-input-text>
+                                <oj-popup id="tooltip-popup-connectionName1" class = "toolTipPopUp">
+                                        <oj-bind-text value="{{connectionNameParsed}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item" id="tooltip-container-colorBtn1">
+                                <oj-button 
+                                        id="colorBtn1"
+                                        class="conn-color-button" 
+                                        style="margin-left: 5px" 
+                                        on-oj-action="[[onColorButtonClick]]">
+
+                                        <svg slot="startIcon" width="16px" height="16px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                                <polyline points="0,0 0,16 16,16 16,0 0,0"
+                                                        :style.fill="[[colorValue().toString()]]"
+                                                        style="stroke-width:1;stroke:#ffffff;"
+                                                />
+                                                <oj-bind-if test = "[[colorValue().getAlpha() === 0]]">
+                                                        <polyline points="0,0 0,16 16,16 16,0 0,0 16,16 16,0 0,16" 
+                                                                :style.fill="[[colorValue().toString()]]"
+                                                                style="stroke-width:1;stroke:#ffffff;"
+                                                        />
+                                                </oj-bind-if>
+                                        </svg>
+                                        <oj-bind-text value="[[connectionUILabelTexts.connColorLabel]]"></oj-bind-text>
+                                </oj-button>
+                                <oj-popup id="tooltip-popup-colorBtn1" class = "toolTipPopUp">
+                                        <oj-bind-text value='[[connectionUILabelTexts.connColorToolTip]]'></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                </div>
+
+                <oj-bind-if test="[[profileConfigurationTarget() == 2]]">
+                        <div class="flex">
+                                <div class="flex-item"></div>
+                                <div class="flex-item" id="tooltip-container-showScopeOption1">
+                                        <oj-checkboxset label-hint=" " value="{{showScopeOptions}}" id="showScope1">
+                                                <oj-option id="showScopeOption1" value="yes">
+                                                        <oj-bind-text
+                                                                value='[[connectionUILabelTexts.showWorkspaceWithConnectionName]]'>
+                                                        </oj-bind-text>
+                                                </oj-option>
+                                        </oj-checkboxset>
+                                        <oj-popup id="tooltip-popup-showScopeOption1" class = "toolTipPopUp">
+                                                <oj-bind-text value='[[connectionUILabelTexts.showWorkspaceWithConnectionNameToolTip]]'></oj-bind-text>
+                                        </oj-popup>
+                                    </div>
+                                <div class="flex-item"></div>
+                        </div>
+                </oj-bind-if>
+                <oj-bind-if test="[[profileConfigurationTarget() == 3]]">
+                        <div class="flex">
+                                <div class="flex-item"></div>
+                                <div class="flex-item" id="tooltip-container-showScopeOption2">
+                                        <oj-checkboxset label-hint=" " value="{{showScopeOptions}}" id="showScope2">
+                                                <oj-option id="showScopeOption2" value="yes">
+                                                        <oj-bind-text
+                                                                value='[[connectionUILabelTexts.showFolderNameWithConnectionName]]'>
+                                                        </oj-bind-text>
+                                                </oj-option>
+                                        </oj-checkboxset>
+                                        <oj-popup id="tooltip-popup-showScopeOption2" class = "toolTipPopUp">
+                                                <oj-bind-text value='[[connectionUILabelTexts.showFolderNameWithConnectionNameToolTip]]'></oj-bind-text>
+                                        </oj-popup>
+                                </div>
+                                <div class="flex-item"></div>
+                        </div>
+                </oj-bind-if>
+
+        </oj-bind-if>
+        <div class="flex">
+                <div class="flex-item"></div>
+                <div class="flex-item" id="tooltip-container-showMorePropsID">
+                        <oj-checkboxset label-hint=" " value="{{showMorePropsOptions}}" id="showMorePropsID"
+                                on-value-changed='[[onShowMorePropsValueChanged]]'>
+
+                                <oj-option id="showMoreProps" value="yes">
+                                        <oj-bind-text value='[[connectionUILabelTexts.showMoreOptionsLabel]]'>
+                                        </oj-bind-text>
+                                </oj-option>
+                        </oj-checkboxset>
+                        <oj-popup id="tooltip-popup-showMorePropsID" class = "toolTipPopUp">
+                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                        </oj-popup>
+                </div>
+                <div class="flex-item"></div>
+        </div>
+        <oj-bind-if test="[[showMoreProps()]]">
+
+                <oj-bind-if test="[[connectionType() !== odpConnectionType]]">
+                        <div class="flex">
+                                <div class="flex-item">
+                                        <oj-label for="proxyUserName" slot="label" id="proxyUserNameLabelID">
+                                                <label class="leftalign">
+                                                        <p>
+                                                                <oj-bind-text
+                                                                        value='[[connectionUILabelTexts.proxyUserIdLabel]]'>
+                                                                </oj-bind-text>
+                                                                <oj-bind-if test="[[connInfoRequred.proxyUserId]]">
+                                                                        <span class="required">
+                                                                                <oj-bind-text
+                                                                                        value='[[connectionUILabelTexts.requiredText]]'>
+                                                                                </oj-bind-text>
+                                                                        </span>
+                                                                </oj-bind-if>
+                                                        </p>
+                                                </label>
+
+                                                <oj-popup id="tooltip-popup-proxyUserNameLabelID" class = "toolTipPopUp">
+                                                        <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                                </oj-popup>
+                                        </oj-label>
+                                </div>
+                                <div class="flex-item" id="tooltip-container-proxyUserName">
+                                        <oj-input-text value='{{proxyUserId}}'
+                                                on-raw-value-changed='[[onRawValueChanged]]'
+                                                placeholder='[[connInfoPlaceHolderTexts.proxyUserId]]'
+                                                id='proxyUserName' on-blur='[[updateProxyUserId]]' slot="value">
+                                        </oj-input-text>
+                                        <oj-popup id="tooltip-popup-proxyUserName" class = "toolTipPopUp">
+                                                <oj-bind-text value="{{proxyUserId}}"></oj-bind-text>
+                                        </oj-popup>
+                                </div>
+                                <div class="flex-item"></div>
+                        </div>
+                        <div class="flex">
+                                <div class="flex-item">
+                                        <oj-label for="proxyPassword" slot="label" id="proxyPasswordLabelID">
+                                                <label class="leftalign">
+                                                        <p>
+                                                                <oj-bind-text
+                                                                        value='[[connectionUILabelTexts.proxyPasswordLabel]]'>
+                                                                </oj-bind-text>
+                                                                <oj-bind-if
+                                                                        test="[[connInfoRequred.proxyPassword && useProxyAuthentication() && !osProxyAuthentication()]]">
+                                                                        <span class="required">
+                                                                                <oj-bind-text
+                                                                                        value='[[connectionUILabelTexts.requiredText]]'>
+                                                                                </oj-bind-text>
+                                                                        </span>
+                                                                </oj-bind-if>
+                                                        </p>
+                                                </label>
+                                                <oj-popup id="tooltip-popup-proxyPasswordLabelID" class = "toolTipPopUp">
+                                                        <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                                </oj-popup>
+                                        </oj-label>
+                                </div>
+                                <div class="flex-item" id="tooltip-container-proxyPassword">
+                                        <oj-input-password value="{{proxyPassword}}"
+                                                on-raw-value-changed='[[onRawValueChanged]]' id="proxyPassword"
+                                                on-mouseenter="[[() => tooltipOpen(event)]]"
+                                                on-mouseleave="[[() => tooltipClose(event)]]"
+                                                disabled="[[osProxyAuthentication()]]" slot="value">
+                                        </oj-input-password>
+                                        <oj-popup id="tooltip-popup-proxyPassword" auto-dismiss="focusLoss" class = "toolTipPopUp"
+                                                modality="modeless" on-oj-animate-start="[[startAnimationListener]]"
+                                                position.my.horizontal="start" position.my.vertical="top"
+                                                position.at.horizontal="end" position.at.vertical="bottom"
+                                                position.collision="flipfit" position.offset.x="7"
+                                                position.offset.y="8">
+                                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                        </oj-popup>
+                                </div>
+                                <div class="flex-item"></div>
+                        </div>
+                </oj-bind-if>
+                <div class="flex">
+                        <div class="flex-item">
+                                <oj-label for="currentSchemas" slot="label" id="currentSchemasLabelID">
+                                        <label class="leftalign">
+                                                <p>
+                                                        <oj-bind-text
+                                                                value='[[connectionUILabelTexts.currentSchemaLabel]]'>
+                                                        </oj-bind-text>
+                                                        <oj-bind-if test="[[connInfoRequred.currentSchema]]">
+                                                                <span class="required">
+                                                                        <oj-bind-text
+                                                                                value='[[connectionUILabelTexts.requiredText]]'>
+                                                                        </oj-bind-text>
+                                                                </span>
+                                                        </oj-bind-if>
+                                                </p>
+                                        </label>
+                                        <oj-popup id="tooltip-popup-currentSchemasLabelID" class = "toolTipPopUp">
+                                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                        </oj-popup>
+                                </oj-label>
+                        </div>
+                        <div class="flex-item" id="tooltip-container-currentSchemas">
+                                <oj-combobox-one id="currentSchemas" options="[[currentSchemas]]"
+                                        value="{{currentSchema}}" on-focus='[[onFetchSchemas]]' onpaste="return false;"
+                                        onCut="return false" oncontextmenu="return false"
+                                        on-blur='[[updateCurrentSchemaToOracleCase]]' on-mousedown='[[onFetchSchemas]]'
+                                        slot="value" 
+                                        maximum-result-count="0" 
+                                        on-raw-value-changed='[[onCurrentSchemaValueChanged]]'
+                                        on-mouseenter="[[() => tooltipOpen(event)]]"
+                                        on-mouseleave="[[() => tooltipClose(event)]]">
+                                </oj-combobox-one>
+                                <oj-popup id="tooltip-popup-currentSchemas" auto-dismiss="focusLoss" modality="modeless" class = "toolTipPopUp"
+                                        on-oj-animate-start="[[startAnimationListener]]" position.my.horizontal="start"
+                                        position.my.vertical="top" position.at.horizontal="end"
+                                        position.at.vertical="bottom" position.collision="flipfit" position.offset.x="7"
+                                        position.offset.y="8">
+                                        <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item">
+                                <oj-bind-if test="[[isFetchSchemasInProgress]]">
+                                        <oj-progress-circle size="sm" id="progressCircle" value="-1"
+                                                style="padding-left: 5px;"></oj-progress-circle>
+                                </oj-bind-if>
+                        </div>
+                </div>
+                <!--  -->
+                <div class="flex">
+                        <div class="flex-item"></div>
+                        <div class="flex-item" id="tooltip-container-showSchemaOptions">
+                                <oj-checkboxset label-hint=" " value="{{showSchemaOptions}}" id="showSchemaOptions">
+                                        <oj-option id="showSchemaOption" value="yes">
+                                                <oj-bind-text
+                                                        value='[[connectionUILabelTexts.showSchemaNameWithConnectionName]]'>
+                                                </oj-bind-text>
+                                        </oj-option>
+                                </oj-checkboxset>
+                                <oj-popup id="tooltip-popup-showSchemaOptions" class = "toolTipPopUp">
+                                        <oj-bind-text value='[[connectionUILabelTexts.showSchemaNameWithConnectionNameToolTip]]'></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item"></div>
+                </div>
+                <!--  -->
+                <div class="flex">
+                        <div class="flex-item">
+                                <oj-label for="loginScript" slot="label" id="loginScriptLabelID">
+                                        <label class="leftalign">
+                                                <p>
+                                                        <oj-bind-text
+                                                                value='[[connectionUILabelTexts.loginScriptLabel]]'>
+                                                        </oj-bind-text>
+                                                        <oj-bind-if test="[[connInfoRequred.loginScript]]">
+                                                                <span class="required">
+                                                                        <oj-bind-text
+                                                                                value='[[connectionUILabelTexts.requiredText]]'>
+                                                                        </oj-bind-text>
+                                                                </span>
+                                                        </oj-bind-if>
+                                                </p>
+                                        </label>
+                                        <oj-popup id="tooltip-popup-loginScriptLabelID" class = "toolTipPopUp">
+                                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                        </oj-popup>
+                                </oj-label>
+                        </div>
+                        <div class="flex-item" id="tooltip-container-loginScript">
+                                <oj-input-text value='{{loginScript}}' on-raw-value-changed='[[onRawValueChanged]]'
+                                        id='loginScript' placeholder='[[connInfoPlaceHolderTexts.loginScript]]'
+                                        slot="value">
+                                </oj-input-text>
+                                <oj-popup id="tooltip-popup-loginScript" class = "toolTipPopUp">
+                                        <oj-bind-text value="{{loginScript}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item">
+                                <oj-button display="icons" on-oj-action='[[onBrowseLoginScript]]' id="browseLoginScriptBtn"
+                                        style="padding-left: 5px;">
+                                        <oj-bind-text value='[[connectionUILabelTexts.browse]]'></oj-bind-text>
+                                </oj-button>
+                        </div>
+                </div>
+                <!--  -->
+                <div class="flex">
+                        <div class="flex-item">
+                                <oj-label for="aiProfiles" slot="label" id="aiProfileLabelID">
+                                        <label class="leftalign">
+                                                <p><oj-bind-text value='[[connectionUILabelTexts.defaultAIProfileLabel]]'></oj-bind-text></p>
+                                        </label>
+                                        <oj-popup id="tooltip-popup-aiProfileLabelID" class = "toolTipPopUp">
+                                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                        </oj-popup>
+                                </oj-label>
+                        </div>
+                        <div class="flex-item" id="tooltip-container-aiProfiles">
+                                <oj-combobox-one id="aiProfiles" options="[[aiProfiles]]"
+                                        value="{{defaultAIProfile}}" on-focus='[[onFetchAIProfiles]]' onpaste="return false;"
+                                        onCut="return false" oncontextmenu="return false" on-mousedown='[[onFetchAIProfiles]]'
+                                        slot="value" 
+                                        maximum-result-count="0"
+                                        on-mouseenter="[[() => tooltipOpen(event)]]"
+                                        on-mouseleave="[[() => tooltipClose(event)]]">
+                                </oj-combobox-one>
+                                <oj-popup id="tooltip-popup-aiProfiles" auto-dismiss="focusLoss" modality="modeless" class = "toolTipPopUp"
+                                        on-oj-animate-start="[[startAnimationListener]]" position.my.horizontal="start"
+                                        position.my.vertical="top" position.at.horizontal="end"
+                                        position.at.vertical="bottom" position.collision="flipfit" position.offset.x="7"
+                                        position.offset.y="8">
+                                        <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item">
+                                <oj-bind-if test="[[isFetchAIProfilesInProgress]]">
+                                        <oj-progress-circle size="sm" id="progressCircle" value="-1"
+                                                style="padding-left: 5px;"></oj-progress-circle>
+                                </oj-bind-if>
+                        </div>
+                </div>
+        </oj-bind-if>
+
+
+        <oj-bind-if test="[[showMoreProps()]]">
+                <div class="flex">
+                        <div class="flex-item">
+                                <oj-label for="connectionName2" slot="label" id="connectionName2LabelID">
+                                        <label class="leftalign">
+                                                <p>
+                                                        <oj-bind-text
+                                                                value='[[connectionUILabelTexts.connectionNameLabel]]'>
+                                                        </oj-bind-text>
+                                                        <oj-bind-if
+                                                                test="[[connInfoRequred.connectionName && creatingNewConnection()]]">
+                                                                <span class="required">
+                                                                        <oj-bind-text
+                                                                                value='[[connectionUILabelTexts.requiredText]]'>
+                                                                        </oj-bind-text>
+                                                                </span>
+                                                        </oj-bind-if>
+                                                </p>
+                                        </label>
+                                        <oj-popup id="tooltip-popup-connectionName2LabelID" class = "toolTipPopUp">
+                                                <oj-bind-text value="{{tooltipDescription}}"></oj-bind-text>
+                                        </oj-popup>
+                                </oj-label>
+                        </div>
+                        <div class="flex-item" id="tooltip-container-connectionName2">
+                                <oj-input-text value='{{connectionNameParsed}}' id="connectionName2"
+                                        placeholder='[[connInfoPlaceHolderTexts.connectionName]]'
+                                        on-raw-value-changed='[[onRawValueChanged]]' slot="value">
+                                </oj-input-text>
+                                <oj-popup id="tooltip-popup-connectionName2" class = "toolTipPopUp">
+                                        <oj-bind-text value="{{connectionNameParsed}}"></oj-bind-text>
+                                </oj-popup>
+                        </div>
+                        <div class="flex-item" id ="tooltip-container-colorBtn2">
+                                <oj-button 
+                                        id="colorBtn2"
+                                        class="conn-color-button" 
+                                        style="margin-left: 5px" 
+                                        on-oj-action="[[onColorButtonClick]]">
+
+                                        <svg slot="startIcon" width="16px" height="16px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                                <polyline points="0,0 0,16 16,16 16,0 0,0"
+                                                        :style.fill="[[colorValue().toString()]]"
+                                                        style="stroke-width:1;stroke:#ffffff;"
+                                                />
+                                                <oj-bind-if test = "[[colorValue().getAlpha() === 0]]">
+                                                        <polyline points="0,0 0,16 16,16 16,0 0,0 16,16 16,0 0,16" 
+                                                                :style.fill="[[colorValue().toString()]]"
+                                                                style="stroke-width:1;stroke:#ffffff;"
+                                                        />
+                                                </oj-bind-if>
+                                        </svg>
+                                        <oj-bind-text value="[[connectionUILabelTexts.connColorLabel]]"></oj-bind-text>
+                                </oj-button>
+                                <oj-popup id="tooltip-popup-colorBtn2" class = "toolTipPopUp">
+                                        <oj-bind-text value='[[connectionUILabelTexts.connColorToolTip]]'></oj-bind-text>
+                                </oj-popup>                                
+                        </div>
+                </div>
+
+                <oj-bind-if test="[[profileConfigurationTarget() == 2]]">
+                        <div class="flex">
+                                <div class="flex-item"></div>
+                                <div class="flex-item" id="tooltip-container-showScopeOption3">
+                                        <oj-checkboxset label-hint=" " value="{{showScopeOptions}}" id="showScope3">
+                                                <oj-option id="showScopeOption3" value="yes">
+                                                        <oj-bind-text
+                                                                value='[[connectionUILabelTexts.showWorkspaceWithConnectionName]]'>
+                                                        </oj-bind-text>
+                                                </oj-option>
+                                        </oj-checkboxset>
+                                        <oj-popup id="tooltip-popup-showScopeOption3" class = "toolTipPopUp">
+                                                <oj-bind-text value='[[connectionUILabelTexts.showWorkspaceWithConnectionNameToolTip]]'></oj-bind-text>
+                                        </oj-popup>                                
+                                </div>
+                                <div class="flex-item"></div>
+                        </div>
+                </oj-bind-if>
+                <oj-bind-if test="[[profileConfigurationTarget() == 3]]">
+                        <div class="flex">
+                                <div class="flex-item"></div>
+                                <div class="flex-item" id="tooltip-container-showScopeOption4">
+                                        <oj-checkboxset label-hint=" " value="{{showScopeOptions}}" id="showScope4">
+                                                <oj-option id="showScopeOption4" value="yes">
+                                                        <oj-bind-text
+                                                                value='[[connectionUILabelTexts.showFolderNameWithConnectionName]]'>
+                                                        </oj-bind-text>
+                                                </oj-option>
+                                        </oj-checkboxset>
+                                        <oj-popup id="tooltip-popup-showScopeOption4" class = "toolTipPopUp">
+                                                <oj-bind-text value='[[connectionUILabelTexts.showFolderNameWithConnectionNameToolTip]]'></oj-bind-text>
+                                        </oj-popup>                                
+                                </div>
+                                <div class="flex-item"></div>
+                        </div>
+                </oj-bind-if>
+
+        </oj-bind-if>
+        <oj-label>
+        </oj-label>
+        <div class="formatterButtonContainer">
+                <oj-button id='testConnectionButton' class='oj-button-lg' style="margin-left:4.5rem; margin-right:0.5rem;"
+                        on-oj-action='[[onTestConnection]]' disabled='{{testConnectionButtonDisabled}}'>
+                        <span>
+                                <oj-bind-text value='[[connectionUILabelTexts.testConnButtonLabel]]'></oj-bind-text>
+                        </span>
+                </oj-button>
+                <oj-button id='createUpdateButton' class='oj-button-lg' on-oj-action='[[onCreateUpdateConnection]]'
+                        disabled='{{createUpdateButtonDisabled}}'>
+                        <span>
+                                <oj-bind-text value='[[createUpdateButtonText]]'></oj-bind-text>
+                        </span>
+                </oj-button>
+                <oj-bind-if test="[[isConnectionInProgress() || isTestConnectionInProgress()]]">
+                        <oj-progress-circle size="md" id="progressCircle" value="-1" style="padding-left: 5px;">
+                        </oj-progress-circle>
+                </oj-bind-if>
+                <oj-bind-if test="[[!isConnectionInProgress() && !isTestConnectionInProgress()]]">
+                        <label style="margin-left:2.5rem;"></label>
+                </oj-bind-if>
+        </div>
+        <div id="popupWrapper">
+                <oj-popup id="colorPalettePopup" class="color-popup" auto-dismiss="focusLoss" modality="modal" class = "toolTipPopUp"
+                        position.my.horizontal="center" position.my.vertical="center" position.at.horizontal="center"
+                        position.at.vertical="center" position.of="window" tail="none">
+                        <div class="color-popup-body">
+                                <div class="color-popup-header">
+                                        <oj-button class="color-popup-header-btn" id="btnNone"
+                                                on-oj-action="[[setNone]]">
+                                                <oj-bind-text value='[[connectionUILabelTexts.noColorLabel]]'>
+                                                </oj-bind-text>
+                                        </oj-button>
+                                </div>
+                                <div class="palette-panel oj-panel">
+                                        <oj-color-palette class="palette-picker" labelled-by="mainlabelid"
+                                                palette="[[colorpalette]]" swatch-size="xs" label-display="auto"
+                                                layout="grid" value="{{popupColorValue}}">
+                                        </oj-color-palette>
+                                </div>
+
+                                <div class="color-popup-footer">
+                                        <div class="color-popup-footer-selection">
+                                                <oj-bind-text value='[[connectionUILabelTexts.selectionLabel]]'>
+                                                </oj-bind-text>
+                                        </div>
+
+                                        <div class="palette-preview"
+                                                :style.background-color="[[popupColorValue().toString()]]">
+                                                <span class="color-palette-text">
+                                                        <oj-bind-text
+                                                                value="[[popupColorValue().getAlpha() === 0? '' : '']]">
+                                                        </oj-bind-text>
+                                                </span>
+                                        </div>
+
+                                        <oj-button class="color-popup-footer-done" id="doneButton"
+                                                on-oj-action="[[onDoneButtonClick]]">
+                                                <oj-bind-text value='[[connectionUILabelTexts.doneLabel]]'>
+                                                </oj-bind-text>
+                                        </oj-button>
+                                </div>
+                        </div>
+                </oj-popup>
+        </div>
+
+</div>
+<oj-messages position="{}" messages="[[messagesDataprovider]]" display="notification"></oj-messages>

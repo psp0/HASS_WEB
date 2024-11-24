@@ -1,0 +1,30 @@
+*
+* Visual Studio Code Server
+*
+* By using the software, you agree to
+* the Visual Studio Code Server License Terms (https://aka.ms/vscode-server-license) and
+* the Microsoft Privacy Statement (https://privacy.microsoft.com/en-US/privacystatement).
+*
+Server bound to /tmp/code-15f83358-3ede-40b6-a703-be02b325f6b8
+Extension host agent listening on /tmp/code-15f83358-3ede-40b6-a703-be02b325f6b8
+
+[21:36:50] 
+
+
+
+
+[21:36:50] Extension host agent started.
+[21:36:50] [<unknown>][b7cddded][ExtensionHostConnection] New connection established.
+[21:36:51] [<unknown>][8751f295][ManagementConnection] New connection established.
+[21:36:51] [<unknown>][b7cddded][ExtensionHostConnection] <356856> Launched Extension Host Process.
+[21:41:05] [<unknown>][8751f295][ManagementConnection] The client has reconnected.
+[21:41:42] [<unknown>][2aa5d9a5][ExtensionHostConnection] New connection established.
+[21:41:42] [<unknown>][2aa5d9a5][ExtensionHostConnection] <357515> Launched Extension Host Process.
+[21:41:42] [<unknown>][e6c9b72d][ManagementConnection] New connection established.
+[21:41:49] [<unknown>][8751f295][ManagementConnection] The client has disconnected, will wait for reconnection 3h before disposing...
+New EH opened, aborting shutdown
+[21:41:50] New EH opened, aborting shutdown
+[21:42:49] [<unknown>][8751f295][ManagementConnection] Another client has connected, will shorten the wait for reconnection 5m before disposing...
+[21:42:49] [<unknown>][e6c9b72d][ManagementConnection] The client has reconnected.
+[21:42:49] [<unknown>][2aa5d9a5][ExtensionHostConnection] The client has reconnected.
+[21:47:49] [<unknown>][8751f295][ManagementConnection] The reconnection short grace time of 5m has expired, so the connection will be disposed.

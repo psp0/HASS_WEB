@@ -1,0 +1,2 @@
+define(['exports', 'preact/hooks', 'preact', './useId-93f47e0a'], (function(e,t,r,n){"use strict";const o=r.createContext({});e.ConveyorBeltContext=o,e.useConveyorBeltItem=function(e){const{isCurrent:r,itemRef:u}=e,s=t.useContext(o),c=t.useRef(null),f=n.useId(),C=t.useCallback((()=>u??c),[u]);return t.useEffect((()=>{C().current&&s&&s.setCurrentItem&&r&&s.setCurrentItem(C().current)}),[s,r,C]),{ref:c,...s&&{"data-oj-conveyorbelt-item":f}}}}));
+//# sourceMappingURL=useConveyorBeltItem-cf31b341.js.map

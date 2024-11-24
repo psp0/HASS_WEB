@@ -1,0 +1,2 @@
+define(['exports', 'preact/jsx-runtime', './dimensions-f9da1099', './mergeInterpolations-2c5b5a03', './flexitem-554e6fbe'], (function(e,t,s,n,i){"use strict";const o=[...Object.values(s.dimensionInterpolations),i.flexitemInterpolations.flex],r=n.mergeInterpolations(o);e.Spacer=({...e})=>{const{class:s,...n}=r(e);return t.jsx("div",{class:s,style:n})}}));
+//# sourceMappingURL=Spacer-1123e45f.js.map

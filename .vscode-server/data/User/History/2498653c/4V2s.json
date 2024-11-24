@@ -1,0 +1,25 @@
+{
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "workbench.iconTheme": "material-icon-theme",
+    "window.openFoldersInNewWindow": "off",
+    "php.validate.executablePath": "",
+    "remote.SSH.remotePlatform": {
+        "203.249.87.58": "linux"
+    },
+    "oracledevtools.connectionConfiguration.configFilesFolder": "C:\\Users\\dlwls\\Oracle\\network\\admin",
+    "[oraclesql]": {
+        "editor.suggest.showSnippets": true,
+        "editor.quickSuggestions": {
+            "comments": "on",
+            "strings": "on",
+            "other": "on"
+        }
+    },
+    "oracledevtools.connectionConfiguration.walletFileFolder": "C:\\Users\\dlwls\\Oracle\\network\\admin",
+    "oracledevtools.bookmarkFileFolder": "C:\\Users\\dlwls\\Oracle\\oracle.oracledevtools",
+    "oracledevtools.download.otherFolder": "C:\\Users\\dlwls\\downloads",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "[php]": {
+        "editor.defaultFormatter": "DEVSENSE.phptools-vscode"
+    }
+}

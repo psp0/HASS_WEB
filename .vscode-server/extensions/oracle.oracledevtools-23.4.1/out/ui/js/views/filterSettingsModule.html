@@ -1,0 +1,113 @@
+<!-- delete all filters -->
+<oj-dialog id="deleteAllDialog" dialog-title="Delete All Confirmation" cancel-behavior="escape">
+    <div slot="header" class="filterDialogTitleHeader">
+        <h1 class="dialogHeader">
+            <oj-bind-text value="[[filterUITexts.btnDeleteAllFilters]]"></oj-bind-text>
+        </h1>
+    </div>
+    <div slot="body" class="filtersDialogBody">
+        <oj-bind-text value="[[filterUITexts.deleteAllMsg]]"></oj-bind-text>
+    </div>
+    <div slot="footer">
+        <oj-button id="deleteAllOkBtn" on-oj-action="[[onYesDeleteAll]]" aria-label="Confirm Delete All">
+            <oj-bind-text value="[[filterUITexts.strYes]]"></oj-bind-text>
+        </oj-button>
+        <oj-button id="deleteAllCancelButton" on-oj-action="[[onCancelDeleteAll]]" aria-label="Cancel Delete All">
+            <oj-bind-text value="[[filterUITexts.btnCancel]]"></oj-bind-text>
+        </oj-button>
+    </div>
+</oj-dialog>
+
+<div id="filterSettingsBody">
+    <div class="filterPageHeaderContainer">
+        <div class="filterPageHeaderItems">
+            <div id="filterConfigurationHeader">
+                <label class="filtersh1">
+                    <oj-bind-text value="[[filterUITexts.filterSettingsTitle]]"></oj-bind-text>
+                </label>
+            </div>
+            <!-- connection target -->
+            <div class="flex connectionContainer">
+                <div class="flex-item connectionNameLabel">
+                        <label class="filtersh2">
+                            <oj-bind-text value="[[filterUITexts.connectionName]]"></oj-bind-text>
+                        </label>
+                </div>
+                <div class="flex-item filterUIHeaderInputBoxDiv">
+                    <div class="filterUIHeaderInputBox">
+                        <oj-combobox-one id="connTarget" aria-label="Connection" options="[[connectionNamesDP]]" value="{{connectionNameValue}}" on-oj-value-updated="[[onConnectionNameChanged]]"
+                        onkeydown='javascript: if((event.key != "Tab")){ return false;}' onpaste="return false;" onCut="return false" maximum-result-count="0">
+                        </oj-combobox-one>
+                    </div>
+                </div>
+                <div class="flex-item" style="flex: 2.9"><span></span></div>
+            </div>
+            <div class="flex connectionContainer">
+                <div class="flex-item connectionNameLabel">
+                    <label>
+                    </label>
+                </div>
+                <div class="flex-item filterUIHeaderInputBoxDiv">
+                    <div class="filterUIHeaderInputBox">
+                        <oj-menu-button id="filterEnableMenu" aria-label="Enable or Disable All Filters">
+                            <oj-bind-text value="[[filterUITexts.enableDisableAll]]"></oj-bind-text>
+                            <oj-menu slot="menu" on-oj-menu-action="[[onEnableMenuAction]]" aria-label="Enable or Disable All Filters">
+                                <oj-option value="[[enableAllExplorerValue]]">
+                                        <oj-bind-text value="[[filterUITexts.enableAllFiltersForExplorer]]"></oj-bind-text>
+                                </oj-option>
+                                <oj-option value="[[disableAllExplorerValue]]">
+                                        <oj-bind-text value="[[filterUITexts.disableAllFiltersForExplorer]]"></oj-bind-text>
+                                </oj-option>
+                                <oj-option value="[[enableAllIntellisenseValue]]">
+                                        <oj-bind-text value="[[filterUITexts.enableAllFiltersForIntellisense]]"></oj-bind-text>
+                                </oj-option>
+                                <oj-option value="[[disableAllIntellisenseValue]]">
+                                        <oj-bind-text value="[[filterUITexts.disableAllFiltersForIntellisense]]"></oj-bind-text>
+                                </oj-option>
+                            </oj-menu>
+                        </oj-menu-button>
+                    </div>
+                </div>
+                <!-- delete all -->
+                <div class="flex-item" style="flex: 2.9">
+                    <oj-button class="oj-button-lg buttonGridItem filterButton" on-oj-action="[[onDeleteAll]]" disabled="[[disableDeleteAllButton]]" id="deleteAllFiltersBtn"
+                        aria-label="Delete All Filters">
+                        <oj-bind-text value="[[filterUITexts.btnDeleteAllFilters]]"></oj-bind-text>
+                    </oj-button>
+                </div>
+            </div>
+            <div id="configSettingsModule" class="oj-flex">
+                <oj-module config="[[settingsConfig]]" style="background-color: transparent !important"></oj-module>
+            </div>
+        </div>
+    </div>
+    <div class="oj-flex filtersContainer" id="filtersBody">
+        <div id="tabBarContainer" class="oj-flex-item">
+            <oj-tab-bar selection="{{selectedTab}}" data="{{tabDP}}" edge="start" display="all" on-selection-changed="[[onTabSelectionChanged]]">
+                <template slot="itemTemplate" data-oj-as="item">
+                    <li class="filtersTabbarItem" :id="[[item.data.label+'Id']]">                   
+                        <a>
+                            <oj-bind-text value="[[item.data.label]]"></oj-bind-text>
+                            <span :class="[['oj-tabbar-item-icon filtersTabBarIcon ' + item.data.enabledIcon]]"></span> 
+                        </a>                   
+                    </li>
+                </template>
+            </oj-tab-bar>
+        </div>
+        <div id="collectionModuleContainer" class="oj-flex-item">
+            <oj-module id="collectionModule" config="[[moduleConfig]]" style="background-color: transparent !important;" on-oj-view-connected="[[focusLastValueElementIfEmpty]]">
+            </oj-module>
+        </div>
+    </div>
+    <div class="oj-flex filterButtonRegion" >
+
+        <div class="filterButtonContainer oj-flex-item">
+            <oj-button id="saveFilterSettingsButton" class="oj-button-lg buttonGridItem filterButton" on-oj-action="[[onSave]]"
+            disabled="[[saveButtonDisable()]]" aria-label="Save">
+                <oj-bind-text value="[[filterUITexts.btnSave]]"></oj-bind-text>
+            </oj-button>
+        </div>
+    </div>
+
+</div>
+<oj-messages position="[[msgPos]]" messages="[[messagesDataProvider]]" display="notification"></oj-messages>

@@ -1,0 +1,297 @@
+<oj-dialog id="editVisibleCollectionsUIID" class="vizCollDialogClass" on-oj-close="[[updateVisCollValue]]"
+    dialog-title="Visible Collections" drag-affordance="title-bar" cancel-behavior="escape">
+    <div slot="header" class="filterDialogTitleHeader">
+        <h1 class="dialogHeader">
+            <oj-bind-text value="[[filterUITexts.visibleCollections]]"></oj-bind-text>
+        </h1>
+    </div> 
+    <div slot="body" class="filtersDialogBody">
+        <div id="filtersSelectAllDiv">
+            <oj-checkboxset value="{{allCollVisComp}}" class="visCollCheckbox" id="selectAllCheckBox">
+                <oj-option value="[[strYes]]">
+                    <h1 class="selectAllH1"><oj-bind-text value="[[filterUITexts.selectAll]]"></oj-bind-text></h1>
+                </oj-option>
+            </oj-checkboxset>
+        </div>
+        <oj-checkboxset  id="visibleCollectionsList" class="visCollCheckbox" slot="selector" 
+        options ="{{visibleCollectionOptionsDP}}"
+        value="{{visibleCollectionsValue}}" on-value-changed="[[onVisCollChanged]]">
+        </oj-checkboxset>
+    </div>
+    <div slot="footer">
+        <oj-button id="vizCollOKButton" on-oj-action="[[onOKVizColl]]" disabled="[[disableOkButton]]">
+            <oj-bind-text value="[[filterUITexts.btnOk]]"></oj-bind-text>
+        </oj-button>
+        <oj-button id="vizCollCancelButton" on-oj-action="[[onCancelVizColl]]">
+            <oj-bind-text value="[[filterUITexts.btnCancel]]"></oj-bind-text>
+        </oj-button>
+    </div>
+</oj-dialog>
+
+<div :id="[['collectionSettingsBody'+moduleId]]">
+    <div :id="[[moduleId]]">
+
+        <div class="categoryHeaderContainer">
+            <!-- category -->
+            <div class="flex">
+                <h1 class="filtersh11"><oj-bind-text value="[[collectionName]]"></oj-bind-text></h1>
+            </div>
+            <!-- enable -->
+            <div class="flex">
+                    <oj-checkboxset id="enableCheckboxSet" value="{{enableCheckboxes}}" on-value-changed="[[onEnableChanged]]" class="oj-choice-direction-row" disabled="[[doDisableCheckboxes]]">
+                        <oj-option value="[[enableFilters]]" id="enableFiltersCheckbox" :aria-label="[[filterUITexts.enableFilterForExplorer]]">
+                            <oj-bind-text value="[[filterUITexts.enableFilterForExplorer]]"></oj-bind-text>
+                        </oj-option>
+                        <oj-option value="[[enableFiltersForIntellisense]]" id="enableIntellisenseCheckbox" :aria-label="[[filterUITexts.enableFilterForIntellisense]]">
+                            <oj-bind-text value="[[filterUITexts.enableFilterForIntellisense]]"></oj-bind-text>
+                        </oj-option>
+                    </oj-checkboxset>
+            </div>
+            <!-- visible collections or override checkbox -->
+            <div>
+                <!-- visible collections -->
+                <oj-bind-if test="[[collectionType() == connectionCollType]]">
+                    <div class="flex">
+                        <h1 class="filtersh11"><oj-bind-text value="[[filterUITexts.visibleCollections]]"></oj-bind-text></h1>
+                    </div>
+                    <div class="flex filterFlexRow">
+                        <div class="flex-item filterUIHeaderInputBoxDiv">
+                            <div id="visCollValueDiv" class="filterUIHeaderInputBox" on-mouseover="[[openPopup]]" on-mouseout="[[closePopup]]">
+                                <oj-input-text aria-label="Visible Collections" disabled="true" value="[[visibleCollectionsStrings]]" id="visibleCollectionsString">
+                                </oj-input-text>
+                                <oj-popup id="visCollPopupId" class="visCollPopup" on-oj-animate-start="[[preventAnimation]]"
+                                    auto-dismiss="focusLoss" modality="modeless" position.my.horizontal="start" position.my.vertical="bottom"
+                                    position.at.horizontal="end" position.at.vertical="top" position.collision="flipfit">
+                                    <oj-bind-text value="[[visibleCollectionsStrings]]"></oj-bind-text>
+                                </oj-popup>
+                            </div>
+                        </div>
+
+                        <div id="visCollBtnDiv" class="flex-item">
+                            <oj-button display="icons" id="editVisCollBtn" class="oj-button-lg filterButton filterRemoveUpdateBtn" on-oj-action="[[onEditVisibleCollections]]"
+                                aria-label="Edit Visible Collections">
+                                <oj-bind-text value="[[filterUITexts.ellipse]]"></oj-bind-text>
+                            </oj-button> 
+                        </div>
+                        <div class="flex-item-value"><span></span></div>
+                    </div>
+                </oj-bind-if>
+
+                <!-- add 'Override Global Filter' checkbox -->
+                <oj-bind-if test="[[collectionType() != connectionCollType]]">
+                    <div class="flex">
+                        <oj-checkboxset id="overrideCheckboxSet" value="{{overrideCheckbox}}" on-value-changed="[[onOverrideChanged]]" class="oj-choice-direction-row"
+                            aria-label="Override Connection Filter" disabled="[[doDisableCheckboxes]]">
+                            <oj-option value="[[strYes]]">
+                                <oj-bind-text value="[[filterUITexts.overrideConnectionFilter]]"></oj-bind-text>
+                            </oj-option>
+                        </oj-checkboxset>
+                    </div>
+                </oj-bind-if>
+                <!--  -->
+            </div>
+            <!-- filter properties -->
+            <div class="flex filterFlexRow">
+                <div class="flex-item filterUIHeaderInputBoxDiv">
+                    <h1 class="filtersh11"><oj-bind-text value="[[filterUITexts.filterProperties]]"></oj-bind-text></h1>
+                </div> 
+                <!-- add button -->
+                <div class="flex-item" id="addFilterButtonDiv">
+                    <oj-button id="addFilterSettingButton" class="oj-button-lg buttonGridItem filterButton" on-oj-action="[[onAddFilter]]"
+                        disabled="[[disableAddFilterButton]]" aria-label="Add Filter">
+                        <oj-bind-text value="[[filterUITexts.btnAddFilterProp]]"></oj-bind-text>
+                    </oj-button>
+                </div>
+                <div class="flex-item-value">
+                    <span></span>
+                </div>
+            </div>
+            <!-- match -->
+            <div class="flex filterFlexRow">
+                <div class="flex-item">
+                    <oj-radioset
+                        id="matchRadio"
+                        value="{{match}}"
+                        class="oj-choice-direction-row"
+                        aria-label="Match All or Match Any" 
+                        on-value-changed="[[onMatchChanged]]">
+                        <oj-option value="[[matchAnyEnum]]">
+                            <oj-bind-text value="[[filterUITexts.matchAny]]"></oj-bind-text>
+                        </oj-option>
+                        <oj-option value="[[matchAllEnum]]">
+                            <oj-bind-text value="[[filterUITexts.matchAll]]"></oj-bind-text>
+                        </oj-option>
+                    </oj-radioset>
+                </div>
+            </div>
+        </div>
+        
+        <!-- filter table header -->
+        <div class="flex filterHeaderContainer">
+            <div class="flex-item filterHeader">
+                <h1 class="dialogHeader"><oj-bind-text value="[[filterUITexts.propertyName]]"></oj-bind-text></h1>
+            </div>
+            <div class="flex-item filterHeader">
+                <h1 class="dialogHeader"><oj-bind-text value="[[filterUITexts.condition]]"></oj-bind-text></h1>
+            </div>
+            <div class="flex-item-value filterHeader">
+                <h1 class="dialogHeader"><oj-bind-text value="[[filterUITexts.value]]"></oj-bind-text></h1>
+            </div>
+            <div class="flex-item filterHeader">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="collectionFilterTable" :id="[[filterOuterContainerId]]" :style="[[containerHeight]]">
+        <div id="filterContainerID">
+            <oj-bind-if test="[[noData]]">
+                <div class="noFiltersData">
+                    <oj-bind-text value="[[filterUITexts.noDataMessage]]"></oj-bind-text>
+                </div>
+            </oj-bind-if>
+        </div>
+    </div>
+
+    <template id="filterModuleTemplate" data-oj-as='data'>
+        <div :id="[[data.rowId]]">
+            <div :id="[['innerFilterContainer'+data.index]]" style="padding-top: 0px;padding-bottom: 0px;">
+                <div class="flex">
+                    <!--Property-->
+                    <div class="flex-item">
+                        <div class="flex" style="flex-direction: column">   
+                            <div class="flex-item filterRow">
+                                <oj-combobox-one aria-label="Filter Setting Property" :id="[['propertyValue'+data.parent.moduleId+'_'+data.index]]"
+                                on-value-changed="[[data.parent.onPropertyOptionChanged]]" onkeydown='javascript: if((event.key != "Tab")){ return false;}' 
+                                onpaste="return false;" onCut="return false"
+                                options="[[data.propertyOptions]]" value="{{data.row.propertyValue}}" maximum-result-count="0">
+                                </oj-combobox-one>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Condition-->
+                    <div class="flex-item">
+                        <div class="flex" style="flex-direction: column">    
+                            <div class="flex-item filterRow">
+                                    <oj-combobox-one aria-label="Filter Setting Condition" options="[[data.conditionOptions]]" 
+                                    value="{{data.row.conditionValue}}" :id="[['conditionValue'+data.parent.moduleId+'_'+data.index]]"
+                                    onkeydown='javascript: if((event.key != "Tab")){ return false;}' onpaste="return false;" onCut="return false"
+                                    on-value-changed="[[data.parent.onConditionValueChanged]]" maximum-result-count="0"></oj-combobox-one>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Value-->
+                    <div class="flex-item-value">
+                        <div  style="flex-direction: column">  
+                            <div class="flex-item filterRow">
+                                <!--Date-->
+                                <oj-bind-if test="[[data.row.propertyValue() === data.parent.createdDatePropertyType || data.row.propertyValue() === data.parent.modifiedDatePropertyType]]">
+                                    <oj-bind-if test="[[data.row.conditionValue() === data.parent.betweenConditionType || data.row.conditionValue() === data.parent.notBetweenConditionType]]">
+                                        <div style="display:flex">
+                                            <oj-input-date :id="[[data.valueControlId]]"  style="padding-right:2.5px"                                            
+                                                on-value-changed='[[() => data.parent.onDateValueChanged(event, data, "lower")]]' value="{{data.row.lowerValue}}"   
+                                                on-raw-value-changed='[[() => data.parent.setDisplayDateTooltip(event, data, "lower")]]' :title="[[data.lowerRawValue]]"
+                                                on-keydown='[[() => data.parent.preventInput(event, data, "lower")]]'  placeholder="[[data.parent.filterUITexts.startDate]]"
+                                                max="[[data.row.upperValue]]">
+                                            </oj-input-date>
+                                            <oj-input-date :id="[[data.valueControlId+'_1']]" style="padding-left:2.5px"                                         
+                                                on-value-changed='[[() => data.parent.onDateValueChanged(event, data, "upper")]]' value="{{data.row.upperValue}}" 
+                                                on-raw-value-changed='[[() => data.parent.setDisplayDateTooltip(event, data, "upper")]]' :title="[[data.upperRawValue]]"
+                                                on-keydown='[[() => data.parent.preventInput(event, data, "upper")]]' placeholder="[[data.parent.filterUITexts.endDate]]"
+                                                min="[[data.row.lowerValue]]">
+                                            </oj-input-date>
+                                        </div>
+                                    </oj-bind-if>
+                                    <oj-bind-if test="[[data.row.conditionValue() !== data.parent.betweenConditionType && data.row.conditionValue() !== data.parent.notBetweenConditionType]]">
+                                        <oj-input-date   :id="[[data.valueControlId]]" 
+                                            on-value-changed="[[() => data.parent.onDateValueChanged(event, data, null)]]" value="{{data.row.valueValue}}"  
+                                            on-raw-value-changed='[[() => data.parent.setDisplayDateTooltip(event, data, "lower")]]' :title="[[data.lowerRawValue]]"
+                                            on-keydown="[[() => data.parent.preventInput(event, data)]]">
+                                        </oj-input-date>
+                                    </oj-bind-if>
+                                </oj-bind-if>
+                                <!--Object Count-->
+                                <oj-bind-if test="[[data.row.propertyValue() === data.parent.objectCountPropertyType]]">
+                                    <oj-bind-if test="[[data.row.conditionValue() === data.parent.betweenConditionType || data.row.conditionValue() === data.parent.notBetweenConditionType]]">
+                                        <div style="display:flex">
+                                            <oj-input-number :id="[[data.valueControlId]]" style="padding-right:2.5px" placeholder="[[data.parent.filterUITexts.lowerLimit]]"
+                                            on-keydown='[[data.parent.preventNonDigits]]' on-raw-value-changed="[[data.parent.onLowerLimitChanged]]" 
+                                            value="{{data.row.lowerValue}}">
+                                            </oj-input-number>
+                                                <oj-input-number :id="[[data.valueControlId+'_1']]" style="padding-left:2.5px" placeholder="[[data.parent.filterUITexts.upperLimit]]"
+                                                on-keydown='[[data.parent.preventNonDigits]]' on-raw-value-changed="[[data.parent.onUpperLimitChanged]]" 
+                                                value="{{data.row.upperValue}}">
+                                                </oj-input-number>
+                                        </div>
+                                        <oj-bind-if test="[[data.errorMsg()!==undefined]]">
+                                                <oj-label class="uiControlErrorMsg"> 
+                                                    <oj-bind-text value="[[data.errorMsg]]">
+                                                    </oj-bind-text>
+                                                </oj-label>
+                                        </oj-bind-if>
+                                    </oj-bind-if>
+                                    <oj-bind-if test="[[data.row.conditionValue() !== data.parent.betweenConditionType && data.row.conditionValue() !== data.parent.notBetweenConditionType]]">
+                                        <oj-input-number :id="[[data.valueControlId]]" 
+                                        on-keydown="[[data.parent.preventNonDigits]]" on-raw-value-changed="[[data.parent.onNumberChanged]]"
+                                        value="{{data.row.valueValue}}">
+                                        </oj-input-number>
+                                    </oj-bind-if>
+                                </oj-bind-if>
+                                <!--Object name-->
+                                <oj-bind-if test="[[data.row.propertyValue() === data.parent.objectNamePropertyType ||
+                                    data.row.propertyValue() === data.parent.parentObjectNamePropertyType ||
+                                    data.row.propertyValue() === data.parent.parentOwnerNamePropertyType]]"  >
+                                    <div style="display:flex">
+                                        <oj-input-text aria-label="Object Name Value" value="{{data.row.valueValue}}" style="width:65%; "
+                                        on-raw-value-changed="[[data.parent.onValueChanged]]" label-edge="none" :id="[[data.valueControlId]]"></oj-input-text>
+                                        <oj-checkboxset :id="[['caseSensitive_'+data.index]]" value="{{data.row.caseSensitive}}" on-value-changed="[[data.parent.onCaseChanged]]"
+                                        style="margin-top:2px;padding-left:5px; min-width:fit-content;">
+                                            <oj-option value="[[data.parent.strYes]]">
+                                                <oj-bind-text value="[[data.parent.filterUITexts.caseSensitive]]"></oj-bind-text>
+                                            </oj-option>
+                                        </oj-checkboxset>
+                                    </div>
+                                </oj-bind-if>
+                                <!--Compile options-->
+                                <oj-bind-if test="[[data.row.propertyValue() === data.parent.debugPropertyType]]">
+                                    <oj-combobox-one aria-label="Debug Options" options="[[data.parent.debugOptionsDP]]" 
+                                    onkeydown='javascript: if((event.key != "Tab")){ return false;}' onpaste="return false;" onCut="return false"
+                                    value="{{data.row.valueValue}}" on-value-changed="[[data.parent.onValueChanged]]" 
+                                    maximum-result-count="0" :id="[[data.valueControlId]]">
+                                    </oj-combobox-one>
+                                </oj-bind-if>
+                                <!--Status options-->
+                                <oj-bind-if test="[[data.row.propertyValue() === data.parent.statusPropertyType]]">
+                                    <oj-combobox-one aria-label="Status Options" options="[[data.parent.statusOptionsDP]]" value="{{data.row.valueValue}}" 
+                                    onkeydown='javascript: if((event.key != "Tab")){ return false;}' onpaste="return false;" onCut="return false"
+                                    on-value-changed="[[data.parent.onValueChanged]]"
+                                    maximum-result-count="0" :id="[[data.valueControlId]]">
+                                    </oj-combobox-one>
+                                </oj-bind-if>
+                                <!--Trigger status options-->
+                                <oj-bind-if test="[[data.row.propertyValue() === data.parent.triggerStatusPropertyType]]">
+                                    <oj-combobox-one aria-label="Trigger Status Options" options="[[data.parent.triggerStatusOptionsDP]]" 
+                                    onkeydown='javascript: if((event.key != "Tab")){ return false;}' onpaste="return false;" onCut="return false"
+                                    value="{{data.row.valueValue}}" on-value-changed="[[data.parent.onValueChanged]]" 
+                                    maximum-result-count="0" :id="[[data.valueControlId]]"></oj-combobox-one>
+                                </oj-bind-if>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-item">
+                        <div class="flex" style="flex-direction: column">   
+                            <div class="flex-item filterRow">
+                                <oj-bind-if test="[[data.row.propertyValue() !== data.parent.visibleCollectionsPropertyType]]">                         
+                                    <oj-button display="icons" class="filterButton deleteIcon" :id="[['closeBtn'+data.parent.moduleId+'_'+data.index]]"  :aria-label="[[data.parent.deleteStr]]" :title="[[data.parent.deleteStr]]"
+                                    on-oj-action="[[data.parent.onRemoveFilterSetting]]" chroming="borderless">
+                                        <oj-bind-text value="[[data.parent.filterUITexts.btnX]]"></oj-bind-text>
+                                    </oj-button>  
+                                </oj-bind-if>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</div>

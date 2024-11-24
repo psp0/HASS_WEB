@@ -1,0 +1,50 @@
+{
+    "workbench.colorTheme": "Visual Studio Light",
+    "explorer.confirmDelete": false,
+    "remote.SSH.remotePlatform": {
+        "203.249.87.58": "linux"
+    },
+    "breadcrumbs.enabled": false,
+    "editor.stickyScroll.enabled": false,
+    "editor.minimap.enabled": false,
+    "php.problems.exclude": {
+        "/": [
+            "PHP2014"
+        ]
+    },
+    "workbench.settings.useSplitJSON": true,
+    "database-client.autoSync": true,
+    "oracledevtools.connectionConfiguration.configFilesFolder": "/var/www/html/2_team/2_team5/Oracle/network/admin",
+    "[oraclesql]": {
+        "editor.suggest.showSnippets": true,
+        "editor.quickSuggestions": {
+            "comments": "on",
+            "strings": "on",
+            "other": "on"
+        }
+    },
+    "oracledevtools.connectionConfiguration.walletFileFolder": "/var/www/html/2_team/2_team5/Oracle/network/admin",
+    "oracledevtools.bookmarkFileFolder": "/var/www/html/2_team/2_team5/Oracle/oracle.oracledevtools",
+    "oracledevtools.download.otherFolder": "/var/www/html/2_team/2_team5/downloads",
+    "oracledevtools.connections": [
+        {
+            "authenticationType": 2,
+            "dBAPrivilege": "None",
+            "userID": "DB502_PROJ_G5",
+            "passwordSaved": false,
+            "dataSource": "203.249.87.57:1521/orcl",
+            "connectionType": 2,
+            "databaseHostName": "203.249.87.57",
+            "databasePortNumber": "1521",
+            "databaseServiceName": "orcl",
+            "tnsAdmin": "/var/www/html/2_team/2_team5/Oracle/network/admin",
+            "name": "DB502_PROJ_G5.orcl",
+            "color": "none",
+            "currentSchema": "",
+            "addSettingsScopeToConnectionName": false,
+            "addCurrentSchemaToConnectionName": false,
+            "filters": [],
+            "useCompatibleNamesDirectoryPath": true
+        }
+    ]
+}

@@ -1,0 +1,2 @@
+define(['exports', './_arity-cc05f75a', './_curry1-18233096', './_curry2-6839fe47'], (function(r,t,e,n){"use strict";function c(r,n,u){return function(){for(var a=[],i=0,l=r,y=0,_=!1;y<n.length||i<arguments.length;){var f;y<n.length&&(!e._isPlaceholder(n[y])||i>=arguments.length)?f=n[y]:(f=arguments[i],i+=1),a[y]=f,e._isPlaceholder(f)?_=!0:l-=1,y+=1}return!_&&l<=0?u.apply(this,a):t._arity(Math.max(0,l),c(r,a,u))}}var u=n._curry2((function(r,n){return 1===r?e._curry1(n):t._arity(r,c(r,[],n))}));r.curryN=u}));
+//# sourceMappingURL=curryN-a3cf891a.js.map

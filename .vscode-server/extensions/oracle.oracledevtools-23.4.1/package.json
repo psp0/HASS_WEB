@@ -1,0 +1,6372 @@
+{
+	"name": "oracledevtools",
+	"displayName": "Oracle Developer Tools for VS Code (SQL and PLSQL)",
+	"description": "Develop SQL and PL/SQL with Oracle Database and Oracle Autonomous Database",
+	"version": "23.4.1",
+	"publisher": "Oracle",
+	"bugs": {
+		"url": "https://forums.oracle.com/ords/apexds/domain/dev-community/category/oracle-developer-tools-for-vs-code"
+	},
+	"icon": "images/oracle-logo.png",
+	"license": "SEE LICENSE IN license.txt",
+	"engines": {
+		"vscode": "^1.75.0"
+	},
+	"categories": [
+		"Programming Languages"
+	],
+	"keywords": [
+		"Oracle",
+		"SQL",
+		"PL/SQL",
+		"plsql"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./out/extension",
+	"devDependencies": {
+		"@types/jquery": "^3.5.16",
+		"@types/node": "14.14.22",
+		"@types/vscode": "^1.75.0"
+	},
+	"repository": {},
+	"contributes": {
+		"configurationDefaults": {},
+		"submenus": [
+			{
+				"id": "extension.selectAI",
+				"label": "%selectAI%",
+				"icon": {
+					"light": "out/explorer/images/light/select-ai_lightmode.svg",
+					"dark": "out/explorer/images/dark/select-ai_darkmode.svg"
+				}
+			}
+		],
+		"keybindings": [
+			{
+				"command": "extension.executeSQLCommand",
+				"key": "ctrl+e",
+				"when": "editorTextFocus && editorLangId == oraclesql"
+			},
+			{
+				"command": "extension.executeAllCommand",
+				"key": "ctrl+r",
+				"when": "editorTextFocus && editorLangId == oraclesql && resourceScheme != oracle"
+			},
+			{
+				"command": "oracleDBObjectExplorer.runCodeObjectFromFile",
+				"key": "ctrl+e",
+				"when": "editorTextFocus && resourceScheme == oracle && resource =~ /(objectType%3D13|objectType%3D15)/"
+			},
+			{
+				"command": "oracleDBObjectExplorer.runDebugFromFile",
+				"when": "editorTextFocus && resourceScheme == oracle && resource =~ /(objectType%3D13|objectType%3D15)/"
+			},
+			{
+				"command": "oracleDBObjectExplorer.stepIntoFromFile",
+				"when": "editorTextFocus && resourceScheme == oracle && resource =~ /(objectType%3D13|objectType%3D15)/"
+			},
+			{
+				"command": "oracleBookmarkExplorer.addBookmarkItem",
+				"key": "ctrl+alt+b",
+				"when": "editorLangId == oraclesql && editorTextFocus"
+			},
+			{
+				"command": "extension.realTimeSqlMonitoringDetail",
+				"key": "ctrl+alt+r",
+				"when": "editorTextFocus && editorLangId == oraclesql"
+			},
+			{
+				"command": "extension.translatetoSQL",
+				"key": "ctrl+alt+t",
+				"when": "editorTextFocus && editorLangId == oraclesql && resourceScheme != oracle"
+			},
+			{
+				"command": "extension.translateToSQLAndExplain",
+				"key": "ctrl+alt+x",
+				"when": "editorTextFocus && editorLangId == oraclesql && resourceScheme != oracle"
+			},
+			{
+				"command": "extension.explain",
+				"key": "ctrl+alt+e",
+				"when": "editorTextFocus && editorLangId == oraclesql && resourceScheme != oracle"
+			},
+			{
+				"command": "extension.hideInlineSuggestion",
+				"key": "escape",
+				"when": "inlineSuggestionVisible && editorTextFocus && editorLangId == oraclesql"
+			}
+		],
+		"commands": [
+			{
+				"command": "extension.oracleToolbarCancelCommand",
+				"title": "%executeCancelLabel%",
+				"category": "Oracle Toolbar",
+				"icon": {
+					"light": "out/explorer/images/light/stop.svg",
+					"dark": "out/explorer/images/dark/stop.svg"
+				}
+			},
+			{
+				"command": "extension.oracleToolbarClearCommand",
+				"title": "%executeClearLabel%",
+				"category": "Oracle Toolbar",
+				"icon": {
+					"light": "out/explorer/images/light/eraser.svg",
+					"dark": "out/explorer/images/dark/eraser.svg"
+				}
+			},
+			{
+				"command": "extension.oracleToolbarDisabledCancelCommand",
+				"title": "%executeDisabledCancelLabel%",
+				"category": "Oracle Toolbar",
+				"icon": {
+					"light": "out/explorer/images/light/stopDisabled.svg",
+					"dark": "out/explorer/images/dark/stopDisabled.svg"
+				}
+			},
+			{
+				"command": "extension.oracleToolbarDisabledClearCommand",
+				"title": "%executeDisabledClearLabel%",
+				"category": "Oracle Toolbar",
+				"icon": {
+					"light": "out/explorer/images/light/eraserDisabled.svg",
+					"dark": "out/explorer/images/dark/eraserDisabled.svg"
+				}
+			},
+			{
+				"command": "extension.rebuildIntelliSenseMetaData",
+				"title": "%rebuildIntellisenseMetaData%",
+				"category": "Oracle Toolbar",
+				"icon": {
+					"light": "out/explorer/images/light/rebuildintellisense.svg",
+					"dark": "out/explorer/images/dark/rebuildintellisense.svg"
+				}
+			},
+			{
+				"command": "extension.openFormatterSettingsFromToolbar",
+				"title": "%formatterSettingsTitle%",
+				"category": "Oracle Toolbar",
+				"icon": {
+					"light": "out/explorer/images/light/formatsettings.svg",
+					"dark": "out/explorer/images/dark/formatsettings.svg"
+				}
+			},
+			{
+				"command": "extension.formatText",
+				"title": "%formatText%",
+				"category": "Oracle Toolbar",
+				"icon": {
+					"light": "out/explorer/images/light/format.svg",
+					"dark": "out/explorer/images/dark/format.svg"
+				}
+			},
+			{
+				"command": "extension.getEditorHelp",
+				"title": "%getEditorHelp%",
+				"category": "Oracle Toolbar",
+				"icon": {
+					"light": "out/explorer/images/light/question.svg",
+					"dark": "out/explorer/images/dark/question.svg"
+				}
+			},
+			{
+				"command": "extension.executeSQLCommand",
+				"title": "%executeSQLCommandLabel%",
+				"category": "Oracle Toolbar",
+				"icon": {
+					"light": "out/explorer/images/light/run.svg",
+					"dark": "out/explorer/images/dark/run.svg"
+				}
+			},
+			{
+				"command": "extension.executeAllCommand",
+				"title": "%executeAllCommandLabel%",
+				"category": "Oracle Toolbar",
+				"icon": {
+					"light": "out/explorer/images/light/runscript.svg",
+					"dark": "out/explorer/images/dark/runscript.svg"
+				}
+			},
+			{
+				"command": "extension.oracleconnect",
+				"title": "%connect%",
+				"category": "Oracle"
+			},
+			{
+				"command": "extension.oracledisconnect",
+				"title": "%disconnect%",
+				"category": "Oracle"
+			},
+			{
+				"command": "extension.testwebview",
+				"title": "Get WebView Info",
+				"category": "Oracle"
+			},
+			{
+				"command": "extension.setwebview",
+				"title": "Set WebView Items",
+				"category": "Oracle"
+			},
+			{
+				"command": "extension.testwebviewhtml",
+				"title": "Get WebView html",
+				"category": "Oracle"
+			},
+			{
+				"command": "extension.setdatagrid",
+				"title": "Set Data Grid",
+				"category": "Oracle"
+			},
+			{
+				"command": "extension.enabledisableoraclelangservices",
+				"title": "%enabledisableoraclelangservices%",
+				"category": "Oracle"
+			},
+			{
+				"command": "extension.cancelScriptExecution",
+				"title": "%cancelScriptExecution%",
+				"category": "Oracle"
+			},
+			{
+				"command": "oracledevtools.getDBExplorerConnections",
+				"title": "Get Database Explorer Connections",
+				"category": "Oracle"
+			},
+			{
+				"command": "oracleDBObjectExplorer.refreshAll",
+				"title": "%refresh%",
+				"icon": {
+					"light": "out/explorer/images/light/refresh.svg",
+					"dark": "out/explorer/images/dark/refresh.svg"
+				},
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.installXeDatabase",
+				"title": "%installXeDatabase%",
+				"icon": {
+					"light": "out/explorer/images/light/gear.svg",
+					"dark": "out/explorer/images/dark/gear.svg"
+				},
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.getHelp",
+				"title": "%getHelp%",
+				"icon": {
+					"light": "out/explorer/images/light/question.svg",
+					"dark": "out/explorer/images/dark/question.svg"
+				},
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.refresh",
+				"title": "%refresh%",
+				"icon": {
+					"light": "out/explorer/images/light/refresh.svg",
+					"dark": "out/explorer/images/dark/refresh.svg"
+				},
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "extension.oracleNewQuery",
+				"title": "%runNewQuery%",
+				"category": "Oracle"
+			},
+			{
+				"command": "extension.oracleGettingStartedGuide",
+				"title": "%gettingStartedGuide%",
+				"category": "Oracle"
+			},
+			{
+				"command": "oracleDBObjectExplorer.runCodeObjectFromFile",
+				"title": "%runProc%",
+				"category": "%oracleExplorer%",
+				"icon": {
+					"light": "out/explorer/images/light/run.svg",
+					"dark": "out/explorer/images/dark/run.svg"
+				}
+			},
+			{
+				"command": "oracleDBObjectExplorer.runCodeObject",
+				"title": "%run%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.connectMenu",
+				"title": "%connect%",
+				"icon": {
+					"light": "out/explorer/images/light/connect.svg",
+					"dark": "out/explorer/images/dark/connect.svg"
+				},
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.disconnectMenu",
+				"title": "%disconnect%",
+				"icon": {
+					"light": "out/explorer/images/light/disconnect.svg",
+					"dark": "out/explorer/images/dark/disconnect.svg"
+				},
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.openNewSQLFile",
+				"title": "%openNewSQLFile%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.openExistingSQLFile",
+				"title": "%openExistingSQLFile%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.deleteConnection",
+				"title": "%deleteConnection%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleQueryHistoryExplorer.editHistoryItem",
+				"title": "%copyToEditor%",
+				"category": "%oracleQueryHistoryExplorer%"
+			},
+			{
+				"command": "oracleQueryHistoryExplorer.openHistoryItem",
+				"title": "%editBookmarkItem%",
+				"category": "%oracleQueryHistoryExplorer%"
+			},
+			{
+				"command": "oracleQueryHistoryExplorer.runHistoryItem",
+				"title": "%runProc%",
+				"category": "%oracleQueryHistoryExplorer%"
+			},
+			{
+				"command": "oracleQueryHistoryExplorer.bookmarkHistoryItem",
+				"title": "%bookmarkQuery%",
+				"category": "%oracleQueryHistoryExplorer%"
+			},
+			{
+				"command": "oracleQueryHistoryExplorer.deleteHistoryItem",
+				"title": "%deleteItem%",
+				"category": "%oracleQueryHistoryExplorer%"
+			},
+			{
+				"command": "oracleQueryHistoryExplorer.clearAll",
+				"title": "%clearAll%",
+				"category": "%oracleQueryHistoryExplorer%"
+			},
+			{
+				"command": "extension.modifyConnection",
+				"title": "%cmdPaletteUpdateConnection%",
+				"category": "Oracle"
+			},
+			{
+				"command": "extension.newConnection",
+				"title": "%cmdPaletteNewConnection%",
+				"category": "Oracle"
+			},
+			{
+				"command": "extension.deleteConnection",
+				"title": "%cmdPaletteDeleteConnection%",
+				"category": "Oracle"
+			},
+			{
+				"command": "extension.clearRecentConnections",
+				"title": "%clearRecentConnections%",
+				"category": "Oracle"
+			},
+			{
+				"command": "oracleDBObjectExplorer.modifyConnection",
+				"title": "%modifyConnection%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.rename",
+				"title": "%rename%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.clone",
+				"title": "%clone%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.newConnection",
+				"title": "%newConnection%",
+				"icon": {
+					"light": "out/explorer/images/light/database-plus.svg",
+					"dark": "out/explorer/images/dark/database-plus.svg"
+				},
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.editPackageBody",
+				"title": "%editPackageBody%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.editPackageSpec",
+				"title": "%editPackageSpec%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.editPackageMethod",
+				"title": "%editPackageMethod%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.showData",
+				"title": "%showData%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleBookmarkExplorer.moveUpBookmarkGroup",
+				"title": "%moveUp%",
+				"icon": {
+					"light": "out/explorer/images/light/arrowup.svg",
+					"dark": "out/explorer/images/dark/arrowup.svg"
+				},
+				"category": "Bookmarks"
+			},
+			{
+				"command": "oracleBookmarkExplorer.moveDownBookmarkGroup",
+				"title": "%moveDown%",
+				"icon": {
+					"light": "out/explorer/images/light/arrowdown.svg",
+					"dark": "out/explorer/images/dark/arrowdown.svg"
+				},
+				"category": "Bookmarks"
+			},
+			{
+				"command": "oracleBookmarkExplorer.moveUpBookmarkItem",
+				"title": "%moveUp%",
+				"icon": {
+					"light": "out/explorer/images/light/arrowup.svg",
+					"dark": "out/explorer/images/dark/arrowup.svg"
+				},
+				"category": "Bookmarks"
+			},
+			{
+				"command": "oracleBookmarkExplorer.moveDownBookmarkItem",
+				"title": "%moveDown%",
+				"icon": {
+					"light": "out/explorer/images/light/arrowdown.svg",
+					"dark": "out/explorer/images/dark/arrowdown.svg"
+				},
+				"category": "Bookmarks"
+			},
+			{
+				"command": "oracleBookmarkExplorer.addBookmarkItem",
+				"title": "%bookmarkQuery%",
+				"category": "Bookmarks"
+			},
+			{
+				"command": "oracleBookmarkExplorer.editBookmarkItem",
+				"title": "%editBookmarkItem%",
+				"category": "Bookmarks"
+			},
+			{
+				"command": "oracleBookmarkExplorer.deleteBookmarkItem",
+				"title": "%deleteItem%",
+				"category": "Bookmarks"
+			},
+			{
+				"command": "oracleBookmarkExplorer.runBookmarkItem",
+				"title": "%runProc%",
+				"category": "Bookmarks"
+			},
+			{
+				"command": "oracleBookmarkExplorer.addFolder",
+				"title": "%addFolder%",
+				"icon": {
+					"light": "out/explorer/images/light/database-plus.svg",
+					"dark": "out/explorer/images/dark/database-plus.svg"
+				},
+				"category": "Bookmarks"
+			},
+			{
+				"command": "oracleBookmarkExplorer.clearAll",
+				"title": "%clearAll%",
+				"category": "Bookmarks"
+			},
+			{
+				"command": "oracleBookmarkExplorer.copyToEditor",
+				"title": "%copyToEditor%",
+				"category": "Bookmarks"
+			},
+			{
+				"command": "oracleBookmarkExplorer.rename",
+				"title": "%rename%",
+				"category": "Bookmarks"
+			},
+			{
+				"command": "oracleCloudExplorer.refreshAll",
+				"title": "%refresh%",
+				"icon": {
+					"light": "out/explorer/images/light/refresh.svg",
+					"dark": "out/explorer/images/dark/refresh.svg"
+				},
+				"category": "CloudExplorer"
+			},
+			{
+				"command": "oracleCloudExplorer.ociUpdateProfile",
+				"title": "%ociUpdateProfile%",
+				"category": "CloudExplorer"
+			},
+			{
+				"command": "oracleCloudExplorer.ociRefreshNode",
+				"title": "%ociRefreshNode%",
+				"category": "CloudExplorer"
+			},
+			{
+				"command": "oracleCloudExplorer.ociCreateNewDatabase",
+				"title": "%ociCreateNewDatabase%",
+				"category": "CloudExplorer"
+			},
+			{
+				"command": "oracleCloudExplorer.adbStartInstance",
+				"title": "%ociStartDatabase%",
+				"category": "CloudExplorer"
+			},
+			{
+				"command": "oracleCloudExplorer.adbStopInstance",
+				"title": "%ociStopDatabase%",
+				"category": "CloudExplorer"
+			},
+			{
+				"command": "oracleCloudExplorer.adbTerminateInstance",
+				"title": "%ociTerminateDatabase%",
+				"category": "CloudExplorer"
+			},
+			{
+				"command": "oracleCloudExplorer.adbChangePassword",
+				"title": "%ociChangeADBPd%",
+				"category": "CloudExplorer"
+			},
+			{
+				"command": "oracleCloudExplorer.adbCreateDataConnection",
+				"title": "%ociCreateDataConnection%",
+				"category": "CloudExplorer"
+			},
+			{
+				"command": "oracleCloudExplorer.adbDownloadCredentialsFile",
+				"title": "%adbDownloadCredentialsFile%",
+				"category": "CloudExplorer"
+			},
+			{
+				"command": "oracleCloudExplorer.adbConnectionStrings",
+				"title": "%adbConnectionStrings%",
+				"category": "CloudExplorer"
+			},
+			{
+				"command": "oracleCloudExplorer.adbConfigureWalletlessConnectivityandNetworkAccess",
+				"title": "%adbConfigureWalletlessConnectivityandNetworkAccess%",
+				"group": "CloudExplorer"
+			},
+			{
+				"command": "oracleCloudExplorer.adbConfigureDatabaseAccessControl",
+				"title": "%adbConfigureDatabaseAccessControl%",
+				"group": "CloudExplorer"
+			},
+			{
+				"command": "oracleCloudExplorer.signupOracleCloud",
+				"title": "%signupOracleCloud%",
+				"icon": {
+					"light": "out/explorer/images/light/gear.svg",
+					"dark": "out/explorer/images/dark/gear.svg"
+				},
+				"category": "CloudExplorer"
+			},
+			{
+				"command": "oracleDBObjectExplorer.describeObject",
+				"title": "%describeObject%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.compileObject",
+				"title": "%compileObject%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.compileDebugObject",
+				"title": "%compileDebugObject%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.compileObjectFromFile",
+				"title": "%compileObject%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.compileDebugObjectFromFile",
+				"title": "%compileDebugObject%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.generateSelect",
+				"title": "%generateSelect%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.generateCode",
+				"title": "%generateCode%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.generateInsert",
+				"title": "%generateInsert%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.generateDelete",
+				"title": "%generateDelete%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.generateCreate",
+				"title": "%generateCreate%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.editScript",
+				"title": "%editScript%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.downloadScript",
+				"title": "%downloadScript%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.downloadPackageSpec",
+				"title": "%downloadPackageSpec%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.downloadPackageBody",
+				"title": "%downloadPackageBody%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.openCompilerSettings",
+				"title": "%compilerSettingsTitle%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.openFilterSettings",
+				"title": "%filterSettingsTitle%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.openFilterSettingsAll",
+				"title": "%filterSettingsTitle%",
+				"icon": {
+					"light": "out/ui/css/images/light/filter_lightmode.svg",
+					"dark": "out/ui/css/images/dark/filter_darkmode.svg"
+				},
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.openFormatterSettings",
+				"title": "%formatterSettingsTitle%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.openExplainPlanSettings",
+				"title": "%explainPlanSettingsTitle%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.startExternalApplicationdebugger",
+				"title": "%startExtAppDebugger%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.runDebug",
+				"title": "%runDebug%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.stepInto",
+				"title": "%stepInto%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.runDebugFromFile",
+				"title": "%runDebug%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.stepIntoFromFile",
+				"title": "%stepInto%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.setDefaultConnection",
+				"title": "%setDefaultConnection%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "oracleDBObjectExplorer.unsetDefaultConnection",
+				"title": "%unsetDefaultConnection%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "extension.explainPlan",
+				"title": "%explainPlanTooltip%",
+				"category": "Oracle Toolbar",
+				"icon": {
+					"light": "out/explorer/images/light/explainPlan.svg",
+					"dark": "out/explorer/images/dark/explainPlan.svg"
+				}
+			},
+			{
+				"command": "extension.dbmsExplainPlan",
+				"title": "%dbmsExplainPlanTooltip%",
+				"category": "Oracle Toolbar",
+				"icon": {
+					"light": "out/explorer/images/light/explain-plan-text_lightmode.svg",
+					"dark": "out/explorer/images/dark/explain-plan-text_darkmode.svg"
+				}
+			},
+			{
+				"command": "extension.executionPlan",
+				"title": "%executionPlanTooltip%",
+				"category": "Oracle Toolbar",
+				"icon": {
+					"light": "out/explorer/images/light/execution-plan-grid_lightmode.svg",
+					"dark": "out/explorer/images/dark/execution-plan-grid_darkmode.svg"
+				}
+			},
+			{
+				"command": "extension.dbmsExecutionPlan",
+				"title": "%dbmsExecutionPlanTooltip%",
+				"category": "Oracle Toolbar",
+				"icon": {
+					"light": "out/explorer/images/light/execution-plan-text_lightmode.svg",
+					"dark": "out/explorer/images/dark/execution-plan-text_darkmode.svg"
+				}
+			},
+			{
+				"command": "extension.realTimeSqlMonitoringDetail",
+				"title": "%realTimeSqlMonitoringMonitorSql%",
+				"category": "Oracle Toolbar",
+				"icon": {
+					"light": "out/explorer/images/light/analytics_lightmode.svg",
+					"dark": "out/explorer/images/dark/analytics_darkmode.svg"
+				}
+			},
+			{
+				"command": "extension.explainPlanCtxMenu",
+				"title": "%explainPlan%",
+				"category": "Oracle Toolbar"
+			},
+			{
+				"command": "extension.dbmsExplainPlanCtxMenu",
+				"title": "%dbmsExplainPlan%",
+				"category": "Oracle Toolbar"
+			},
+			{
+				"command": "extension.executionPlanCtxMenu",
+				"title": "%executionPlan%",
+				"category": "Oracle Toolbar"
+			},
+			{
+				"command": "extension.dbmsExecutionPlanCtxMenu",
+				"title": "%dbmsExecutionPlan%",
+				"category": "Oracle Toolbar"
+			},
+			{
+				"command": "oracleDBObjectExplorer.realTimeSqlMonitoring",
+				"title": "%realTimeSqlMonitoring%",
+				"category": "%oracleExplorer%"
+			},
+			{
+				"command": "extension.translatetoSQL",
+				"title": "%translatetoSQLToolip%",
+				"category": "Oracle Toolbar"
+			},
+			{
+				"command": "extension.translateToSQLAndExplain",
+				"title": "%translateToSQLAndExplainToolip%",
+				"category": "Oracle Toolbar"
+			},
+			{
+				"command": "extension.explain",
+				"title": "%explainToolip%",
+				"category": "Oracle Toolbar"
+			},
+			{
+				"command": "oracleDBObjectExplorer.openConfigureAIProvider",
+				"title": "%configureAIProvider%",
+				"category": "AI Configuration"
+			},
+			{
+				"command": "oracleDBObjectExplorer.openManageAIProfiles",
+				"title": "%manageAIProfiles%",
+				"category": "AI Configuration"
+			}
+		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "extension.oracleconnect",
+					"when": "resourceScheme != oracle"
+				},
+				{
+					"command": "extension.oracledisconnect",
+					"when": "resourceScheme != oracle"
+				},
+				{
+					"command": "oracleDBObjectExplorer.refreshAll",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.refresh",
+					"when": "false"
+				},
+				{
+					"command": "extension.testwebview",
+					"when": "testEnvironment"
+				},
+				{
+					"command": "extension.setwebview",
+					"when": "testEnvironment"
+				},
+				{
+					"command": "extension.testwebviewhtml",
+					"when": "testEnvironment"
+				},
+				{
+					"command": "extension.setdatagrid",
+					"when": "testEnvironment"
+				},
+				{
+					"command": "oracleDBObjectExplorer.runCodeObjectFromFile",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.runCodeObject",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.connectMenu",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.disconnectMenu",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.openNewSQLFile",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.openExistingSQLFile",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.deleteConnection",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.modifyConnection",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.newConnection",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.editPackageBody",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.editPackageSpec",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.editPackageMethod",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.showData",
+					"when": "false"
+				},
+				{
+					"command": "extension.oracleToolbarClearCommand",
+					"when": "false"
+				},
+				{
+					"command": "extension.oracleToolbarCancelCommand",
+					"when": "false"
+				},
+				{
+					"command": "extension.oracleToolbarDisabledClearCommand",
+					"when": "false"
+				},
+				{
+					"command": "extension.oracleToolbarDisabledCancelCommand",
+					"when": "false"
+				},
+				{
+					"command": "oracleCloudExplorer.refreshAll",
+					"when": "false"
+				},
+				{
+					"command": "oracleCloudExplorer.signupOracleCloud",
+					"when": "false"
+				},
+				{
+					"command": "oracleCloudExplorer.ociUpdateProfile",
+					"when": "false"
+				},
+				{
+					"command": "oracleCloudExplorer.ociRefreshNode",
+					"when": "false"
+				},
+				{
+					"command": "oracleCloudExplorer.ociCreateNewDatabase",
+					"when": "false"
+				},
+				{
+					"command": "oracleCloudExplorer.adbCreateDataConnection",
+					"when": "false"
+				},
+				{
+					"command": "oracleCloudExplorer.adbStartInstance",
+					"when": "false"
+				},
+				{
+					"command": "oracleCloudExplorer.adbStopInstance",
+					"when": "false"
+				},
+				{
+					"command": "oracleCloudExplorer.adbTerminateInstance",
+					"when": "false"
+				},
+				{
+					"command": "oracleCloudExplorer.adbChangePassword",
+					"when": "false"
+				},
+				{
+					"command": "oracleCloudExplorer.adbDownloadCredentialsFile",
+					"when": "false"
+				},
+				{
+					"command": "oracleCloudExplorer.adbConnectionStrings",
+					"when": "false"
+				},
+				{
+					"command": "oracleCloudExplorer.adbConfigureWalletlessConnectivityandNetworkAccess",
+					"when": "false"
+				},
+				{
+					"command": "oracleCloudExplorer.adbConfigureDatabaseAccessControl",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.describeObject",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.generateSelect",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.generateCode",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.compileObject",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.compileDebugObject",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.compileObjectFromFile",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.compileDebugObjectFromFile",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.generateInsert",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.generateDelete",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.generateCreate",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.editScript",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.downloadScript",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.downloadPackageSpec",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.downloadPackageBody",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.runDebug",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.stepInto",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.runDebugFromFile",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.stepIntoFromFile",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.startExternalApplicationdebugger",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.setDefaultConnection",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.unsetDefaultConnection",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.openFilterSettingsAll",
+					"when": "oracleDBObjectExplorer.connectionCount > 0"
+				},
+				{
+					"command": "oracleDBObjectExplorer.realTimeSqlMonitoring",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.openConfigureAIProvider",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.openManageAIProfiles",
+					"when": "false"
+				},
+				{
+					"command": "oracleDBObjectExplorer.clone",
+					"when": "false"
+				}
+			],
+			"editor/context": [
+				{
+					"command": "extension.executeSQLCommand",
+					"when": "editorLangId == oraclesql && resourceScheme != oracle || editorLangId == oraclesql && resourceScheme == oracle && resourceExtname == .sql",
+					"group": "90_OracleSQL@1"
+				},
+				{
+					"command": "extension.executeAllCommand",
+					"when": "editorLangId == oraclesql && resourceScheme != oracle || editorLangId == oraclesql && resourceScheme == oracle && resourceExtname == .sql",
+					"group": "90_OracleSQL@2"
+				},
+				{
+					"command": "oracleDBObjectExplorer.runCodeObjectFromFile",
+					"when": "editorTextFocus && editorLangId == oraclesql && resourceScheme == oracle && resource =~ /(objectType%3D13|objectType%3D15)/",
+					"group": "90_OracleEXP@1"
+				},
+				{
+					"command": "oracleDBObjectExplorer.runDebugFromFile",
+					"when": "editorTextFocus && editorLangId == oraclesql && resourceScheme == oracle && resource =~ /(objectType%3D13|objectType%3D15)/",
+					"group": "90_OracleEXP@1"
+				},
+				{
+					"command": "oracleDBObjectExplorer.stepIntoFromFile",
+					"when": "editorTextFocus && editorLangId == oraclesql && resourceScheme == oracle && resource =~ /(objectType%3D13|objectType%3D15)/",
+					"group": "90_OracleEXP@1"
+				},
+				{
+					"command": "oracleBookmarkExplorer.addBookmarkItem",
+					"when": "editorLangId == oraclesql && resourceScheme != oracle",
+					"group": "91_OracleBookMark"
+				},
+				{
+					"command": "oracleDBObjectExplorer.compileObjectFromFile",
+					"when": "editorTextFocus && editorLangId == oraclesql && resourceScheme == oracle",
+					"group": "90_OracleEXP@2"
+				},
+				{
+					"command": "oracleDBObjectExplorer.compileDebugObjectFromFile",
+					"when": "editorTextFocus && editorLangId == oraclesql && resourceScheme == oracle",
+					"group": "90_OracleEXP@3"
+				},
+				{
+					"command": "extension.explainPlanCtxMenu",
+					"when": "editorLangId == oraclesql && resourceScheme != oracle || editorLangId == oraclesql && resourceScheme == oracle && resourceExtname == .sql",
+					"group": "92_OracleExplainPlan@1"
+				},
+				{
+					"command": "extension.dbmsExplainPlanCtxMenu",
+					"when": "editorLangId == oraclesql && resourceScheme != oracle || editorLangId == oraclesql && resourceScheme == oracle && resourceExtname == .sql",
+					"group": "92_OracleExplainPlan@2"
+				},
+				{
+					"command": "extension.executionPlanCtxMenu",
+					"when": "editorLangId == oraclesql && resourceScheme != oracle || editorLangId == oraclesql && resourceScheme == oracle && resourceExtname == .sql",
+					"group": "93_OracleExecutionPlan@1"
+				},
+				{
+					"command": "extension.dbmsExecutionPlanCtxMenu",
+					"when": "editorLangId == oraclesql && resourceScheme != oracle || editorLangId == oraclesql && resourceScheme == oracle && resourceExtname == .sql",
+					"group": "93_OracleExecutionPlan@2"
+				},
+				{
+					"command": "extension.realTimeSqlMonitoringDetail",
+					"when": "editorLangId == oraclesql && resourceScheme != oracle || editorLangId == oraclesql && resourceScheme == oracle && resourceExtname == .sql",
+					"group": "94_RealTimeSQLMonitoring"
+				},
+				{
+					"submenu": "extension.selectAI",
+					"group": "95_OracletranslatetoSQL",
+					"when": "editorLangId == oraclesql && resourceScheme != oracle"
+				}
+			],
+			"extension.selectAI": [
+				{
+					"command": "extension.translatetoSQL",
+					"group": "94_OracletranslatetoSQL@1"
+				},
+				{
+					"command": "extension.translateToSQLAndExplain",
+					"group": "94_OracletranslatetoSQL@2"
+				},
+				{
+					"command": "extension.explain",
+					"group": "94_OracletranslatetoSQL@3"
+				}
+			],
+			"editor/title": [
+				{
+					"command": "extension.oracleToolbarCancelCommand",
+					"group": "navigation",
+					"when": "oracleToolbar.cancelVisibility"
+				},
+				{
+					"command": "extension.oracleToolbarClearCommand",
+					"group": "navigation",
+					"when": "oracleToolbar.clearVisibility"
+				},
+				{
+					"command": "extension.oracleToolbarDisabledCancelCommand",
+					"group": "navigation",
+					"when": "oracleToolbar.cancelDisabledVisibility"
+				},
+				{
+					"command": "extension.oracleToolbarDisabledClearCommand",
+					"group": "navigation",
+					"when": "oracleToolbar.clearDisabledVisibility"
+				},
+				{
+					"command": "oracleDBObjectExplorer.runCodeObjectFromFile",
+					"when": "editorLangId == oraclesql && resourceScheme == oracle && resourceDirname =~ /^\\\\[^\\\\]+\\\\(Procedure|Function)\\\\/",
+					"group": "navigation@1"
+				},
+				{
+					"command": "extension.executeSQLCommand",
+					"group": "navigation@1",
+					"when": "editorLangId == oraclesql && resourceScheme != oracle || editorLangId == oraclesql && resourceScheme == oracle && resourceExtname == .sql"
+				},
+				{
+					"command": "extension.executeAllCommand",
+					"group": "navigation@2",
+					"when": "editorLangId == oraclesql && resourceScheme != oracle || editorLangId == oraclesql && resourceScheme == oracle && resourceExtname == .sql"
+				},
+				{
+					"command": "extension.getEditorHelp",
+					"group": "navigation@3",
+					"when": "editorLangId == oraclesql"
+				},
+				{
+					"command": "extension.formatText",
+					"group": "navigation@4",
+					"when": "editorLangId == oraclesql && editorHasDocumentFormattingProvider && !editorReadonly && !inCompositeEditor"
+				},
+				{
+					"command": "extension.rebuildIntelliSenseMetaData",
+					"group": "navigation@5",
+					"when": "editorLangId == oraclesql"
+				},
+				{
+					"command": "extension.explainPlan",
+					"group": "navigation@6",
+					"when": "editorLangId == oraclesql && resourceScheme != oracle || editorLangId == oraclesql && resourceScheme == oracle && resourceExtname == .sql"
+				},
+				{
+					"command": "extension.dbmsExplainPlan",
+					"group": "navigation@7",
+					"when": "editorLangId == oraclesql && resourceScheme != oracle || editorLangId == oraclesql && resourceScheme == oracle && resourceExtname == .sql"
+				},
+				{
+					"command": "extension.executionPlan",
+					"group": "navigation@8",
+					"when": "editorLangId == oraclesql && resourceScheme != oracle || editorLangId == oraclesql && resourceScheme == oracle && resourceExtname == .sql"
+				},
+				{
+					"command": "extension.openFormatterSettingsFromToolbar",
+					"group": "navigation@9",
+					"when": "editorLangId == oraclesql"
+				},
+				{
+					"command": "extension.dbmsExecutionPlan",
+					"group": "navigation@10",
+					"when": "editorLangId == oraclesql && resourceScheme != oracle || editorLangId == oraclesql && resourceScheme == oracle && resourceExtname == .sql"
+				},
+				{
+					"command": "extension.realTimeSqlMonitoringDetail",
+					"group": "navigation@11",
+					"when": "editorLangId == oraclesql && resourceScheme != oracle || editorLangId == oraclesql && resourceScheme == oracle && resourceExtname == .sql"
+				},
+				{
+					"submenu": "extension.selectAI",
+					"group": "navigation@12",
+					"when": "editorLangId == oraclesql && resourceScheme != oracle || editorLangId == oraclesql && resourceScheme == oracle && resourceExtname == .sql"
+				}
+			],
+			"view/title": [
+				{
+					"command": "oracleDBObjectExplorer.getHelp",
+					"when": "view == oracleDBObjectExplorer",
+					"group": "navigation@2"
+				},
+				{
+					"command": "oracleDBObjectExplorer.installXeDatabase",
+					"when": "view == oracleDBObjectExplorer",
+					"group": "navigation@3"
+				},
+				{
+					"command": "oracleDBObjectExplorer.refreshAll",
+					"when": "view == oracleDBObjectExplorer",
+					"group": "navigation@4"
+				},
+				{
+					"command": "oracleDBObjectExplorer.newConnection",
+					"when": "view == oracleDBObjectExplorer",
+					"group": "navigation@1"
+				},
+				{
+					"command": "oracleQueryHistoryExplorer.clearAll",
+					"when": "view == oracleQueryHistoryExplorer",
+					"group": "navigation"
+				},
+				{
+					"command": "oracleBookmarkExplorer.addFolder",
+					"when": "view == oracleBookmarkExplorer",
+					"group": "navigation"
+				},
+				{
+					"command": "oracleBookmarkExplorer.clearAll",
+					"when": "view == oracleBookmarkExplorer",
+					"group": "navigation"
+				},
+				{
+					"command": "oracleCloudExplorer.signupOracleCloud",
+					"when": "view == oracleCloudExplorer",
+					"group": "navigation@1"
+				},
+				{
+					"command": "oracleCloudExplorer.refreshAll",
+					"when": "view == oracleCloudExplorer",
+					"group": "navigation@2"
+				},
+				{
+					"command": "oracleDBObjectExplorer.openFilterSettingsAll",
+					"when": "view == oracleDBObjectExplorer && oracleDBObjectExplorer.connectionCount > 0",
+					"group": "navigation"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "oracleDBObjectExplorer.openNewSQLFile",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /Connection/",
+					"group": "connection_1_openSQLFile@1"
+				},
+				{
+					"command": "oracleDBObjectExplorer.openExistingSQLFile",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /Connection/",
+					"group": "connection_1_openSQLFile@2"
+				},
+				{
+					"command": "oracleDBObjectExplorer.connectMenu",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /(DisconnectedConnection|ErroredConnection)/",
+					"group": "connection_2_state@1"
+				},
+				{
+					"command": "oracleDBObjectExplorer.disconnectMenu",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /ConnectedConnection/",
+					"group": "connection_2_state@2"
+				},
+				{
+					"command": "oracleDBObjectExplorer.rename",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /Connection/",
+					"group": "connection_2_state@3"
+				},
+				{
+					"command": "oracleDBObjectExplorer.modifyConnection",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /Connection/",
+					"group": "connection_2_state@4"
+				},
+				{
+					"command": "oracleDBObjectExplorer.deleteConnection",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /Connection/",
+					"group": "connection_2_state@5"
+				},
+				{
+					"command": "oracleDBObjectExplorer.runCodeObject",
+					"when": "view == oracleDBObjectExplorer && viewItem == Procedure",
+					"group": "oemenu1@1"
+				},
+				{
+					"command": "oracleDBObjectExplorer.editScript",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /^(Procedure|Function|Trigger)$/",
+					"group": "oemenu2@1"
+				},
+				{
+					"command": "oracleDBObjectExplorer.runCodeObject",
+					"when": "view == oracleDBObjectExplorer && viewItem == Function",
+					"group": "oemenu1@1"
+				},
+				{
+					"command": "oracleDBObjectExplorer.downloadScript",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /^(Procedure|Function|Trigger)$/",
+					"group": "oemenu2@2"
+				},
+				{
+					"command": "oracleDBObjectExplorer.editPackageSpec",
+					"when": "view == oracleDBObjectExplorer && viewItem == Package",
+					"group": "oemenu2@1"
+				},
+				{
+					"command": "oracleDBObjectExplorer.editPackageBody",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /^(Package|PackageBody)$/",
+					"group": "oemenu2@2"
+				},
+				{
+					"command": "oracleDBObjectExplorer.downloadPackageSpec",
+					"when": "view == oracleDBObjectExplorer && viewItem == Package",
+					"group": "oemenu2@3"
+				},
+				{
+					"command": "oracleDBObjectExplorer.downloadPackageBody",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /^(Package|PackageBody)$/",
+					"group": "oemenu2@4"
+				},
+				{
+					"command": "oracleDBObjectExplorer.runCodeObject",
+					"when": "view == oracleDBObjectExplorer && viewItem == PackageMethod",
+					"group": "oemenu1@1"
+				},
+				{
+					"command": "oracleDBObjectExplorer.editPackageMethod",
+					"when": "view == oracleDBObjectExplorer && viewItem == PackageMethod",
+					"group": "oemenu2@1"
+				},
+				{
+					"command": "oracleDBObjectExplorer.editPackageMethod",
+					"when": "view == oracleDBObjectExplorer && viewItem == PackageBodyPrivateMethod",
+					"group": "oemenu2@1"
+				},
+				{
+					"command": "oracleDBObjectExplorer.runDebug",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /^(Procedure|Function|PackageMethod)$/",
+					"group": "oemenu1@2"
+				},
+				{
+					"command": "oracleDBObjectExplorer.stepInto",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /^(Procedure|Function|PackageMethod)$/",
+					"group": "oemenu1@3"
+				},
+				{
+					"command": "oracleDBObjectExplorer.showData",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /^(Relational Table|Object Table|XML Table|Relational View|Object View|XML View|Materialized View)$/",
+					"group": "oemenu1@2"
+				},
+				{
+					"command": "oracleDBObjectExplorer.openCompilerSettings",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /Connection/",
+					"group": "oemenu3@1"
+				},
+				{
+					"command": "oracleDBObjectExplorer.openFormatterSettings",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /Connection/",
+					"group": "oemenu3@2"
+				},
+				{
+					"command": "oracleDBObjectExplorer.openExplainPlanSettings",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /Connection/",
+					"group": "oemenu3@3"
+				},
+				{
+					"command": "oracleDBObjectExplorer.startExternalApplicationdebugger",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /Connection/",
+					"group": "oemenu3@4"
+				},
+				{
+					"command": "oracleDBObjectExplorer.openConfigureAIProvider",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /Connection/",
+					"group": "oemenu4@1"
+				},
+				{
+					"command": "oracleDBObjectExplorer.openManageAIProfiles",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /Connection/",
+					"group": "oemenu4@2"
+				},
+				{
+					"command": "oracleDBObjectExplorer.refresh",
+					"when": "view == oracleDBObjectExplorer",
+					"group": "oemenu5@1"
+				},
+				{
+					"command": "oracleQueryHistoryExplorer.runHistoryItem",
+					"when": "view == oracleQueryHistoryExplorer && viewItem == HistoryItem",
+					"group": "history1@1"
+				},
+				{
+					"command": "oracleQueryHistoryExplorer.openHistoryItem",
+					"when": "view == oracleQueryHistoryExplorer && viewItem == HistoryItem",
+					"group": "history1@2"
+				},
+				{
+					"command": "oracleQueryHistoryExplorer.editHistoryItem",
+					"when": "view == oracleQueryHistoryExplorer && viewItem == HistoryItem",
+					"group": "history1@3"
+				},
+				{
+					"command": "oracleQueryHistoryExplorer.bookmarkHistoryItem",
+					"when": "view == oracleQueryHistoryExplorer && viewItem == HistoryItem",
+					"group": "history1@4"
+				},
+				{
+					"command": "oracleQueryHistoryExplorer.deleteHistoryItem",
+					"when": "view == oracleQueryHistoryExplorer",
+					"group": "history2@1"
+				},
+				{
+					"command": "oracleBookmarkExplorer.runBookmarkItem",
+					"when": "view == oracleBookmarkExplorer && viewItem =~ /(bookmarkItemOne|firstBookmarkItem|middleBookmarkItem|lastBookmarkItem)/",
+					"group": "bookmarks1@1"
+				},
+				{
+					"command": "oracleBookmarkExplorer.editBookmarkItem",
+					"when": "view == oracleBookmarkExplorer && viewItem =~ /(bookmarkItemOne|firstBookmarkItem|middleBookmarkItem|lastBookmarkItem)/",
+					"group": "bookmarks1@2"
+				},
+				{
+					"command": "oracleBookmarkExplorer.copyToEditor",
+					"when": "view == oracleBookmarkExplorer && viewItem =~ /(bookmarkItemOne|firstBookmarkItem|middleBookmarkItem|lastBookmarkItem)/",
+					"group": "bookmarks1@3"
+				},
+				{
+					"command": "oracleBookmarkExplorer.rename",
+					"when": "view == oracleBookmarkExplorer",
+					"group": "bookmarks2@1"
+				},
+				{
+					"command": "oracleBookmarkExplorer.deleteBookmarkItem",
+					"when": "view == oracleBookmarkExplorer",
+					"group": "bookmarks2@2"
+				},
+				{
+					"command": "oracleBookmarkExplorer.moveUpBookmarkGroup",
+					"when": "view == oracleBookmarkExplorer && viewItem =~ /(middleBookMarkGroup|lastBookmarkGroup)/",
+					"group": "inline"
+				},
+				{
+					"command": "oracleBookmarkExplorer.moveDownBookmarkGroup",
+					"when": "view == oracleBookmarkExplorer && viewItem =~ /(middleBookMarkGroup|firstBookmarkGroup)/",
+					"group": "inline"
+				},
+				{
+					"command": "oracleBookmarkExplorer.moveUpBookmarkItem",
+					"when": "view == oracleBookmarkExplorer && viewItem =~ /(middleBookmarkItem|lastBookmarkItem)/",
+					"group": "inline"
+				},
+				{
+					"command": "oracleBookmarkExplorer.moveDownBookmarkItem",
+					"when": "view == oracleBookmarkExplorer && viewItem =~ /(middleBookmarkItem|firstBookmarkItem)/",
+					"group": "inline"
+				},
+				{
+					"command": "oracleCloudExplorer.ociUpdateProfile",
+					"when": "view == oracleCloudExplorer && viewItem == ociRootNodeItem",
+					"group": "CloudExplorer1@1"
+				},
+				{
+					"command": "oracleCloudExplorer.ociCreateNewDatabase",
+					"when": "view == oracleCloudExplorer  && viewItem == ociWorkloadItem",
+					"group": "CloudExplorer3@1"
+				},
+				{
+					"command": "oracleCloudExplorer.ociRefreshNode",
+					"when": "view == oracleCloudExplorer",
+					"group": "CloudExplorer5@1"
+				},
+				{
+					"command": "oracleCloudExplorer.adbCreateDataConnection",
+					"when": "view == oracleCloudExplorer && viewItem =~ /(ociNonDedicatedDatabaseItem|ociDedicatedDatabaseItem)/",
+					"group": "CloudExplorer1@1"
+				},
+				{
+					"command": "oracleCloudExplorer.adbDownloadCredentialsFile",
+					"when": "view == oracleCloudExplorer && viewItem =~ /(ociNonDedicatedDatabaseItem|ociDedicatedDatabaseItem)/",
+					"group": "CloudExplorer1@2"
+				},
+				{
+					"command": "oracleCloudExplorer.adbConnectionStrings",
+					"when": "view == oracleCloudExplorer && viewItem =~ /(ociNonDedicatedDatabaseItem|ociDedicatedDatabaseItem)/",
+					"group": "CloudExplorer1@4"
+				},
+				{
+					"command": "oracleCloudExplorer.adbStartInstance",
+					"when": "view == oracleCloudExplorer && viewItem =~ /(ociNonDedicatedDatabaseItem|ociDedicatedDatabaseItem)/",
+					"group": "CloudExplorer2@1"
+				},
+				{
+					"command": "oracleCloudExplorer.adbStopInstance",
+					"when": "view == oracleCloudExplorer && viewItem =~ /(ociNonDedicatedDatabaseItem|ociDedicatedDatabaseItem)/",
+					"group": "CloudExplorer2@2"
+				},
+				{
+					"command": "oracleCloudExplorer.adbTerminateInstance",
+					"when": "view == oracleCloudExplorer && viewItem =~ /(ociNonDedicatedDatabaseItem|ociDedicatedDatabaseItem)/",
+					"group": "CloudExplorer2@3"
+				},
+				{
+					"command": "oracleCloudExplorer.adbChangePassword",
+					"when": "view == oracleCloudExplorer && viewItem =~ /(ociNonDedicatedDatabaseItem|ociDedicatedDatabaseItem)/",
+					"group": "CloudExplorer2@4"
+				},
+				{
+					"command": "oracleCloudExplorer.adbConfigureWalletlessConnectivityandNetworkAccess",
+					"when": "view == oracleCloudExplorer && viewItem == ociNonDedicatedDatabaseItem",
+					"group": "CloudExplorer2@5"
+				},
+				{
+					"command": "oracleCloudExplorer.adbConfigureDatabaseAccessControl",
+					"when": "view == oracleCloudExplorer && viewItem == ociDedicatedDatabaseItem",
+					"group": "CloudExplorer2@5"
+				},
+				{
+					"command": "oracleDBObjectExplorer.describeObject",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /^(Relational Table|Object Table|XML Table|Relational View|Object View|XML View|Materialized View|Procedure|Function|Package|Synonym)$/",
+					"group": "oemenu1@4"
+				},
+				{
+					"command": "oracleDBObjectExplorer.compileObject",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /^(Procedure|Function|Package|PackageBody|Trigger)$/",
+					"group": "oemenu1@5"
+				},
+				{
+					"command": "oracleDBObjectExplorer.compileDebugObject",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /^(Procedure|Function|Package|PackageBody|Trigger)$/",
+					"group": "oemenu1@6"
+				},
+				{
+					"command": "oracleDBObjectExplorer.generateSelect",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /^(Relational Table)$/",
+					"group": "oemenu1@7"
+				},
+				{
+					"command": "oracleDBObjectExplorer.generateInsert",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /^(Relational Table)$/",
+					"group": "oemenu1@8"
+				},
+				{
+					"command": "oracleDBObjectExplorer.generateDelete",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /^(Relational Table)$/",
+					"group": "oemenu1@9"
+				},
+				{
+					"command": "oracleDBObjectExplorer.generateCreate",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /^(Relational Table|Object Table|XML Table|Relational View|Object View|XML View|Materialized View|Synonym)$/",
+					"group": "oemenu1@10"
+				},
+				{
+					"command": "oracleDBObjectExplorer.generateCode",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /^(Relational Table|Object Table|XML Table|Relational View|Object View|XML View|Materialized View|Column)$/",
+					"group": "oemenu1@20"
+				},
+				{
+					"command": "oracleDBObjectExplorer.setDefaultConnection",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /^(ConnectedConnection|DisconnectedConnection|ErroredConnection)/",
+					"group": "connection_2_state@6"
+				},
+				{
+					"command": "oracleDBObjectExplorer.unsetDefaultConnection",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /^(DefaultConnectedConnection|DefaultDisconnectedConnection|DefaultErroredConnection)/",
+					"group": "connection_2_state@6"
+				},
+				{
+					"command": "oracleDBObjectExplorer.openFilterSettings",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /(Connection)|^(Tables|Views|Procedures|Functions|Packages|Synonyms|Sequences|Triggers|Other Users)$/",
+					"group": "connection_2_state@7"
+				},
+				{
+					"command": "oracleDBObjectExplorer.clone",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /Connection/",
+					"group": "connection_2_state@8"
+				},
+				{
+					"command": "oracleDBObjectExplorer.realTimeSqlMonitoring",
+					"when": "view == oracleDBObjectExplorer && viewItem =~ /Connection/",
+					"group": "connection_2_state@9"
+				}
+			]
+		},
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "oracle-db-explorer",
+					"title": "%viewContainerTitle%",
+					"icon": "out/explorer/images/database.svg"
+				}
+			]
+		},
+		"views": {
+			"oracle-db-explorer": [
+				{
+					"id": "oracleDBObjectExplorer",
+					"name": "%oracleExplorerViewName%"
+				},
+				{
+					"id": "oracleCloudExplorer",
+					"name": "%oracleCloudExplorerViewName%"
+				},
+				{
+					"id": "oracleBookmarkExplorer",
+					"name": "%oracleQueryBookmarkViewName%"
+				},
+				{
+					"id": "oracleQueryHistoryExplorer",
+					"name": "%oracleQueryHistoryExplorerViewName%"
+				}
+			]
+		},
+		"languages": [
+			{
+				"id": "oraclesql",
+				"aliases": [
+					"Oracle-SQL and PLSQL"
+				],
+				"extensions": [
+					".sql",
+					".plsql",
+					".pls",
+					".bdy",
+					".fnc",
+					".pck",
+					".plb",
+					".pkb",
+					".pkh",
+					".pks",
+					".prc",
+					".spc",
+					".trg"
+				],
+				"configuration": "./syntaxes/language-configuration.json"
+			}
+		],
+		"breakpoints": [
+			{
+				"language": "oraclesql"
+			}
+		],
+		"grammars": [
+			{
+				"language": "oraclesql",
+				"scopeName": "source.oraclesql",
+				"path": "./syntaxes/oraclesql.tmLanguage.plist"
+			}
+		],
+		"snippets": [
+			{
+				"language": "oraclesql",
+				"path": "./snippets/oracle-sql.json"
+			},
+			{
+				"language": "csharp",
+				"path": "./snippets/oracle-csharp.json"
+			},
+			{
+				"language": "java",
+				"path": "./snippets/oracle-java.json"
+			},
+			{
+				"language": "python",
+				"path": "./snippets/oracle-python.json"
+			},
+			{
+				"language": "javascript",
+				"path": "./snippets/oracle-javascript.json"
+			}
+		],
+		"configuration": {
+			"type": "object",
+			"title": "Oracle Developer Tools for VS Code Configuration",
+			"properties": {
+				"oracledevtools.bookmarkFileFolder": {
+					"type": "string",
+					"default": "%Default%",
+					"description": "%bookmarkFileFolder%"
+				},
+				"oracledevtools.connectionConfiguration.configFilesFolder": {
+					"type": "string",
+					"default": "%Default%",
+					"description": "%connectionConfiguration.configFileFolder%",
+					"scope": "resource"
+				},
+				"oracledevtools.connectionConfiguration.loginScript": {
+					"type": "string",
+					"default": "",
+					"description": "%connectionConfiguration.loginScript%",
+					"scope": "resource"
+				},
+				"oracledevtools.connectionConfiguration.showPromptForPasswordStoreMigrationToSecretStorage": {
+					"type": "boolean",
+					"default": "true",
+					"description": "%connectionConfiguration.showCredStoreMigrationPrompt%",
+					"scope": "machine"
+				},
+				"oracledevtools.connectionConfiguration.passwordStore": {
+					"type": "string",
+					"enum": [
+						"VS Code Secret Storage",
+						"VS Code Settings as clear text"
+					],
+					"default": "VS Code Secret Storage",
+					"description": "%connectionConfiguration.credStore%",
+					"scope": "resource"
+				},
+				"oracledevtools.connectionConfiguration.walletFileFolder": {
+					"type": "string",
+					"default": "%Default%",
+					"description": "%connectionConfiguration.walletFileFolder%",
+					"scope": "resource"
+				},
+				"oracledevtools.OracleCloudInfrastructure.profiles": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"profileName": {
+								"type": "string",
+								"default": "",
+								"description": "%profileName%"
+							},
+							"compartmentName": {
+								"type": "string",
+								"default": "",
+								"description": "%recentCompartmentName%"
+							},
+							"region": {
+								"type": "string",
+								"default": "",
+								"description": "%region%"
+							},
+							"tenancyID": {
+								"type": "string",
+								"default": "",
+								"description": "%tenancyID%"
+							},
+							"tenancyName": {
+								"type": "string",
+								"default": "",
+								"description": "%tenancyName%"
+							}
+						}
+					},
+					"scope": "resource"
+				},
+				"oracledevtools.connections": {
+					"type": "array",
+					"default": [
+						{
+							"dataSource": "{{specify the data source}}",
+							"userID": "{{specify the database user ID}}",
+							"password": "{{specify the database password}}"
+						}
+					],
+					"description": "%connectionsDesc%",
+					"items": {
+						"type": "object",
+						"properties": {
+							"dataSource": {
+								"type": "string",
+								"default": "{{specify the data source}}",
+								"description": "%datasourceDesc%"
+							},
+							"userID": {
+								"type": "string",
+								"default": "{{specify the database user ID}}",
+								"description": "%userIDDesc%"
+							},
+							"connectionType": {
+								"type": "number",
+								"default": 2,
+								"enum": [
+									1,
+									2,
+									3,
+									4,
+									5
+								],
+								"description": "%connectionTypeDesc%"
+							},
+							"databaseHostName": {
+								"type": "string",
+								"default": "{{specify DB host name}}",
+								"description": "%databaseHostNameDesc%"
+							},
+							"databasePortNumber": {
+								"type": "string",
+								"default": "{{specify DB port number}}",
+								"description": "%databasePortNumberDesc%"
+							},
+							"databaseServiceName": {
+								"type": "string",
+								"default": "{{specify DB service name}}",
+								"description": "%databaseServiceNameDesc%"
+							},
+							"currentSchema": {
+								"type": "string",
+								"default": "{{specify the current schema}}",
+								"description": "%currentSchemaDesc%"
+							},
+							"tnsAdmin": {
+								"type": "string",
+								"default": "{{specify folder for Oracle network configuration files (e.g. tnsnames.ora, sqlnet.ora etc.)}}",
+								"description": "%tnsAdminDesc%"
+							},
+							"walletLocation": {
+								"type": "string",
+								"default": "{{specify Oracle network configuration wallet file folder}}",
+								"description": "%walletFileFolderDesc%"
+							},
+							"dBAPrivilege": {
+								"type": "string",
+								"default": "{{specify DBA privelege}}",
+								"description": "%dbaPrivilegeDesc%"
+							},
+							"password": {
+								"type": "string",
+								"default": "{{specify password}}",
+								"description": "%pdDesc%"
+							},
+							"authenticationType": {
+								"type": "number",
+								"default": 2,
+								"enum": [
+									1,
+									2
+								],
+								"description": "%authenticationTypeDesc%"
+							},
+							"enlist": {
+								"type": "boolean",
+								"default": true,
+								"description": "%enlistDesc%"
+							},
+							"connectionLifeTime": {
+								"type": "number",
+								"default": 0,
+								"description": "%connectionLifeTimeDesc%"
+							},
+							"incrPoolSize": {
+								"type": "number",
+								"default": 5,
+								"description": "%incrPoolSizeDesc%"
+							},
+							"decrPoolSize": {
+								"type": "number",
+								"default": 1,
+								"description": "%decrPoolSizeDesc%"
+							},
+							"maxPoolSize": {
+								"type": "number",
+								"default": 100,
+								"description": "%maxPoolSizeDesc%"
+							},
+							"minPoolSize": {
+								"type": "number",
+								"default": 1,
+								"description": "%minPoolSizeDesc%"
+							},
+							"persistSecurityInfo": {
+								"type": "boolean",
+								"default": false,
+								"description": "%persistSecurityInfoDesc%"
+							},
+							"pooling": {
+								"type": "boolean",
+								"default": false,
+								"description": "%poolingDesc%"
+							},
+							"connectionTimeout": {
+								"type": "number",
+								"default": 30,
+								"description": "%connectionTimeoutDesc%"
+							},
+							"proxyUserID": {
+								"type": "string",
+								"default": "",
+								"description": "%proxyUserIDDesc%"
+							},
+							"proxyPassword": {
+								"type": "string",
+								"default": "",
+								"description": "%proxyPdDesc%"
+							},
+							"validateConnection": {
+								"type": "boolean",
+								"default": false,
+								"description": "%validateConnectionDesc%"
+							},
+							"statementCacheSize": {
+								"type": "number",
+								"default": 0,
+								"description": "%statementCacheSizeDesc%"
+							},
+							"statementCachePurge": {
+								"type": "boolean",
+								"default": false,
+								"description": "%statementCachePurgeDesc%"
+							},
+							"hAEvents": {
+								"type": "boolean",
+								"default": true,
+								"description": "%hAEventsDesc%"
+							},
+							"loadBalancing": {
+								"type": "boolean",
+								"default": true,
+								"description": "%loadBalancingDesc%"
+							},
+							"metadataPooling": {
+								"type": "boolean",
+								"default": false,
+								"description": "%metadataPoolingDesc%"
+							},
+							"contextConnection": {
+								"type": "boolean",
+								"default": false,
+								"description": "%contextConnectionDesc%"
+							},
+							"promotableTransaction": {
+								"type": "string",
+								"default": "promotable",
+								"description": "%promotableTransactionDesc%"
+							},
+							"selfTuning": {
+								"type": "boolean",
+								"default": false,
+								"description": "%selfTuningDesc%"
+							},
+							"providerDataSourceType": {
+								"type": "string",
+								"enum": [
+									"EZConnect",
+									"Direct",
+									"TNS"
+								],
+								"description": "%providerDataSourceTypeDescDeprecated%",
+								"deprecationMessage": "%providerDataSourceTypeDeprecationMessage%",
+								"markdownDeprecationMessage": "%providerDataSourceTypeDeprecationMarkdownMessage%"
+							},
+							"connectionString": {
+								"type": "string",
+								"default": "",
+								"description": "%connectionStringDesc%"
+							},
+							"name": {
+								"type": "string",
+								"description": "%oracleProfileNameDesc%"
+							},
+							"passwordSaved": {
+								"type": "boolean",
+								"default": false,
+								"description": "%pdSavedDesc%"
+							},
+							"passwordEmptyByUser": {
+								"type": "boolean",
+								"default": false,
+								"description": "%pdEmptyByUserDesc%"
+							},
+							"loginScript": {
+								"type": "string",
+								"default": "",
+								"description": "%loginScriptDesc%"
+							},
+							"addSettingsScopeToConnectionName": {
+								"type": "boolean",
+								"default": false,
+								"description": "%addSettingsScopeToConnectionName%"
+							},
+							"addCurrentSchemaToConnectionName": {
+								"type": "boolean",
+								"default": false,
+								"description": "%addCurrentSchemaToConnectionName%"
+							},
+							"color": {
+								"type": "string",
+								"default": "",
+								"description": "%colorDesc%"
+							},
+							"useCompatibleNamesDirectoryPath": {
+								"type": "boolean",
+								"default": false,
+								"description": "%useCompatibleNamesDirectoryPathDesc%"
+							},
+							"useConnectionCredentialsFromWalletFile": {
+								"type": "boolean",
+								"default": false,
+								"description": "%useConnectionCredsFromWalletFileDesc%"
+							},
+							"defaultAIProfile": {
+								"type": "string",
+								"default": "",
+								"description": "%defaultAIProfileDescription%"
+							},
+							"passwordStore": {
+								"type": "string",
+								"default": "Settings",
+								"enum": [
+									"Secret Storage",
+									"Settings"
+								],
+								"description": "%pdStoreDesc%"
+							},
+							"enableFiltersForIntellisense": {
+								"type": "boolean",
+								"default": true,
+								"description": "%enableAllFiltersForIntellisenseDesc.deprecated%",
+								"deprecationMessage": "%enableAllFiltersForIntellisenseDesc.deprecationMessage%",
+								"markdownDeprecationMessage": "%enableAllFiltersForIntellisenseDesc.markdownDeprecationMessage%"
+							},
+							"filters": {
+								"type": "array",
+								"uniqueItems": true,
+								"description": "%connFiltersDescription%",
+								"items": {
+									"type": "object",
+									"oneOf": [
+										{
+											"properties": {
+												"collection": {
+													"type": "string",
+													"const": "Connection",
+													"description": "%filtersConnCollPropertyNameDesc%"
+												},
+												"enableFiltersForExplorer": {
+													"type": "boolean",
+													"default": true,
+													"description": "%enableFiltersForExplorerDesc%"
+												},
+												"enableFiltersForIntellisense": {
+													"type": "boolean",
+													"default": true,
+													"description": "%enableFilterForIntellisenseDesc%"
+												},
+												"match": {
+													"type": "string",
+													"enum": [
+														"any",
+														"all"
+													],
+													"default": "all",
+													"description": "%filtersConnectionMatchPropertyNameDesc%"
+												},
+												"filterProperties": {
+													"type": "array",
+													"uniqueItems": true,
+													"description": "%filtersSpecifyProperties%",
+													"items": {
+														"type": "object",
+														"properties": {
+															"propertyName": {
+																"type": "string",
+																"enum": [
+																	"Visible Collections",
+																	"Object Name"
+																]
+															},
+															"condition": {
+																"type": "string",
+																"description": "%filtersConditionPropDesc%"
+															}
+														},
+														"if": {
+															"type": "object",
+															"properties": {
+																"propertyName": {
+																	"const": "Object Name"
+																}
+															}
+														},
+														"then": {
+															"properties": {
+																"propertyName": {
+																	"description": "%filtersObjectNameDesc%"
+																},
+																"condition": {
+																	"enum": [
+																		"is",
+																		"is not",
+																		"starts with",
+																		"ends with",
+																		"contains",
+																		"does not contain"
+																	],
+																	"default": "is"
+																},
+																"value": {
+																	"type": "string",
+																	"description": "%filtersObjectNameValueDesc%"
+																},
+																"caseSensitiveMatch": {
+																	"type": "boolean",
+																	"default": false,
+																	"description": "%filtersCaseSensitiveDesc%"
+																}
+															},
+															"required": [
+																"propertyName",
+																"value"
+															]
+														},
+														"else": {
+															"properties": {
+																"propertyName": {
+																	"description": "%filtersVisCollPropertyNameDesc%"
+																},
+																"condition": {
+																	"const": "is"
+																},
+																"value": {
+																	"type": "array",
+																	"description": "%filtersVisCollPropertyValueDesc%",
+																	"items": {
+																		"type": "string",
+																		"enum": [
+																			"Relational Tables",
+																			"Object Tables",
+																			"XML Tables",
+																			"Relational Views",
+																			"Object Views",
+																			"XML Views",
+																			"Materialized Views",
+																			"Functions",
+																			"Procedures",
+																			"Packages",
+																			"Sequences",
+																			"Synonyms",
+																			"Table Triggers",
+																			"View Triggers",
+																			"Schema Triggers",
+																			"Database Triggers",
+																			"Other Users"
+																		],
+																		"default": [
+																			"Relational Tables",
+																			"Object Tables",
+																			"XML Tables",
+																			"Relational Views",
+																			"Object Views",
+																			"XML Views",
+																			"Materialized Views",
+																			"Functions",
+																			"Procedures",
+																			"Packages",
+																			"Sequences",
+																			"Synonyms",
+																			"Table Triggers",
+																			"View Triggers",
+																			"Schema Triggers",
+																			"Database Triggers",
+																			"Other Users"
+																		]
+																	}
+																}
+															},
+															"required": [
+																"propertyName",
+																"value"
+															]
+														},
+														"unevaluatedProperties": false
+													}
+												}
+											},
+											"required": [
+												"collection",
+												"filterProperties"
+											],
+											"unevaluatedProperties": false
+										},
+										{
+											"properties": {
+												"collection": {
+													"type": "string",
+													"enum": [
+														"Procedures",
+														"Functions",
+														"Packages"
+													],
+													"description": "%filtersCollPropDesc%"
+												},
+												"enableFiltersForExplorer": {
+													"type": "boolean",
+													"default": true,
+													"description": "%enableFiltersForExplorerDesc%"
+												},
+												"enableFiltersForIntellisense": {
+													"type": "boolean",
+													"default": true,
+													"description": "%enableFilterForIntellisenseDesc%"
+												},
+												"overrideConnectionFilter": {
+													"type": "boolean",
+													"default": false,
+													"description": "%filtersOverrideConnectionFilterDesc%"
+												},
+												"match": {
+													"type": "string",
+													"enum": [
+														"any",
+														"all"
+													],
+													"default": "all",
+													"description": "%filtersMatchPropertyNameDesc%"
+												},
+												"filterProperties": {
+													"type": "array",
+													"uniqueItems": true,
+													"description": "%filtersSpecifyProperties%",
+													"items": {
+														"type": "object",
+														"properties": {
+															"propertyName": {
+																"type": "string",
+																"enum": [
+																	"Object Name",
+																	"Compilation Mode",
+																	"Status",
+																	"Created Date",
+																	"Modified Date"
+																],
+																"default": "Object Name"
+															},
+															"condition": {
+																"type": "string",
+																"description": "%filtersConditionPropDesc%"
+															}
+														},
+														"unevaluatedProperties": false,
+														"if": {
+															"type": "object",
+															"properties": {
+																"propertyName": {
+																	"const": "Object Name"
+																}
+															}
+														},
+														"then": {
+															"properties": {
+																"propertyName": {
+																	"description": "%filtersObjectNameDesc%"
+																},
+																"condition": {
+																	"enum": [
+																		"is",
+																		"is not",
+																		"starts with",
+																		"ends with",
+																		"contains",
+																		"does not contain"
+																	],
+																	"default": "is"
+																},
+																"value": {
+																	"type": "string",
+																	"description": "%filtersObjectNameValueDesc%"
+																},
+																"caseSensitiveMatch": {
+																	"type": "boolean",
+																	"default": false,
+																	"description": "%filtersCaseSensitiveDesc%"
+																}
+															},
+															"required": [
+																"propertyName",
+																"value"
+															]
+														},
+														"else": {
+															"if": {
+																"type": "object",
+																"properties": {
+																	"propertyName": {
+																		"const": "Compilation Mode"
+																	}
+																}
+															},
+															"then": {
+																"properties": {
+																	"propertyName": {
+																		"description": "%filtersDebugDesc%"
+																	},
+																	"condition": {
+																		"const": "is"
+																	},
+																	"value": {
+																		"type": "string",
+																		"enum": [
+																			"With Debug",
+																			"Without Debug"
+																		],
+																		"default": "Without Debug",
+																		"description": "%filtersDebugValueDesc%"
+																	}
+																},
+																"required": [
+																	"propertyName",
+																	"value"
+																]
+															},
+															"else": {
+																"if": {
+																	"type": "object",
+																	"properties": {
+																		"propertyName": {
+																			"const": "Status"
+																		}
+																	}
+																},
+																"then": {
+																	"properties": {
+																		"propertyName": {
+																			"description": "%filtersStatusDesc%"
+																		},
+																		"condition": {
+																			"const": "is"
+																		},
+																		"value": {
+																			"type": "string",
+																			"enum": [
+																				"Valid",
+																				"Invalid"
+																			],
+																			"default": "Valid",
+																			"description": "%filtersStatusValueDesc%"
+																		}
+																	},
+																	"required": [
+																		"propertyName",
+																		"value"
+																	]
+																},
+																"else": {
+																	"if": {
+																		"type": "object",
+																		"properties": {
+																			"propertyName": {
+																				"enum": [
+																					"Created Date",
+																					"Modified Date"
+																				]
+																			}
+																		}
+																	},
+																	"then": {
+																		"properties": {
+																			"propertyName": {
+																				"description": "%filtersDateDesc%"
+																			},
+																			"condition": {
+																				"enum": [
+																					"=",
+																					"<>",
+																					"<",
+																					">",
+																					"<=",
+																					">=",
+																					"Between",
+																					"Not Between"
+																				],
+																				"default": "="
+																			}
+																		},
+																		"if": {
+																			"type": "object",
+																			"properties": {
+																				"condition": {
+																					"enum": [
+																						"Between",
+																						"Not Between"
+																					]
+																				}
+																			}
+																		},
+																		"then": {
+																			"properties": {
+																				"lowerLimit": {
+																					"type": "string",
+																					"pattern": "^\\d\\d\\d\\d-\\d\\d-\\d\\d$",
+																					"description": "%filtersDateValueDesc%"
+																				},
+																				"upperLimit": {
+																					"type": "string",
+																					"pattern": "^\\d\\d\\d\\d-\\d\\d-\\d\\d$",
+																					"description": "%filtersDateValueDesc%"
+																				}
+																			},
+																			"required": [
+																				"propertyName",
+																				"condition",
+																				"lowerLimit",
+																				"upperLimit"
+																			]
+																		},
+																		"else": {
+																			"if": {
+																				"type": "object",
+																				"properties": {
+																					"condition": {
+																						"enum": [
+																							"=",
+																							"<>",
+																							"<",
+																							">",
+																							"<=",
+																							">="
+																						]
+																					}
+																				}
+																			},
+																			"then": {
+																				"properties": {
+																					"value": {
+																						"type": "string",
+																						"pattern": "^\\d\\d\\d\\d-\\d\\d-\\d\\d$",
+																						"description": "%filtersDateValueDesc%"
+																					}
+																				},
+																				"required": [
+																					"propertyName",
+																					"value"
+																				]
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											},
+											"required": [
+												"collection",
+												"filterProperties"
+											],
+											"unevaluatedProperties": false
+										},
+										{
+											"properties": {
+												"collection": {
+													"type": "string",
+													"const": "Triggers",
+													"description": "%filtersCollPropDesc%"
+												},
+												"enableFiltersForExplorer": {
+													"type": "boolean",
+													"default": true,
+													"description": "%enableFiltersForExplorerDesc%"
+												},
+												"enableFiltersForIntellisense": {
+													"type": "boolean",
+													"default": true,
+													"description": "%enableFilterForIntellisenseDesc%"
+												},
+												"overrideConnectionFilter": {
+													"type": "boolean",
+													"default": false,
+													"description": "%filtersOverrideConnectionFilterDesc%"
+												},
+												"match": {
+													"type": "string",
+													"enum": [
+														"any",
+														"all"
+													],
+													"default": "all",
+													"description": "%filtersMatchPropertyNameDesc%"
+												},
+												"filterProperties": {
+													"type": "array",
+													"uniqueItems": true,
+													"description": "%filtersSpecifyProperties%",
+													"items": {
+														"type": "object",
+														"properties": {
+															"propertyName": {
+																"type": "string",
+																"enum": [
+																	"Object Name",
+																	"Compilation Mode",
+																	"Trigger Status"
+																],
+																"default": "Object Name"
+															},
+															"condition": {
+																"type": "string",
+																"description": "%filtersConditionPropDesc%"
+															},
+															"value": {
+																"type": "string"
+															}
+														},
+														"if": {
+															"type": "object",
+															"properties": {
+																"propertyName": {
+																	"const": "Object Name"
+																}
+															}
+														},
+														"then": {
+															"properties": {
+																"propertyName": {
+																	"description": "%filtersObjectNameDesc%"
+																},
+																"condition": {
+																	"enum": [
+																		"is",
+																		"is not",
+																		"starts with",
+																		"ends with",
+																		"contains",
+																		"does not contain"
+																	],
+																	"default": "is"
+																},
+																"value": {
+																	"type": "string",
+																	"description": "%filtersObjectNameValueDesc%"
+																},
+																"caseSensitiveMatch": {
+																	"type": "boolean",
+																	"default": false,
+																	"description": "%filtersCaseSensitiveDesc%"
+																}
+															},
+															"required": [
+																"propertyName",
+																"value"
+															]
+														},
+														"else": {
+															"if": {
+																"type": "object",
+																"properties": {
+																	"propertyName": {
+																		"const": "Compilation Mode"
+																	}
+																}
+															},
+															"then": {
+																"properties": {
+																	"propertyName": {
+																		"description": "%filtersDebugDesc%"
+																	},
+																	"condition": {
+																		"const": "is"
+																	},
+																	"value": {
+																		"enum": [
+																			"With Debug",
+																			"Without Debug"
+																		],
+																		"default": "Without Debug",
+																		"description": "%filtersDebugValueDesc%"
+																	}
+																},
+																"required": [
+																	"propertyName",
+																	"value"
+																]
+															},
+															"else": {
+																"properties": {
+																	"propertyName": {
+																		"description": "%filtersTriggerStatusDesc%"
+																	},
+																	"condition": {
+																		"const": "is"
+																	},
+																	"value": {
+																		"enum": [
+																			"Enabled",
+																			"Disabled"
+																		],
+																		"description": "%filtersTriggerStatusValueDesc%"
+																	}
+																},
+																"required": [
+																	"propertyName",
+																	"value"
+																]
+															}
+														},
+														"unevaluatedProperties": false
+													}
+												}
+											},
+											"required": [
+												"collection",
+												"filterProperties"
+											],
+											"unevaluatedProperties": false
+										},
+										{
+											"properties": {
+												"collection": {
+													"type": "string",
+													"enum": [
+														"Tables",
+														"Views"
+													],
+													"description": "%filtersCollPropDesc%"
+												},
+												"enableFiltersForExplorer": {
+													"type": "boolean",
+													"default": true,
+													"description": "%enableFiltersForExplorerDesc%"
+												},
+												"enableFiltersForIntellisense": {
+													"type": "boolean",
+													"default": true,
+													"description": "%enableFilterForIntellisenseDesc%"
+												},
+												"overrideConnectionFilter": {
+													"type": "boolean",
+													"default": false,
+													"description": "%filtersOverrideConnectionFilterDesc%"
+												},
+												"match": {
+													"type": "string",
+													"enum": [
+														"any",
+														"all"
+													],
+													"default": "all",
+													"description": "%filtersMatchPropertyNameDesc%"
+												},
+												"filterProperties": {
+													"type": "array",
+													"uniqueItems": true,
+													"description": "%filtersSpecifyProperties%",
+													"items": {
+														"type": "object",
+														"properties": {
+															"propertyName": {
+																"type": "string",
+																"enum": [
+																	"Object Name",
+																	"Created Date",
+																	"Modified Date"
+																],
+																"default": "Object Name"
+															},
+															"condition": {
+																"type": "string",
+																"description": "%filtersConditionPropDesc%"
+															}
+														},
+														"unevaluatedProperties": false,
+														"if": {
+															"type": "object",
+															"properties": {
+																"propertyName": {
+																	"const": "Object Name"
+																}
+															}
+														},
+														"then": {
+															"properties": {
+																"propertyName": {
+																	"description": "%filtersObjectNameDesc%"
+																},
+																"condition": {
+																	"enum": [
+																		"is",
+																		"is not",
+																		"starts with",
+																		"ends with",
+																		"contains",
+																		"does not contain"
+																	],
+																	"default": "is"
+																},
+																"value": {
+																	"type": "string",
+																	"description": "%filtersObjectNameValueDesc%"
+																},
+																"caseSensitiveMatch": {
+																	"type": "boolean",
+																	"default": false,
+																	"description": "%filtersCaseSensitiveDesc%"
+																}
+															},
+															"required": [
+																"propertyName",
+																"value"
+															]
+														},
+														"else": {
+															"if": {
+																"type": "object",
+																"properties": {
+																	"propertyName": {
+																		"enum": [
+																			"Created Date",
+																			"Modified Date"
+																		]
+																	}
+																}
+															},
+															"then": {
+																"properties": {
+																	"propertyName": {
+																		"description": "%filtersDateDesc%"
+																	},
+																	"condition": {
+																		"enum": [
+																			"=",
+																			"<>",
+																			"<",
+																			">",
+																			"<=",
+																			">=",
+																			"Between",
+																			"Not Between"
+																		],
+																		"default": "="
+																	}
+																},
+																"if": {
+																	"type": "object",
+																	"properties": {
+																		"condition": {
+																			"enum": [
+																				"Between",
+																				"Not Between"
+																			]
+																		}
+																	}
+																},
+																"then": {
+																	"properties": {
+																		"lowerLimit": {
+																			"type": "string",
+																			"pattern": "^\\d\\d\\d\\d-\\d\\d-\\d\\d$",
+																			"description": "%filtersDateValueDesc%"
+																		},
+																		"upperLimit": {
+																			"type": "string",
+																			"pattern": "^\\d\\d\\d\\d-\\d\\d-\\d\\d$",
+																			"description": "%filtersDateValueDesc%"
+																		}
+																	},
+																	"required": [
+																		"propertyName",
+																		"condition",
+																		"lowerLimit",
+																		"upperLimit"
+																	]
+																},
+																"else": {
+																	"if": {
+																		"type": "object",
+																		"properties": {
+																			"condition": {
+																				"enum": [
+																					"=",
+																					"<>",
+																					"<",
+																					">",
+																					"<=",
+																					">="
+																				]
+																			}
+																		}
+																	},
+																	"then": {
+																		"properties": {
+																			"value": {
+																				"type": "string",
+																				"pattern": "^\\d\\d\\d\\d-\\d\\d-\\d\\d$",
+																				"description": "%filtersDateValueDesc%"
+																			}
+																		},
+																		"required": [
+																			"propertyName",
+																			"value"
+																		]
+																	}
+																}
+															}
+														}
+													}
+												}
+											},
+											"required": [
+												"collection",
+												"filterProperties"
+											],
+											"unevaluatedProperties": false
+										},
+										{
+											"properties": {
+												"collection": {
+													"type": "string",
+													"const": "Other Users",
+													"description": "%filtersSchemaCollPropDesc%"
+												},
+												"enableFiltersForExplorer": {
+													"type": "boolean",
+													"default": true,
+													"description": "%enableFiltersForExplorerDesc%"
+												},
+												"enableFiltersForIntellisense": {
+													"type": "boolean",
+													"default": true,
+													"description": "%enableFilterForIntellisenseDesc%"
+												},
+												"overrideConnectionFilter": {
+													"type": "boolean",
+													"default": false,
+													"description": "%filtersOverrideConnectionFilterDesc%"
+												},
+												"match": {
+													"type": "string",
+													"enum": [
+														"any",
+														"all"
+													],
+													"default": "all",
+													"description": "%filtersMatchPropertyNameDesc%"
+												},
+												"filterProperties": {
+													"type": "array",
+													"uniqueItems": true,
+													"description": "%filtersSpecifyProperties%",
+													"items": {
+														"type": "object",
+														"properties": {
+															"propertyName": {
+																"type": "string",
+																"enum": [
+																	"Object Name",
+																	"Object Count"
+																],
+																"default": "Object Name"
+															},
+															"condition": {
+																"type": "string",
+																"description": "%filtersConditionPropDesc%"
+															},
+															"value": {
+																"type": [
+																	"string",
+																	"integer"
+																]
+															}
+														},
+														"unevaluatedProperties": false,
+														"if": {
+															"type": "object",
+															"properties": {
+																"propertyName": {
+																	"const": "Object Name"
+																}
+															}
+														},
+														"then": {
+															"properties": {
+																"propertyName": {
+																	"description": "%filtersUsersNameDesc%"
+																},
+																"condition": {
+																	"enum": [
+																		"is",
+																		"is not",
+																		"starts with",
+																		"ends with",
+																		"contains",
+																		"does not contain"
+																	],
+																	"default": "is"
+																},
+																"value": {
+																	"type": "string",
+																	"description": "%filtersObjectNameValueDesc%"
+																},
+																"caseSensitiveMatch": {
+																	"type": "boolean",
+																	"default": false,
+																	"description": "%filtersCaseSensitiveDesc%"
+																}
+															},
+															"required": [
+																"propertyName",
+																"value"
+															]
+														},
+														"else": {
+															"if": {
+																"type": "object",
+																"properties": {
+																	"propertyName": {
+																		"const": "Object Count"
+																	}
+																}
+															},
+															"then": {
+																"properties": {
+																	"propertyName": {
+																		"description": "%filtersObjectCountDesc%"
+																	},
+																	"condition": {
+																		"enum": [
+																			"=",
+																			"<>",
+																			"<",
+																			">",
+																			"<=",
+																			">=",
+																			"Between",
+																			"Not Between"
+																		],
+																		"default": "="
+																	}
+																},
+																"if": {
+																	"type": "object",
+																	"properties": {
+																		"condition": {
+																			"enum": [
+																				"Between",
+																				"Not Between"
+																			]
+																		}
+																	}
+																},
+																"then": {
+																	"properties": {
+																		"lowerLimit": {
+																			"type": "integer",
+																			"minimum": 0,
+																			"description": "%filtersObjectCountValueDesc%"
+																		},
+																		"upperLimit": {
+																			"type": "integer",
+																			"minimum": 0,
+																			"description": "%filtersObjectCountValueDesc%"
+																		}
+																	},
+																	"required": [
+																		"propertyName",
+																		"condition",
+																		"lowerLimit",
+																		"upperLimit"
+																	]
+																},
+																"else": {
+																	"if": {
+																		"type": "object",
+																		"properties": {
+																			"condition": {
+																				"enum": [
+																					"=",
+																					"<>",
+																					"<",
+																					">",
+																					"<=",
+																					">="
+																				]
+																			}
+																		}
+																	},
+																	"then": {
+																		"properties": {
+																			"value": {
+																				"type": "integer",
+																				"default": 100,
+																				"minimum": 0,
+																				"description": "%filtersObjectCountValueDesc%"
+																			}
+																		},
+																		"required": [
+																			"propertyName",
+																			"value"
+																		]
+																	}
+																}
+															}
+														}
+													}
+												}
+											},
+											"required": [
+												"collection",
+												"filterProperties"
+											],
+											"unevaluatedProperties": false
+										},
+										{
+											"properties": {
+												"collection": {
+													"type": "string",
+													"enum": [
+														"Synonyms"
+													],
+													"description": "%filtersCollPropDesc%"
+												},
+												"enableFiltersForExplorer": {
+													"type": "boolean",
+													"default": true,
+													"description": "%enableFiltersForExplorerDesc%"
+												},
+												"enableFiltersForIntellisense": {
+													"type": "boolean",
+													"default": true,
+													"description": "%enableFilterForIntellisenseDesc%"
+												},
+												"overrideConnectionFilter": {
+													"type": "boolean",
+													"default": false,
+													"description": "%filtersOverrideConnectionFilterDesc%"
+												},
+												"match": {
+													"type": "string",
+													"enum": [
+														"any",
+														"all"
+													],
+													"default": "all",
+													"description": "%filtersMatchPropertyNameDesc%"
+												},
+												"filterProperties": {
+													"type": "array",
+													"uniqueItems": true,
+													"description": "%filtersSpecifyProperties%",
+													"items": {
+														"type": "object",
+														"properties": {
+															"propertyName": {
+																"type": "string",
+																"enum": [
+																	"Object Name",
+																	"Parent Object Name",
+																	"Parent Object Owner Name"
+																],
+																"default": "Object Name"
+															},
+															"condition": {
+																"type": "string",
+																"enum": [
+																	"is",
+																	"is not",
+																	"starts with",
+																	"ends with",
+																	"contains",
+																	"does not contain"
+																],
+																"default": "is",
+																"description": "%filtersConditionPropDesc%"
+															},
+															"value": {
+																"type": "string"
+															},
+															"caseSensitiveMatch": {
+																"type": "boolean",
+																"default": false,
+																"description": "%filtersCaseSensitiveDesc%"
+															}
+														},
+														"if": {
+															"type": "object",
+															"properties": {
+																"propertyName": {
+																	"const": "Object Name"
+																}
+															}
+														},
+														"then": {
+															"properties": {
+																"propertyName": {
+																	"description": "%filtersObjectNameDesc%"
+																},
+																"value": {
+																	"description": "%filtersObjectNameValueDesc%"
+																}
+															}
+														},
+														"else": {
+															"if": {
+																"type": "object",
+																"properties": {
+																	"propertyName": {
+																		"const": "Parent Object Name"
+																	}
+																}
+															},
+															"then": {
+																"properties": {
+																	"propertyName": {
+																		"description": "%filtersParentObjectNameDesc%"
+																	},
+																	"value": {
+																		"description": "%filtersObjectNameValueDesc%"
+																	}
+																}
+															},
+															"else": {
+																"if": {
+																	"type": "object",
+																	"properties": {
+																		"propertyName": {
+																			"const": "Parent Object Owner Name"
+																		}
+																	}
+																},
+																"then": {
+																	"properties": {
+																		"propertyName": {
+																			"description": "%filtersParentObjectOwnerNameDesc%"
+																		},
+																		"value": {
+																			"description": "%filtersObjectNameValueDesc%"
+																		}
+																	}
+																}
+															}
+														},
+														"required": [
+															"propertyName",
+															"value"
+														]
+													}
+												}
+											},
+											"required": [
+												"collection",
+												"filterProperties"
+											],
+											"unevaluatedProperties": false
+										},
+										{
+											"properties": {
+												"collection": {
+													"type": "string",
+													"const": "Sequences",
+													"description": "%filtersCollPropDesc%"
+												},
+												"enableFiltersForExplorer": {
+													"type": "boolean",
+													"default": true,
+													"description": "%enableFiltersForExplorerDesc%"
+												},
+												"enableFiltersForIntellisense": {
+													"type": "boolean",
+													"default": true,
+													"description": "%enableFilterForIntellisenseDesc%"
+												},
+												"overrideConnectionFilter": {
+													"type": "boolean",
+													"default": false,
+													"description": "%filtersOverrideConnectionFilterDesc%"
+												},
+												"match": {
+													"type": "string",
+													"enum": [
+														"any",
+														"all"
+													],
+													"default": "all",
+													"description": "%filtersMatchPropertyNameDesc%"
+												},
+												"filterProperties": {
+													"type": "array",
+													"uniqueItems": true,
+													"description": "%filtersSpecifyProperties%",
+													"items": {
+														"type": "object",
+														"properties": {
+															"propertyName": {
+																"type": "string",
+																"const": "Object Name",
+																"description": "%filtersObjectNameDesc%"
+															},
+															"condition": {
+																"type": "string",
+																"enum": [
+																	"is",
+																	"is not",
+																	"starts with",
+																	"ends with",
+																	"contains",
+																	"does not contain"
+																],
+																"default": "is",
+																"description": "%filtersConditionPropDesc%"
+															},
+															"value": {
+																"type": "string",
+																"description": "%filtersObjectNameValueDesc%"
+															},
+															"caseSensitiveMatch": {
+																"type": "boolean",
+																"default": false,
+																"description": "%filtersObjectNameValueDesc%"
+															}
+														},
+														"required": [
+															"propertyName",
+															"value"
+														]
+													}
+												}
+											},
+											"required": [
+												"collection",
+												"filterProperties"
+											],
+											"unevaluatedProperties": false
+										}
+									]
+								}
+							}
+						}
+					},
+					"scope": "resource"
+				},
+				"oracledevtools.files.associations": {
+					"type": "boolean",
+					"default": true,
+					"description": "%files.associations.deprecated%",
+					"deprecationMessage": "%files.associations.deprecationMessage%",
+					"markdownDeprecationMessage": "%files.associations.deprecationMarkdownMessage%"
+				},
+				"oracledevtools.fileExtensions.associations": {
+					"type": "array",
+					"default": [
+						"*.bdy",
+						"*.fnc",
+						"*.pck",
+						"*.plsql",
+						"*.plb",
+						"*.pls",
+						"*.pkb",
+						"*.pkh",
+						"*.pks",
+						"*.prc",
+						"*.spc",
+						"*.trg"
+					],
+					"description": "%fileExtensions.associations%",
+					"uniqueItems": true,
+					"additionalItems": true,
+					"items": {
+						"type": "string",
+						"pattern": "^\\*\\.[a-zA-Z0-9]+$"
+					}
+				},
+				"oracledevtools.history.enable": {
+					"type": "boolean",
+					"default": true,
+					"description": "%history.enable%"
+				},
+				"oracledevtools.intellisense.enable": {
+					"type": "boolean",
+					"default": true,
+					"description": "%intellisense.enable%",
+					"scope": "resource"
+				},
+				"oracledevtools.intellisense.suggestions.keywordCasing": {
+					"type": "string",
+					"default": "Uppercase",
+					"enum": [
+						"Uppercase",
+						"Lowercase",
+						"Titlecase"
+					],
+					"description": "%intellisense.keywordCasing%",
+					"scope": "resource"
+				},
+				"oracledevtools.intellisense.suggestions.objectNameCasing": {
+					"type": "string",
+					"default": "Uppercase",
+					"enum": [
+						"Uppercase",
+						"Lowercase",
+						"Titlecase"
+					],
+					"description": "%intellisense.objectNameCasing%",
+					"scope": "resource"
+				},
+				"oracledevtools.intellisense.synonymDepthLevel": {
+					"type": "integer",
+					"default": 1,
+					"minimum": 1,
+					"description": "%synonymDepthLevelDesc%",
+					"scope": "resource"
+				},
+				"oracledevtools.intellisense.rebuildIntellisense": {
+					"type": "boolean",
+					"default": false,
+					"description": "%intellisense.rebuildintellisense%",
+					"scope": "resource"
+				},
+				"oracledevtools.intellisense.rebuildIntellisenseOnDDLexecution": {
+					"type": "boolean",
+					"default": false,
+					"description": "%rebuildIntellisenseonDDLDesc%",
+					"scope": "resource"
+				},
+				"oracledevtools.PL/SQLCompilerSettings": {
+					"type": "object",
+					"properties": {
+						"compile.enableFlags": {
+							"type": "boolean",
+							"description": "%enableCompileFlags%"
+						},
+						"compile.optimizeLevel": {
+							"type": "integer",
+							"minimum": 2,
+							"maximum": 3,
+							"description": "%optimizeLevel%"
+						},
+						"compile.plscopeIdentifiers": {
+							"type": "string",
+							"enum": [
+								"ALL",
+								"NONE",
+								"PUBLIC",
+								"SQL",
+								"PLSQL",
+								""
+							],
+							"description": "%plscopeIdentifiers%"
+						},
+						"compile.plscopeStatements": {
+							"type": "string",
+							"enum": [
+								"ALL",
+								"NONE",
+								""
+							],
+							"description": "%plscopeStatements%"
+						},
+						"compile.allWarnings": {
+							"type": "string",
+							"description": "%warnings.all%",
+							"enum": [
+								"ENABLE",
+								"DISABLE",
+								"ERROR",
+								""
+							]
+						},
+						"compile.informationalWarnings": {
+							"type": "string",
+							"description": "%warnings.informational%",
+							"enum": [
+								"ENABLE",
+								"DISABLE",
+								"ERROR",
+								""
+							]
+						},
+						"compile.performanceWarnings": {
+							"type": "string",
+							"description": "%warnings.performance%",
+							"enum": [
+								"ENABLE",
+								"DISABLE",
+								"ERROR",
+								""
+							]
+						},
+						"compile.severeWarnings": {
+							"type": "string",
+							"description": "%warnings.severe%",
+							"enum": [
+								"ENABLE",
+								"DISABLE",
+								"ERROR",
+								""
+							]
+						},
+						"compileDebug.enableFlags": {
+							"type": "boolean",
+							"description": "%enableCompileFlags%"
+						},
+						"compileDebug.optimizeLevel": {
+							"type": "integer",
+							"minimum": 0,
+							"maximum": 1,
+							"description": "%optimizeLevel%"
+						},
+						"compileDebug.plscopeIdentifiers": {
+							"type": "string",
+							"enum": [
+								"ALL",
+								"NONE",
+								"PUBLIC",
+								"SQL",
+								"PLSQL",
+								""
+							],
+							"description": "%plscopeIdentifiers%"
+						},
+						"compileDebug.plscopeStatements": {
+							"type": "string",
+							"enum": [
+								"ALL",
+								"NONE",
+								""
+							],
+							"description": "%plscopeStatements%"
+						},
+						"compileDebug.allWarnings": {
+							"type": "string",
+							"description": "%warnings.all%",
+							"enum": [
+								"ENABLE",
+								"DISABLE",
+								"ERROR",
+								""
+							]
+						},
+						"compileDebug.informationalWarnings": {
+							"type": "string",
+							"description": "%warnings.informational%",
+							"enum": [
+								"ENABLE",
+								"DISABLE",
+								"ERROR",
+								""
+							]
+						},
+						"compileDebug.performanceWarnings": {
+							"type": "string",
+							"description": "%warnings.performance%",
+							"enum": [
+								"ENABLE",
+								"DISABLE",
+								"ERROR",
+								""
+							]
+						},
+						"compileDebug.severeWarnings": {
+							"type": "string",
+							"description": "%warnings.severe%",
+							"enum": [
+								"ENABLE",
+								"DISABLE",
+								"ERROR",
+								""
+							]
+						}
+					},
+					"default": {
+						"compile.enableFlags": false,
+						"compile.optimizeLevel": 2,
+						"compile.plscopeIdentifiers": "NONE",
+						"compile.plscopeStatements": "",
+						"compile.allWarnings": "DISABLE",
+						"compile.informationalWarnings": "",
+						"compile.performanceWarnings": "",
+						"compile.severeWarnings": "",
+						"compileDebug.enableFlags": false,
+						"compileDebug.optimizeLevel": 1,
+						"compileDebug.plscopeIdentifiers": "NONE",
+						"compileDebug.plscopeStatements": "",
+						"compileDebug.allWarnings": "DISABLE",
+						"compileDebug.informationalWarnings": "",
+						"compileDebug.performanceWarnings": "",
+						"compileDebug.severeWarnings": ""
+					},
+					"required": [
+						"compile.enableFlags",
+						"compile.optimizeLevel",
+						"compile.plscopeIdentifiers",
+						"compileDebug.enableFlags",
+						"compileDebug.optimizeLevel",
+						"compileDebug.plscopeIdentifiers"
+					],
+					"description": "%compilerSettingsDesc%",
+					"scope": "resource"
+				},
+				"oracledevtools.PL/SQLDebuggerSettings": {
+					"type": "object",
+					"properties": {
+						"debugger.hostIPAddress": {
+							"type": "string",
+							"description": "%debugging.hostIpAddress%"
+						},
+						"debugger.startingPortNumber": {
+							"type": "integer",
+							"default": 65000,
+							"minimum": 1,
+							"maximum": 65535,
+							"description": "%debugging.startingPortNumber%"
+						},
+						"debugger.endingPortNumber": {
+							"type": "integer",
+							"default": 65535,
+							"minimum": 1,
+							"maximum": 65535,
+							"description": "%debugging.endingPortNumber%"
+						}
+					},
+					"description": "%debuggerSettingsDesc%",
+					"scope": "resource"
+				},
+				"oracledevtools.logging.enable": {
+					"type": "boolean",
+					"default": false,
+					"description": "%logging.enable%"
+				},
+				"oracledevtools.logging.level": {
+					"type": "string",
+					"default": "Error",
+					"enum": [
+						"Trace",
+						"Information",
+						"Warning",
+						"Error"
+					],
+					"description": "%logging.logLevel%"
+				},
+				"oracledevtools.maxRecentConnections": {
+					"type": "number",
+					"default": 5,
+					"description": "%maxRecentConnections%",
+					"scope": "window"
+				},
+				"oracledevtools.download.folderType": {
+					"type": "string",
+					"default": "Open Workspace or Folder",
+					"enum": [
+						"Open Workspace or Folder",
+						"Other Folder"
+					],
+					"description": "%download.currentWorkspaceOrFolder%"
+				},
+				"oracledevtools.download.otherFolder": {
+					"type": "string",
+					"default": "%Default%",
+					"description": "%download.specifyFolder%"
+				},
+				"oracledevtools.formatterSettings": {
+					"type": "object",
+					"properties": {
+						"keywordCasing": {
+							"type": "string",
+							"default": "Same as Intellisense",
+							"enum": [
+								"Same as Intellisense",
+								"Uppercase",
+								"Lowercase",
+								"Titlecase",
+								"No change"
+							]
+						},
+						"identifierCasing": {
+							"type": "string",
+							"default": "Same as Intellisense",
+							"enum": [
+								"Same as Intellisense",
+								"Uppercase",
+								"Lowercase",
+								"Titlecase",
+								"No change"
+							]
+						},
+						"1-LineLongComments": {
+							"type": "string",
+							"default": "Don't format",
+							"enum": [
+								"Don't format",
+								"Wrap multiline",
+								"Wrap single line"
+							]
+						},
+						"lineBreaksBetweenStatements": {
+							"type": "string",
+							"default": "Double break",
+							"enum": [
+								"Double break",
+								"Single break"
+							]
+						},
+						"lineBreakOnComma": {
+							"type": "string",
+							"default": "After",
+							"enum": [
+								"After",
+								"Before",
+								"No break"
+							]
+						},
+						"commasPerLine": {
+							"type": "integer",
+							"default": 1,
+							"minimum": 1,
+							"maximum": 25
+						},
+						"lineBreakOnConcatenation": {
+							"type": "string",
+							"default": "After",
+							"enum": [
+								"After",
+								"Before",
+								"No break"
+							]
+						},
+						"lineBreakOnBooleanConnectors": {
+							"type": "string",
+							"default": "After",
+							"enum": [
+								"After",
+								"Before",
+								"No break"
+							]
+						},
+						"lineBreakOnANSI-joins": {
+							"type": "boolean",
+							"default": true
+						},
+						"lineBreakBeforeLineComments": {
+							"type": "boolean",
+							"default": false
+						},
+						"lineBreakAfterSelect/From/Where": {
+							"type": "boolean",
+							"default": true
+						},
+						"lineBreaksOnIf/Case/While": {
+							"type": "string",
+							"default": "Indented actions, inlined conditions",
+							"enum": [
+								"Indented actions, inlined conditions",
+								"Terse (Line breaks only after actions)",
+								"Line breaks after conditions and actions",
+								"Indented conditions and actions"
+							]
+						},
+						"whiteSpaceAroundOperators": {
+							"type": "string",
+							"default": "Don't format",
+							"enum": [
+								"Don't format",
+								"Add space",
+								"No space"
+							]
+						},
+						"whiteSpaceAfterCommas": {
+							"type": "boolean",
+							"default": true
+						},
+						"whiteSpaceAroundParenthesis": {
+							"type": "string",
+							"default": "Don't format",
+							"enum": [
+								"Don't format",
+								"Inside",
+								"Outside",
+								"Inside and Outside",
+								"No space"
+							]
+						},
+						"spacesInsideParenthesis": {
+							"type": "number",
+							"default": 1,
+							"minimum": 1,
+							"maximum": 6
+						},
+						"spacesOutsideParenthesis": {
+							"type": "number",
+							"default": 1,
+							"minimum": 1,
+							"maximum": 6
+						}
+					},
+					"description": "%formatterSettingsDesc%",
+					"scope": "resource"
+				},
+				"oracledevtools.query.explainPlan.result.grid": {
+					"type": "object",
+					"properties": {
+						"showAllColumns": {
+							"type": "boolean",
+							"default": false
+						},
+						"columnList": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"uniqueItems": true,
+								"enum": [
+									"BYTES",
+									"CARDINALITY",
+									"COST",
+									"CPU_COST",
+									"DEPTH",
+									"DISTRIBUTION",
+									"IO_COST",
+									"OBJECT_ALIAS",
+									"OBJECT_INSTANCE",
+									"OBJECT_NAME",
+									"OBJECT_NODE",
+									"OBJECT_OWNER",
+									"OBJECT_TYPE",
+									"OPTIMIZER",
+									"OPTIONS",
+									"OTHER",
+									"OTHER_TAG",
+									"Other XML Column",
+									"PARENT_ID",
+									"POSITION",
+									"Partition Columns",
+									"Predicate Column",
+									"Projection Column",
+									"QBLOCK_NAME",
+									"SEARCH_COLUMNS",
+									"TEMP_SPACE",
+									"TIME"
+								]
+							}
+						}
+					},
+					"default": {
+						"showAllColumns": false,
+						"columnList": [
+							"CARDINALITY",
+							"COST",
+							"DISTRIBUTION",
+							"OBJECT_NAME",
+							"OBJECT_NODE",
+							"OPTIONS",
+							"OTHER_TAG",
+							"Partition Columns"
+						]
+					},
+					"description": "%explainPlanSettingsDesc%",
+					"scope": "resource"
+				},
+				"oracledevtools.query.explainPlan.result.text": {
+					"type": "object",
+					"properties": {
+						"format": {
+							"type": "string",
+							"default": "Typical",
+							"enum": [
+								"Basic",
+								"Typical",
+								"Serial",
+								"All"
+							]
+						},
+						"customiseKeywords": {
+							"type": "boolean",
+							"default": false
+						},
+						"keywords": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"uniqueItems": true,
+								"enum": [
+									"ALIAS",
+									"BYTES",
+									"COST",
+									"NOTE",
+									"PARALLEL",
+									"PARTITION",
+									"PREDICATE",
+									"PROJECTION",
+									"REMOTE",
+									"ROWS"
+								]
+							}
+						}
+					},
+					"default": {
+						"format": "Typical",
+						"customiseKeywords": false
+					},
+					"description": "%dbmsExplainPlanSettingsDesc%",
+					"scope": "resource"
+				},
+				"oracledevtools.query.executionPlan.result.grid": {
+					"type": "object",
+					"properties": {
+						"showAllColumns": {
+							"type": "boolean",
+							"default": false
+						},
+						"columnList": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"uniqueItems": true,
+								"enum": [
+									"BYTES",
+									"CARDINALITY",
+									"COST",
+									"CPU_COST",
+									"DEPTH",
+									"DISTRIBUTION",
+									"IO_COST",
+									"OBJECT_ALIAS",
+									"OBJECT_NAME",
+									"OBJECT_NODE",
+									"OBJECT_OWNER",
+									"OBJECT_TYPE",
+									"OPTIMIZER",
+									"OPTIONS",
+									"OTHER",
+									"OTHER_TAG",
+									"Other XML Column",
+									"PARENT_ID",
+									"POSITION",
+									"Partition Columns",
+									"Predicate Column",
+									"Projection Column",
+									"QBLOCK_NAME",
+									"SEARCH_COLUMNS",
+									"TEMP_SPACE",
+									"TIME"
+								]
+							}
+						}
+					},
+					"default": {
+						"showAllColumns": false,
+						"columnList": [
+							"CARDINALITY",
+							"COST",
+							"DISTRIBUTION",
+							"OBJECT_NAME",
+							"OBJECT_NODE",
+							"OPTIONS",
+							"OTHER_TAG",
+							"Partition Columns"
+						]
+					},
+					"description": "%executionPlanSettingsDesc%",
+					"scope": "resource"
+				},
+				"oracledevtools.query.executionPlan.result.text": {
+					"type": "object",
+					"properties": {
+						"format": {
+							"type": "string",
+							"default": "Typical",
+							"enum": [
+								"Basic",
+								"Typical",
+								"Serial",
+								"All",
+								"Adaptive"
+							]
+						},
+						"customiseKeywords": {
+							"type": "boolean",
+							"default": false
+						},
+						"keywords": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"uniqueItems": true,
+								"enum": [
+									"ALIAS",
+									"BYTES",
+									"COST",
+									"IOSTATS",
+									"MEMSTATS",
+									"NOTE",
+									"PARALLEL",
+									"PARTITION",
+									"PREDICATE",
+									"PROJECTION",
+									"REMOTE",
+									"ROWS"
+								]
+							}
+						}
+					},
+					"default": {
+						"format": "Typical",
+						"customiseKeywords": false
+					},
+					"description": "%dbmsExecutionPlanSettingsDesc%",
+					"scope": "resource"
+				},
+				"oracledevtools.query.autoCommit": {
+					"type": "boolean",
+					"default": true,
+					"description": "%query.autoCommit%",
+					"scope": "resource"
+				},
+				"oracledevtools.query.clearResultsWindow": {
+					"type": "boolean",
+					"default": false,
+					"description": "%query.clearResultsWindow%",
+					"scope": "resource"
+				},
+				"oracledevtools.query.echo": {
+					"type": "boolean",
+					"default": true,
+					"description": "%query.echo%",
+					"scope": "resource"
+				},
+				"oracledevtools.query.openResultsWindow": {
+					"type": "string",
+					"default": "Use Workbench > Editor: Open Positioning",
+					"enum": [
+						"Use Workbench > Editor: Open Positioning",
+						"Right",
+						"Below"
+					],
+					"description": "%query.openResultsWindow%"
+				},
+				"oracledevtools.query.resultSet.maxRows": {
+					"type": "integer",
+					"default": 500,
+					"minimum": -1,
+					"description": "%query.resultSetMaxRows%",
+					"scope": "resource"
+				},
+				"oracledevtools.query.resultSet.pageSize": {
+					"type": "integer",
+					"default": 10,
+					"minimum": 1,
+					"maximum": 25,
+					"description": "%query.resultSetPageSize%",
+					"scope": "resource"
+				},
+				"oracledevtools.query.resultSet.showRowNumber": {
+					"type": "boolean",
+					"default": true,
+					"description": "%query.resultSetRowNumber%",
+					"scope": "resource"
+				},
+				"oracledevtools.query.resultSet.resultsGrid.MaxCellDataDisplayLength": {
+					"type": "integer",
+					"default": 50,
+					"minimum": 5,
+					"maximum": 50,
+					"description": "%query.resultSetMaxCellDataDisplayLength%",
+					"scope": "resource"
+				},
+				"oracledevtools.query.resultSet.resultsGrid.MaxTooltipDataDisplayLength": {
+					"type": "integer",
+					"default": 100,
+					"minimum": 5,
+					"maximum": 100,
+					"description": "%query.resultSetMaxTooltipDataDisplayLength%",
+					"scope": "resource"
+				},
+				"oracledevtools.selectAI.timeout": {
+					"type": "integer",
+					"default": 30,
+					"minimum": 1,
+					"description": "%SelectAI.Timeout%",
+					"scope": "resource"
+				},
+				"oracledevtools.query.resultSet.cSV.delimiter": {
+					"type": "string",
+					"default": ",",
+					"pattern": "(^\\\\n$)|(^\\\\r$)|(^\\\\t$)|(^\\\\f$)|(^.$)",
+					"patternErrorMessage": "%query.resultSetDelimiterValidation%",
+					"description": "%query.resultSetColumnDelimiter%",
+					"scope": "resource"
+				},
+				"oracledevtools.query.resultSet.cSV.textQualifier": {
+					"type": "string",
+					"default": "None",
+					"description": "%query.resultSetTextQualifier%",
+					"enum": [
+						"None",
+						" ' ' Single quotes",
+						" \" \" Double quotes"
+					],
+					"scope": "resource"
+				},
+				"oracledevtools.query.unsupportedSqlplusCommands.showWarning": {
+					"type": "boolean",
+					"default": true,
+					"description": "%query.unsupportedCommandShowWarning%",
+					"scope": "resource"
+				},
+				"oracleDeveloperTools.intellisense.enable": {
+					"type": "boolean",
+					"default": true,
+					"description": "%intellisense.enable.deprecated%",
+					"deprecationMessage": "%intellisense.enable.deprecationMessage%",
+					"markdownDeprecationMessage": "%intellisense.enable.deprecationMarkdownMessage%"
+				},
+				"oracleDeveloperTools.logging.enable": {
+					"type": "boolean",
+					"default": false,
+					"description": "%logging.enableLogging.deprecated%",
+					"deprecationMessage": "%logging.enableLogging.deprecationMessage%",
+					"markdownDeprecationMessage": "%logging.enableLogging.deprecationMarkdownMessage%"
+				},
+				"oracleDeveloperTools.logging.level": {
+					"type": "string",
+					"default": "Error",
+					"enum": [
+						"Information",
+						"Warning",
+						"Error"
+					],
+					"description": "%logging.logLevel.deprecated%",
+					"deprecationMessage": "%logging.logLevel.deprecationMessage%",
+					"markdownDeprecationMessage": "%logging.logLevel.deprecationMarkdownMessage%"
+				},
+				"oracleDeveloperTools.maxRecentConnections": {
+					"type": "integer",
+					"default": 5,
+					"description": "%oracleDeveloperTools.maxRecentConnections.deprecated%",
+					"scope": "window",
+					"deprecationMessage": "%oracleDeveloperTools.maxRecentConnections.deprecationMessage%",
+					"markdownDeprecationMessage": "%oracleDeveloperTools.maxRecentConnections.deprecationMarkdownMessage%"
+				},
+				"oracleDeveloperTools.networkConfiguration.configFilesLocation": {
+					"type": "string",
+					"default": "%Default%",
+					"description": "%networkConfiguration.configfileLocation.deprecated%",
+					"deprecationMessage": "%networkConfiguration.configfileLocation.deprecationMessage%",
+					"markdownDeprecationMessage": "%networkConfiguration.configfileLocation.deprecationMarkdownMessage%"
+				},
+				"oracleDeveloperTools.networkConfiguration.walletFileLocation": {
+					"type": "string",
+					"default": "%Default%",
+					"description": "%networkConfiguration.walletFileLocation.deprecated%",
+					"deprecationMessage": "%networkConfiguration.walletFileLocation.deprecationMessage%",
+					"markdownDeprecationMessage": "%networkConfiguration.walletFileLocation.deprecationMarkdownMessage%"
+				},
+				"oracleDeveloperTools.oracleConnections": {
+					"type": "array",
+					"default": [
+						{
+							"dataSource": "{{specify the data source}}",
+							"userID": "{{specify the database user ID}}",
+							"password": "{{specify the database password}}"
+						}
+					],
+					"description": "%oracleConnectionsDesc.deprecated%",
+					"deprecationMessage": "%oracleConnectionsDesc.deprecationMessage%",
+					"markdownDeprecationMessage": "%oracleConnectionsDesc.deprecationMarkdownMessage%",
+					"items": {
+						"type": "object",
+						"properties": {
+							"dataSource": {
+								"type": "string",
+								"default": "{{specify the data source}}",
+								"description": "%datasourceDesc%"
+							},
+							"userID": {
+								"type": "string",
+								"default": "{{specify the database user ID}}",
+								"description": "%userIDDesc%"
+							},
+							"dBAPrivilege": {
+								"type": "string",
+								"default": "{{specify DBA privelege}}",
+								"description": "%dbaPrivilegeDesc%"
+							},
+							"password": {
+								"type": "string",
+								"default": "{{specify password}}",
+								"description": "%pdDesc%"
+							},
+							"authenticationType": {
+								"type": "number",
+								"default": 2,
+								"enum": [
+									1,
+									2
+								],
+								"description": "%authenticationTypeDesc%"
+							},
+							"enlist": {
+								"type": "boolean",
+								"default": true,
+								"description": "%enlistDesc%"
+							},
+							"connectionLifeTime": {
+								"type": "number",
+								"default": 0,
+								"description": "%connectionLifeTimeDesc%"
+							},
+							"incrPoolSize": {
+								"type": "number",
+								"default": 5,
+								"description": "%incrPoolSizeDesc%"
+							},
+							"decrPoolSize": {
+								"type": "number",
+								"default": 1,
+								"description": "%decrPoolSizeDesc%"
+							},
+							"maxPoolSize": {
+								"type": "number",
+								"default": 100,
+								"description": "%maxPoolSizeDesc%"
+							},
+							"minPoolSize": {
+								"type": "number",
+								"default": 1,
+								"description": "%minPoolSizeDesc%"
+							},
+							"persistSecurityInfo": {
+								"type": "boolean",
+								"default": false,
+								"description": "%persistSecurityInfoDesc%"
+							},
+							"pooling": {
+								"type": "boolean",
+								"default": false,
+								"description": "%poolingDesc%"
+							},
+							"connectionTimeout": {
+								"type": "number",
+								"default": 15,
+								"description": "%connectionTimeoutDesc%"
+							},
+							"proxyUserID": {
+								"type": "string",
+								"default": "",
+								"description": "%proxyUserIDDesc%"
+							},
+							"proxyPassword": {
+								"type": "string",
+								"default": "",
+								"description": "%proxyPdDesc%"
+							},
+							"validateConnection": {
+								"type": "boolean",
+								"default": false,
+								"description": "%validateConnectionDesc%"
+							},
+							"statementCacheSize": {
+								"type": "number",
+								"default": 0,
+								"description": "%statementCacheSizeDesc%"
+							},
+							"statementCachePurge": {
+								"type": "boolean",
+								"default": false,
+								"description": "%statementCachePurgeDesc%"
+							},
+							"hAEvents": {
+								"type": "boolean",
+								"default": true,
+								"description": "%hAEventsDesc%"
+							},
+							"loadBalancing": {
+								"type": "boolean",
+								"default": true,
+								"description": "%loadBalancingDesc%"
+							},
+							"metadataPooling": {
+								"type": "boolean",
+								"default": false,
+								"description": "%metadataPoolingDesc%"
+							},
+							"contextConnection": {
+								"type": "boolean",
+								"default": false,
+								"description": "%contextConnectionDesc%"
+							},
+							"promotableTransaction": {
+								"type": "string",
+								"default": "promotable",
+								"description": "%promotableTransactionDesc%"
+							},
+							"selfTuning": {
+								"type": "boolean",
+								"default": false,
+								"description": "%selfTuningDesc%"
+							},
+							"providerDataSourceType": {
+								"type": "string",
+								"enum": [
+									"EZConnect",
+									"Direct",
+									"TNS"
+								],
+								"description": "%providerDataSourceTypeDescDeprecated%",
+								"deprecationMessage": "%providerDataSourceTypeDeprecationMessage%",
+								"markdownDeprecationMessage": "%providerDataSourceTypeDeprecationMarkdownMessage%"
+							},
+							"connectionString": {
+								"type": "string",
+								"default": "",
+								"description": "%connectionStringDesc%"
+							},
+							"name": {
+								"type": "string",
+								"description": "%oracleProfileNameDesc%"
+							},
+							"passwordSaved": {
+								"type": "boolean",
+								"default": false,
+								"description": "%pdSavedDesc%"
+							},
+							"passwordEmptyByUser": {
+								"type": "boolean",
+								"default": false,
+								"description": "%pdEmptyByUserDesc%"
+							}
+						}
+					},
+					"scope": "resource"
+				},
+				"oracleDeveloperTools.query.dataBatchsize": {
+					"type": "integer",
+					"default": 25,
+					"description": "%dataBatchsize.deprecated%",
+					"deprecationMessage": "%dataBatchsize.deprecationMessage%",
+					"markdownDeprecationMessage": "%dataBatchsize.deprecationMarkdownMessage%"
+				},
+				"oracledevtools.defaultConnection": {
+					"type": "string",
+					"description": "%oracledevtools.defaultConnection%",
+					"scope": "resource"
+				},
+				"oracledevtools.realTimeSqlMonitoring.showLicenseDialog": {
+					"type": "boolean",
+					"default": true,
+					"description": "%realTimeSqlMonitoring.showLicenseDialog%",
+					"scope": "resource"
+				}
+			}
+		},
+		"debuggers": [
+			{
+				"type": "oracleplsql",
+				"label": "%oraclePlsqlDebugger%",
+				"configurationAttributes": {
+					"launch": {}
+				}
+			}
+		],
+		"colors": [
+			{
+				"id": "treeItem.ffffff",
+				"description": "%treeItemDescffffff%",
+				"defaults": {
+					"dark": "#ffffff",
+					"light": "#ffffff"
+				}
+			},
+			{
+				"id": "treeItem.c6c6c6",
+				"description": "%treeItemDescc6c6c6%",
+				"defaults": {
+					"dark": "#c6c6c6",
+					"light": "#c6c6c6"
+				}
+			},
+			{
+				"id": "treeItem.848484",
+				"description": "%treeItemDesc848484%",
+				"defaults": {
+					"dark": "#848484",
+					"light": "#848484"
+				}
+			},
+			{
+				"id": "treeItem.000000",
+				"description": "%treeItemDesc000000%",
+				"defaults": {
+					"dark": "#000000",
+					"light": "#000000"
+				}
+			},
+			{
+				"id": "treeItem.ff0000",
+				"description": "%treeItemDescff0000%",
+				"defaults": {
+					"dark": "#ff0000",
+					"light": "#ff0000"
+				}
+			},
+			{
+				"id": "treeItem.ffff00",
+				"description": "%treeItemDescffff00%",
+				"defaults": {
+					"dark": "#ffff00",
+					"light": "#ffff00"
+				}
+			},
+			{
+				"id": "treeItem.00ff00",
+				"description": "%treeItemDesc00ff00%",
+				"defaults": {
+					"dark": "#00ff00",
+					"light": "#00ff00"
+				}
+			},
+			{
+				"id": "treeItem.00f7f7",
+				"description": "%treeItemDesc00f7f7%",
+				"defaults": {
+					"dark": "#00f7f7",
+					"light": "#00f7f7"
+				}
+			},
+			{
+				"id": "treeItem.0000ff",
+				"description": "%treeItemDesc0000ff%",
+				"defaults": {
+					"dark": "#0000ff",
+					"light": "#0000ff"
+				}
+			},
+			{
+				"id": "treeItem.ff00ff",
+				"description": "%treeItemDescff00ff%",
+				"defaults": {
+					"dark": "#ff00ff",
+					"light": "#ff00ff"
+				}
+			},
+			{
+				"id": "treeItem.840000",
+				"description": "%treeItemDesc840000%",
+				"defaults": {
+					"dark": "#840000",
+					"light": "#840000"
+				}
+			},
+			{
+				"id": "treeItem.848400",
+				"description": "%treeItemDesc848400%",
+				"defaults": {
+					"dark": "#848400",
+					"light": "#848400"
+				}
+			},
+			{
+				"id": "treeItem.008400",
+				"description": "%treeItemDesc008400%",
+				"defaults": {
+					"dark": "#008400",
+					"light": "#008400"
+				}
+			},
+			{
+				"id": "treeItem.008484",
+				"description": "%treeItemDesc008484%",
+				"defaults": {
+					"dark": "#008484",
+					"light": "#008484"
+				}
+			},
+			{
+				"id": "treeItem.000084",
+				"description": "%treeItemDesc000084%",
+				"defaults": {
+					"dark": "#000084",
+					"light": "#000084"
+				}
+			},
+			{
+				"id": "treeItem.840084",
+				"description": "%treeItemDesc840084%",
+				"defaults": {
+					"dark": "#840084",
+					"light": "#840084"
+				}
+			},
+			{
+				"id": "treeItem.f6f7f7",
+				"description": "%treeItemDescf6f7f7%",
+				"defaults": {
+					"dark": "#f6f7f7",
+					"light": "#f6f7f7"
+				}
+			},
+			{
+				"id": "treeItem.ffd5d4",
+				"description": "%treeItemDescffd5d4%",
+				"defaults": {
+					"dark": "#ffd5d4",
+					"light": "#ffd5d4"
+				}
+			},
+			{
+				"id": "treeItem.fedfd6",
+				"description": "%treeItemDescfedfd6%",
+				"defaults": {
+					"dark": "#fedfd6",
+					"light": "#fedfd6"
+				}
+			},
+			{
+				"id": "treeItem.fff0d9",
+				"description": "%treeItemDescfff0d9%",
+				"defaults": {
+					"dark": "#fff0d9",
+					"light": "#fff0d9"
+				}
+			},
+			{
+				"id": "treeItem.fff6d6",
+				"description": "%treeItemDescfff6d6%",
+				"defaults": {
+					"dark": "#fff6d6",
+					"light": "#fff6d6"
+				}
+			},
+			{
+				"id": "treeItem.f8ffd5",
+				"description": "%treeItemDescf8ffd5%",
+				"defaults": {
+					"dark": "#f8ffd5",
+					"light": "#f8ffd5"
+				}
+			},
+			{
+				"id": "treeItem.e8fed8",
+				"description": "%treeItemDesce8fed8%",
+				"defaults": {
+					"dark": "#e8fed8",
+					"light": "#e8fed8"
+				}
+			},
+			{
+				"id": "treeItem.d6ffd6",
+				"description": "%treeItemDescd6ffd6%",
+				"defaults": {
+					"dark": "#d6ffd6",
+					"light": "#d6ffd6"
+				}
+			},
+			{
+				"id": "treeItem.d6ffef",
+				"description": "%treeItemDescd6ffef%",
+				"defaults": {
+					"dark": "#d6ffef",
+					"light": "#d6ffef"
+				}
+			},
+			{
+				"id": "treeItem.d6ffff",
+				"description": "%treeItemDescd6ffff%",
+				"defaults": {
+					"dark": "#d6ffff",
+					"light": "#d6ffff"
+				}
+			},
+			{
+				"id": "treeItem.d6f7ff",
+				"description": "%treeItemDescd6f7ff%",
+				"defaults": {
+					"dark": "#d6f7ff",
+					"light": "#d6f7ff"
+				}
+			},
+			{
+				"id": "treeItem.d6e7ff",
+				"description": "%treeItemDescd6e7ff%",
+				"defaults": {
+					"dark": "#d6e7ff",
+					"light": "#d6e7ff"
+				}
+			},
+			{
+				"id": "treeItem.d6d6ff",
+				"description": "%treeItemDescd6d6ff%",
+				"defaults": {
+					"dark": "#d6d6ff",
+					"light": "#d6d6ff"
+				}
+			},
+			{
+				"id": "treeItem.efd6ff",
+				"description": "%treeItemDescefd6ff%",
+				"defaults": {
+					"dark": "#efd6ff",
+					"light": "#efd6ff"
+				}
+			},
+			{
+				"id": "treeItem.ffd6ff",
+				"description": "%treeItemDescffd6ff%",
+				"defaults": {
+					"dark": "#ffd6ff",
+					"light": "#ffd6ff"
+				}
+			},
+			{
+				"id": "treeItem.ffd6ef",
+				"description": "%treeItemDescffd6ef%",
+				"defaults": {
+					"dark": "#ffd6ef",
+					"light": "#ffd6ef"
+				}
+			},
+			{
+				"id": "treeItem.e7e6e7",
+				"description": "%treeItemDesce7e6e7%",
+				"defaults": {
+					"dark": "#e7e6e7",
+					"light": "#e7e6e7"
+				}
+			},
+			{
+				"id": "treeItem.fed4d2",
+				"description": "%treeItemDescfed4d2%",
+				"defaults": {
+					"dark": "#fed4d2",
+					"light": "#fed4d2"
+				}
+			},
+			{
+				"id": "treeItem.fedfd6",
+				"description": "%treeItemDescfedfd6%",
+				"defaults": {
+					"dark": "#fedfd6",
+					"light": "#fedfd6"
+				}
+			},
+			{
+				"id": "treeItem.fedeb4",
+				"description": "%treeItemDescfedeb4%",
+				"defaults": {
+					"dark": "#fedeb4",
+					"light": "#fedeb4"
+				}
+			},
+			{
+				"id": "treeItem.feefb7",
+				"description": "%treeItemDescfeefb7%",
+				"defaults": {
+					"dark": "#feefb7",
+					"light": "#feefb7"
+				}
+			},
+			{
+				"id": "treeItem.fffdb7",
+				"description": "%treeItemDescfffdb7%",
+				"defaults": {
+					"dark": "#fffdb7",
+					"light": "#fffdb7"
+				}
+			},
+			{
+				"id": "treeItem.e5ffb5",
+				"description": "%treeItemDesce5ffb5%",
+				"defaults": {
+					"dark": "#e5ffb5",
+					"light": "#e5ffb5"
+				}
+			},
+			{
+				"id": "treeItem.b5ffb5",
+				"description": "%treeItemDescb5ffb5%",
+				"defaults": {
+					"dark": "#b5ffb5",
+					"light": "#b5ffb5"
+				}
+			},
+			{
+				"id": "treeItem.b5ffde",
+				"description": "%treeItemDescb5ffde%",
+				"defaults": {
+					"dark": "#b5ffde",
+					"light": "#b5ffde"
+				}
+			},
+			{
+				"id": "treeItem.b5ffff",
+				"description": "%treeItemDescb5ffff%",
+				"defaults": {
+					"dark": "#b5ffff",
+					"light": "#b5ffff"
+				}
+			},
+			{
+				"id": "treeItem.b5e7ff",
+				"description": "%treeItemDescb5e7ff%",
+				"defaults": {
+					"dark": "#b5e7ff",
+					"light": "#b5e7ff"
+				}
+			},
+			{
+				"id": "treeItem.c6d6ff",
+				"description": "%treeItemDescc6d6ff%",
+				"defaults": {
+					"dark": "#c6d6ff",
+					"light": "#c6d6ff"
+				}
+			},
+			{
+				"id": "treeItem.c6c6ff",
+				"description": "%treeItemDescc6c6ff%",
+				"defaults": {
+					"dark": "#c6c6ff",
+					"light": "#c6c6ff"
+				}
+			},
+			{
+				"id": "treeItem.deb5ff",
+				"description": "%treeItemDescdeb5ff%",
+				"defaults": {
+					"dark": "#deb5ff",
+					"light": "#deb5ff"
+				}
+			},
+			{
+				"id": "treeItem.ffb5ff",
+				"description": "%treeItemDescffb5ff%",
+				"defaults": {
+					"dark": "#ffb5ff",
+					"light": "#ffb5ff"
+				}
+			},
+			{
+				"id": "treeItem.ffb5de",
+				"description": "%treeItemDescffb5de%",
+				"defaults": {
+					"dark": "#ffb5de",
+					"light": "#ffb5de"
+				}
+			},
+			{
+				"id": "treeItem.d6d6d7",
+				"description": "%treeItemDescd6d6d7%",
+				"defaults": {
+					"dark": "#d6d6d7",
+					"light": "#d6d6d7"
+				}
+			},
+			{
+				"id": "treeItem.fea6a3",
+				"description": "%treeItemDescfea6a3%",
+				"defaults": {
+					"dark": "#fea6a3",
+					"light": "#fea6a3"
+				}
+			},
+			{
+				"id": "treeItem.ffbda5",
+				"description": "%treeItemDescffbda5%",
+				"defaults": {
+					"dark": "#ffbda5",
+					"light": "#ffbda5"
+				}
+			},
+			{
+				"id": "treeItem.ffd6a5",
+				"description": "%treeItemDescffd6a5%",
+				"defaults": {
+					"dark": "#ffd6a5",
+					"light": "#ffd6a5"
+				}
+			},
+			{
+				"id": "treeItem.feeeb7",
+				"description": "%treeItemDescfeeeb7%",
+				"defaults": {
+					"dark": "#feeeb7",
+					"light": "#feeeb7"
+				}
+			},
+			{
+				"id": "treeItem.feff93",
+				"description": "%treeItemDescfeff93%",
+				"defaults": {
+					"dark": "#feff93",
+					"light": "#feff93"
+				}
+			},
+			{
+				"id": "treeItem.d4ff92",
+				"description": "%treeItemDescd4ff92%",
+				"defaults": {
+					"dark": "#d4ff92",
+					"light": "#d4ff92"
+				}
+			},
+			{
+				"id": "treeItem.a5ffa5",
+				"description": "%treeItemDesca5ffa5%",
+				"defaults": {
+					"dark": "#a5ffa5",
+					"light": "#a5ffa5"
+				}
+			},
+			{
+				"id": "treeItem.a5ffd6",
+				"description": "%treeItemDesca5ffd6%",
+				"defaults": {
+					"dark": "#a5ffd6",
+					"light": "#a5ffd6"
+				}
+			},
+			{
+				"id": "treeItem.a5ffff",
+				"description": "%treeItemDesca5ffff%",
+				"defaults": {
+					"dark": "#a5ffff",
+					"light": "#a5ffff"
+				}
+			},
+			{
+				"id": "treeItem.a5e7ff",
+				"description": "%treeItemDesca5e7ff%",
+				"defaults": {
+					"dark": "#a5e7ff",
+					"light": "#a5e7ff"
+				}
+			},
+			{
+				"id": "treeItem.a5c6ff",
+				"description": "%treeItemDesca5c6ff%",
+				"defaults": {
+					"dark": "#a5c6ff",
+					"light": "#a5c6ff"
+				}
+			},
+			{
+				"id": "treeItem.a5a5ff",
+				"description": "%treeItemDesca5a5ff%",
+				"defaults": {
+					"dark": "#a5a5ff",
+					"light": "#a5a5ff"
+				}
+			},
+			{
+				"id": "treeItem.d6a5ff",
+				"description": "%treeItemDescd6a5ff%",
+				"defaults": {
+					"dark": "#d6a5ff",
+					"light": "#d6a5ff"
+				}
+			},
+			{
+				"id": "treeItem.ffa5ff",
+				"description": "%treeItemDescffa5ff%",
+				"defaults": {
+					"dark": "#ffa5ff",
+					"light": "#ffa5ff"
+				}
+			},
+			{
+				"id": "treeItem.ffa5d6",
+				"description": "%treeItemDescffa5d6%",
+				"defaults": {
+					"dark": "#ffa5d6",
+					"light": "#ffa5d6"
+				}
+			},
+			{
+				"id": "treeItem.c6c5c6",
+				"description": "%treeItemDescc6c5c6%",
+				"defaults": {
+					"dark": "#c6c5c6",
+					"light": "#c6c5c6"
+				}
+			},
+			{
+				"id": "treeItem.ff9494",
+				"description": "%treeItemDescff9494%",
+				"defaults": {
+					"dark": "#ff9494",
+					"light": "#ff9494"
+				}
+			},
+			{
+				"id": "treeItem.ffa484",
+				"description": "%treeItemDescffa484%",
+				"defaults": {
+					"dark": "#ffa484",
+					"light": "#ffa484"
+				}
+			},
+			{
+				"id": "treeItem.ffc686",
+				"description": "%treeItemDescffc686%",
+				"defaults": {
+					"dark": "#ffc686",
+					"light": "#ffc686"
+				}
+			},
+			{
+				"id": "treeItem.fede74",
+				"description": "%treeItemDescfede74%",
+				"defaults": {
+					"dark": "#fede74",
+					"light": "#fede74"
+				}
+			},
+			{
+				"id": "treeItem.fffe71",
+				"description": "%treeItemDescfffe71%",
+				"defaults": {
+					"dark": "#fffe71",
+					"light": "#fffe71"
+				}
+			},
+			{
+				"id": "treeItem.d6ff84",
+				"description": "%treeItemDescd6ff84%",
+				"defaults": {
+					"dark": "#d6ff84",
+					"light": "#d6ff84"
+				}
+			},
+			{
+				"id": "treeItem.94fe93",
+				"description": "%treeItemDesc94fe93%",
+				"defaults": {
+					"dark": "#94fe93",
+					"light": "#94fe93"
+				}
+			},
+			{
+				"id": "treeItem.94ffcd",
+				"description": "%treeItemDesc94ffcd%",
+				"defaults": {
+					"dark": "#94ffcd",
+					"light": "#94ffcd"
+				}
+			},
+			{
+				"id": "treeItem.85feff",
+				"description": "%treeItemDesc85feff%",
+				"defaults": {
+					"dark": "#85feff",
+					"light": "#85feff"
+				}
+			},
+			{
+				"id": "treeItem.92defe",
+				"description": "%treeItemDesc92defe%",
+				"defaults": {
+					"dark": "#92defe",
+					"light": "#92defe"
+				}
+			},
+			{
+				"id": "treeItem.93b5fe",
+				"description": "%treeItemDesc93b5fe%",
+				"defaults": {
+					"dark": "#93b5fe",
+					"light": "#93b5fe"
+				}
+			},
+			{
+				"id": "treeItem.9593ff",
+				"description": "%treeItemDesc9593ff%",
+				"defaults": {
+					"dark": "#9593ff",
+					"light": "#9593ff"
+				}
+			},
+			{
+				"id": "treeItem.ce94ff",
+				"description": "%treeItemDescce94ff%",
+				"defaults": {
+					"dark": "#ce94ff",
+					"light": "#ce94ff"
+				}
+			},
+			{
+				"id": "treeItem.ff84ff",
+				"description": "%treeItemDescff84ff%",
+				"defaults": {
+					"dark": "#ff84ff",
+					"light": "#ff84ff"
+				}
+			},
+			{
+				"id": "treeItem.ff94ce",
+				"description": "%treeItemDescff94ce%",
+				"defaults": {
+					"dark": "#ff94ce",
+					"light": "#ff94ce"
+				}
+			},
+			{
+				"id": "treeItem.b4b4b5",
+				"description": "%treeItemDescb4b4b5%",
+				"defaults": {
+					"dark": "#b4b4b5",
+					"light": "#b4b4b5"
+				}
+			},
+			{
+				"id": "treeItem.fe8383",
+				"description": "%treeItemDescfe8383%",
+				"defaults": {
+					"dark": "#fe8383",
+					"light": "#fe8383"
+				}
+			},
+			{
+				"id": "treeItem.ff9472",
+				"description": "%treeItemDescff9472%",
+				"defaults": {
+					"dark": "#ff9472",
+					"light": "#ff9472"
+				}
+			},
+			{
+				"id": "treeItem.ffb667",
+				"description": "%treeItemDescffb667%",
+				"defaults": {
+					"dark": "#ffb667",
+					"light": "#ffb667"
+				}
+			},
+			{
+				"id": "treeItem.ffde62",
+				"description": "%treeItemDescffde62%",
+				"defaults": {
+					"dark": "#ffde62",
+					"light": "#ffde62"
+				}
+			},
+			{
+				"id": "treeItem.ffff42",
+				"description": "%treeItemDescffff42%",
+				"defaults": {
+					"dark": "#ffff42",
+					"light": "#ffff42"
+				}
+			},
+			{
+				"id": "treeItem.c5fe63",
+				"description": "%treeItemDescc5fe63%",
+				"defaults": {
+					"dark": "#c5fe63",
+					"light": "#c5fe63"
+				}
+			},
+			{
+				"id": "treeItem.72ff70",
+				"description": "%treeItemDesc72ff70%",
+				"defaults": {
+					"dark": "#72ff70",
+					"light": "#72ff70"
+				}
+			},
+			{
+				"id": "treeItem.73ffbe",
+				"description": "%treeItemDesc73ffbe%",
+				"defaults": {
+					"dark": "#73ffbe",
+					"light": "#73ffbe"
+				}
+			},
+			{
+				"id": "treeItem.73ffff",
+				"description": "%treeItemDesc73ffff%",
+				"defaults": {
+					"dark": "#73ffff",
+					"light": "#73ffff"
+				}
+			},
+			{
+				"id": "treeItem.86d6ff",
+				"description": "%treeItemDesc86d6ff%",
+				"defaults": {
+					"dark": "#86d6ff",
+					"light": "#86d6ff"
+				}
+			},
+			{
+				"id": "treeItem.83abfc",
+				"description": "%treeItemDesc83abfc%",
+				"defaults": {
+					"dark": "#83abfc",
+					"light": "#83abfc"
+				}
+			},
+			{
+				"id": "treeItem.8484fd",
+				"description": "%treeItemDesc8484fd%",
+				"defaults": {
+					"dark": "#8484fd",
+					"light": "#8484fd"
+				}
+			},
+			{
+				"id": "treeItem.c684ff",
+				"description": "%treeItemDescc684ff%",
+				"defaults": {
+					"dark": "#c684ff",
+					"light": "#c684ff"
+				}
+			},
+			{
+				"id": "treeItem.ff73ff",
+				"description": "%treeItemDescff73ff%",
+				"defaults": {
+					"dark": "#ff73ff",
+					"light": "#ff73ff"
+				}
+			},
+			{
+				"id": "treeItem.ff84c6",
+				"description": "%treeItemDescff84c6%",
+				"defaults": {
+					"dark": "#ff84c6",
+					"light": "#ff84c6"
+				}
+			},
+			{
+				"id": "treeItem.a6a5a5",
+				"description": "%treeItemDesca6a5a5%",
+				"defaults": {
+					"dark": "#a6a5a5",
+					"light": "#a6a5a5"
+				}
+			},
+			{
+				"id": "treeItem.ff6365",
+				"description": "%treeItemDescff6365%",
+				"defaults": {
+					"dark": "#ff6365",
+					"light": "#ff6365"
+				}
+			},
+			{
+				"id": "treeItem.ff7a53",
+				"description": "%treeItemDescff7a53%",
+				"defaults": {
+					"dark": "#ff7a53",
+					"light": "#ff7a53"
+				}
+			},
+			{
+				"id": "treeItem.ffad54",
+				"description": "%treeItemDescffad54%",
+				"defaults": {
+					"dark": "#ffad54",
+					"light": "#ffad54"
+				}
+			},
+			{
+				"id": "treeItem.ffd741",
+				"description": "%treeItemDescffd741%",
+				"defaults": {
+					"dark": "#ffd741",
+					"light": "#ffd741"
+				}
+			},
+			{
+				"id": "treeItem.ffff00",
+				"description": "%treeItemDescffff00%",
+				"defaults": {
+					"dark": "#ffff00",
+					"light": "#ffff00"
+				}
+			},
+			{
+				"id": "treeItem.b7ff43",
+				"description": "%treeItemDescb7ff43%",
+				"defaults": {
+					"dark": "#b7ff43",
+					"light": "#b7ff43"
+				}
+			},
+			{
+				"id": "treeItem.63ff63",
+				"description": "%treeItemDesc63ff63%",
+				"defaults": {
+					"dark": "#63ff63",
+					"light": "#63ff63"
+				}
+			},
+			{
+				"id": "treeItem.62ffb6",
+				"description": "%treeItemDesc62ffb6%",
+				"defaults": {
+					"dark": "#62ffb6",
+					"light": "#62ffb6"
+				}
+			},
+			{
+				"id": "treeItem.50fffe",
+				"description": "%treeItemDesc50fffe%",
+				"defaults": {
+					"dark": "#50fffe",
+					"light": "#50fffe"
+				}
+			},
+			{
+				"id": "treeItem.63cdfd",
+				"description": "%treeItemDesc63cdfd%",
+				"defaults": {
+					"dark": "#63cdfd",
+					"light": "#63cdfd"
+				}
+			},
+			{
+				"id": "treeItem.72a3fd",
+				"description": "%treeItemDesc72a3fd%",
+				"defaults": {
+					"dark": "#72a3fd",
+					"light": "#72a3fd"
+				}
+			},
+			{
+				"id": "treeItem.7473ff",
+				"description": "%treeItemDesc7473ff%",
+				"defaults": {
+					"dark": "#7473ff",
+					"light": "#7473ff"
+				}
+			},
+			{
+				"id": "treeItem.b563ff",
+				"description": "%treeItemDescb563ff%",
+				"defaults": {
+					"dark": "#b563ff",
+					"light": "#b563ff"
+				}
+			},
+			{
+				"id": "treeItem.ff52ff",
+				"description": "%treeItemDescff52ff%",
+				"defaults": {
+					"dark": "#ff52ff",
+					"light": "#ff52ff"
+				}
+			},
+			{
+				"id": "treeItem.ff63b5",
+				"description": "%treeItemDescff63b5%",
+				"defaults": {
+					"dark": "#ff63b5",
+					"light": "#ff63b5"
+				}
+			},
+			{
+				"id": "treeItem.939393",
+				"description": "%treeItemDesc939393%",
+				"defaults": {
+					"dark": "#939393",
+					"light": "#939393"
+				}
+			},
+			{
+				"id": "treeItem.ff5252",
+				"description": "%treeItemDescff5252%",
+				"defaults": {
+					"dark": "#ff5252",
+					"light": "#ff5252"
+				}
+			},
+			{
+				"id": "treeItem.ff7442",
+				"description": "%treeItemDescff7442%",
+				"defaults": {
+					"dark": "#ff7442",
+					"light": "#ff7442"
+				}
+			},
+			{
+				"id": "treeItem.fd9c2f",
+				"description": "%treeItemDescfd9c2f%",
+				"defaults": {
+					"dark": "#fd9c2f",
+					"light": "#fd9c2f"
+				}
+			},
+			{
+				"id": "treeItem.fdc700",
+				"description": "%treeItemDescfdc700%",
+				"defaults": {
+					"dark": "#fdc700",
+					"light": "#fdc700"
+				}
+			},
+			{
+				"id": "treeItem.f8f702",
+				"description": "%treeItemDescf8f702%",
+				"defaults": {
+					"dark": "#f8f702",
+					"light": "#f8f702"
+				}
+			},
+			{
+				"id": "treeItem.9eff02",
+				"description": "%treeItemDesc9eff02%",
+				"defaults": {
+					"dark": "#9eff02",
+					"light": "#9eff02"
+				}
+			},
+			{
+				"id": "treeItem.4ffe53",
+				"description": "%treeItemDesc4ffe53%",
+				"defaults": {
+					"dark": "#4ffe53",
+					"light": "#4ffe53"
+				}
+			},
+			{
+				"id": "treeItem.53feae",
+				"description": "%treeItemDesc53feae%",
+				"defaults": {
+					"dark": "#53feae",
+					"light": "#53feae"
+				}
+			},
+			{
+				"id": "treeItem.00fefc",
+				"description": "%treeItemDesc00fefc%",
+				"defaults": {
+					"dark": "#00fefc",
+					"light": "#00fefc"
+				}
+			},
+			{
+				"id": "treeItem.54c4fd",
+				"description": "%treeItemDesc54c4fd%",
+				"defaults": {
+					"dark": "#54c4fd",
+					"light": "#54c4fd"
+				}
+			},
+			{
+				"id": "treeItem.508cfe",
+				"description": "%treeItemDesc508cfe%",
+				"defaults": {
+					"dark": "#508cfe",
+					"light": "#508cfe"
+				}
+			},
+			{
+				"id": "treeItem.6262fd",
+				"description": "%treeItemDesc6262fd%",
+				"defaults": {
+					"dark": "#6262fd",
+					"light": "#6262fd"
+				}
+			},
+			{
+				"id": "treeItem.ad51ff",
+				"description": "%treeItemDescad51ff%",
+				"defaults": {
+					"dark": "#ad51ff",
+					"light": "#ad51ff"
+				}
+			},
+			{
+				"id": "treeItem.fe41ff",
+				"description": "%treeItemDescfe41ff%",
+				"defaults": {
+					"dark": "#fe41ff",
+					"light": "#fe41ff"
+				}
+			},
+			{
+				"id": "treeItem.fe53ae",
+				"description": "%treeItemDescfe53ae%",
+				"defaults": {
+					"dark": "#fe53ae",
+					"light": "#fe53ae"
+				}
+			},
+			{
+				"id": "treeItem.737373",
+				"description": "%treeItemDesc737373%",
+				"defaults": {
+					"dark": "#737373",
+					"light": "#737373"
+				}
+			},
+			{
+				"id": "treeItem.ff4143",
+				"description": "%treeItemDescff4143%",
+				"defaults": {
+					"dark": "#ff4143",
+					"light": "#ff4143"
+				}
+			},
+			{
+				"id": "treeItem.ff5921",
+				"description": "%treeItemDescff5921%",
+				"defaults": {
+					"dark": "#ff5921",
+					"light": "#ff5921"
+				}
+			},
+			{
+				"id": "treeItem.ff8300",
+				"description": "%treeItemDescff8300%",
+				"defaults": {
+					"dark": "#ff8300",
+					"light": "#ff8300"
+				}
+			},
+			{
+				"id": "treeItem.f7b400",
+				"description": "%treeItemDescf7b400%",
+				"defaults": {
+					"dark": "#f7b400",
+					"light": "#f7b400"
+				}
+			},
+			{
+				"id": "treeItem.e6e801",
+				"description": "%treeItemDesce6e801%",
+				"defaults": {
+					"dark": "#e6e801",
+					"light": "#e6e801"
+				}
+			},
+			{
+				"id": "treeItem.93f600",
+				"description": "%treeItemDesc93f600%",
+				"defaults": {
+					"dark": "#93f600",
+					"light": "#93f600"
+				}
+			},
+			{
+				"id": "treeItem.01ff00",
+				"description": "%treeItemDesc01ff00%",
+				"defaults": {
+					"dark": "#01ff00",
+					"light": "#01ff00"
+				}
+			},
+			{
+				"id": "treeItem.01ff83",
+				"description": "%treeItemDesc01ff83%",
+				"defaults": {
+					"dark": "#01ff83",
+					"light": "#01ff83"
+				}
+			},
+			{
+				"id": "treeItem.00f6f5",
+				"description": "%treeItemDesc00f6f5%",
+				"defaults": {
+					"dark": "#00f6f5",
+					"light": "#00f6f5"
+				}
+			},
+			{
+				"id": "treeItem.42c6fe",
+				"description": "%treeItemDesc42c6fe%",
+				"defaults": {
+					"dark": "#42c6fe",
+					"light": "#42c6fe"
+				}
+			},
+			{
+				"id": "treeItem.4284ff",
+				"description": "%treeItemDesc4284ff%",
+				"defaults": {
+					"dark": "#4284ff",
+					"light": "#4284ff"
+				}
+			},
+			{
+				"id": "treeItem.5152ff",
+				"description": "%treeItemDesc5152ff%",
+				"defaults": {
+					"dark": "#5152ff",
+					"light": "#5152ff"
+				}
+			},
+			{
+				"id": "treeItem.a542ff",
+				"description": "%treeItemDesca542ff%",
+				"defaults": {
+					"dark": "#a542ff",
+					"light": "#a542ff"
+				}
+			},
+			{
+				"id": "treeItem.ff21ff",
+				"description": "%treeItemDescff21ff%",
+				"defaults": {
+					"dark": "#ff21ff",
+					"light": "#ff21ff"
+				}
+			},
+			{
+				"id": "treeItem.ff42a4",
+				"description": "%treeItemDescff42a4%",
+				"defaults": {
+					"dark": "#ff42a4",
+					"light": "#ff42a4"
+				}
+			},
+			{
+				"id": "treeItem.636363",
+				"description": "%treeItemDesc636363%",
+				"defaults": {
+					"dark": "#636363",
+					"light": "#636363"
+				}
+			},
+			{
+				"id": "treeItem.fe2121",
+				"description": "%treeItemDescfe2121%",
+				"defaults": {
+					"dark": "#fe2121",
+					"light": "#fe2121"
+				}
+			},
+			{
+				"id": "treeItem.ff4200",
+				"description": "%treeItemDescff4200%",
+				"defaults": {
+					"dark": "#ff4200",
+					"light": "#ff4200"
+				}
+			},
+			{
+				"id": "treeItem.e47504",
+				"description": "%treeItemDesce47504%",
+				"defaults": {
+					"dark": "#e47504",
+					"light": "#e47504"
+				}
+			},
+			{
+				"id": "treeItem.d49c00",
+				"description": "%treeItemDescd49c00%",
+				"defaults": {
+					"dark": "#d49c00",
+					"light": "#d49c00"
+				}
+			},
+			{
+				"id": "treeItem.c4c500",
+				"description": "%treeItemDescc4c500%",
+				"defaults": {
+					"dark": "#c4c500",
+					"light": "#c4c500"
+				}
+			},
+			{
+				"id": "treeItem.83d700",
+				"description": "%treeItemDesc83d700%",
+				"defaults": {
+					"dark": "#83d700",
+					"light": "#83d700"
+				}
+			},
+			{
+				"id": "treeItem.00e700",
+				"description": "%treeItemDesc00e700%",
+				"defaults": {
+					"dark": "#00e700",
+					"light": "#00e700"
+				}
+			},
+			{
+				"id": "treeItem.01e773",
+				"description": "%treeItemDesc01e773%",
+				"defaults": {
+					"dark": "#01e773",
+					"light": "#01e773"
+				}
+			},
+			{
+				"id": "treeItem.01d5d4",
+				"description": "%treeItemDesc01d5d4%",
+				"defaults": {
+					"dark": "#01d5d4",
+					"light": "#01d5d4"
+				}
+			},
+			{
+				"id": "treeItem.01adfd",
+				"description": "%treeItemDesc01adfd%",
+				"defaults": {
+					"dark": "#01adfd",
+					"light": "#01adfd"
+				}
+			},
+			{
+				"id": "treeItem.3272ff",
+				"description": "%treeItemDesc3272ff%",
+				"defaults": {
+					"dark": "#3272ff",
+					"light": "#3272ff"
+				}
+			},
+			{
+				"id": "treeItem.3030fe",
+				"description": "%treeItemDesc3030fe%",
+				"defaults": {
+					"dark": "#3030fe",
+					"light": "#3030fe"
+				}
+			},
+			{
+				"id": "treeItem.9421fe",
+				"description": "%treeItemDesc9421fe%",
+				"defaults": {
+					"dark": "#9421fe",
+					"light": "#9421fe"
+				}
+			},
+			{
+				"id": "treeItem.ff00fd",
+				"description": "%treeItemDescff00fd%",
+				"defaults": {
+					"dark": "#ff00fd",
+					"light": "#ff00fd"
+				}
+			},
+			{
+				"id": "treeItem.fa2193",
+				"description": "%treeItemDescfa2193%",
+				"defaults": {
+					"dark": "#fa2193",
+					"light": "#fa2193"
+				}
+			},
+			{
+				"id": "treeItem.525251",
+				"description": "%treeItemDesc525251%",
+				"defaults": {
+					"dark": "#525251",
+					"light": "#525251"
+				}
+			},
+			{
+				"id": "treeItem.ff0102",
+				"description": "%treeItemDescff0102%",
+				"defaults": {
+					"dark": "#ff0102",
+					"light": "#ff0102"
+				}
+			},
+			{
+				"id": "treeItem.e63801",
+				"description": "%treeItemDesce63801%",
+				"defaults": {
+					"dark": "#e63801",
+					"light": "#e63801"
+				}
+			},
+			{
+				"id": "treeItem.d56b00",
+				"description": "%treeItemDescd56b00%",
+				"defaults": {
+					"dark": "#d56b00",
+					"light": "#d56b00"
+				}
+			},
+			{
+				"id": "treeItem.c69300",
+				"description": "%treeItemDescc69300%",
+				"defaults": {
+					"dark": "#c69300",
+					"light": "#c69300"
+				}
+			},
+			{
+				"id": "treeItem.b5b500",
+				"description": "%treeItemDescb5b500%",
+				"defaults": {
+					"dark": "#b5b500",
+					"light": "#b5b500"
+				}
+			},
+			{
+				"id": "treeItem.74c500",
+				"description": "%treeItemDesc74c500%",
+				"defaults": {
+					"dark": "#74c500",
+					"light": "#74c500"
+				}
+			},
+			{
+				"id": "treeItem.00d601",
+				"description": "%treeItemDesc00d601%",
+				"defaults": {
+					"dark": "#00d601",
+					"light": "#00d601"
+				}
+			},
+			{
+				"id": "treeItem.00d66b",
+				"description": "%treeItemDesc00d66b%",
+				"defaults": {
+					"dark": "#00d66b",
+					"light": "#00d66b"
+				}
+			},
+			{
+				"id": "treeItem.01c6c8",
+				"description": "%treeItemDesc01c6c8%",
+				"defaults": {
+					"dark": "#01c6c8",
+					"light": "#01c6c8"
+				}
+			},
+			{
+				"id": "treeItem.0094e6",
+				"description": "%treeItemDesc0094e6%",
+				"defaults": {
+					"dark": "#0094e6",
+					"light": "#0094e6"
+				}
+			},
+			{
+				"id": "treeItem.0152ff",
+				"description": "%treeItemDesc0152ff%",
+				"defaults": {
+					"dark": "#0152ff",
+					"light": "#0152ff"
+				}
+			},
+			{
+				"id": "treeItem.2020fe",
+				"description": "%treeItemDesc2020fe%",
+				"defaults": {
+					"dark": "#2020fe",
+					"light": "#2020fe"
+				}
+			},
+			{
+				"id": "treeItem.8501fe",
+				"description": "%treeItemDesc8501fe%",
+				"defaults": {
+					"dark": "#8501fe",
+					"light": "#8501fe"
+				}
+			},
+			{
+				"id": "treeItem.e600e6",
+				"description": "%treeItemDesce600e6%",
+				"defaults": {
+					"dark": "#e600e6",
+					"light": "#e600e6"
+				}
+			},
+			{
+				"id": "treeItem.ff0085",
+				"description": "%treeItemDescff0085%",
+				"defaults": {
+					"dark": "#ff0085",
+					"light": "#ff0085"
+				}
+			},
+			{
+				"id": "treeItem.424242",
+				"description": "%treeItemDesc424242%",
+				"defaults": {
+					"dark": "#424242",
+					"light": "#424242"
+				}
+			},
+			{
+				"id": "treeItem.e80103",
+				"description": "%treeItemDesce80103%",
+				"defaults": {
+					"dark": "#e80103",
+					"light": "#e80103"
+				}
+			},
+			{
+				"id": "treeItem.c93103",
+				"description": "%treeItemDescc93103%",
+				"defaults": {
+					"dark": "#c93103",
+					"light": "#c93103"
+				}
+			},
+			{
+				"id": "treeItem.b35a01",
+				"description": "%treeItemDescb35a01%",
+				"defaults": {
+					"dark": "#b35a01",
+					"light": "#b35a01"
+				}
+			},
+			{
+				"id": "treeItem.a57b00",
+				"description": "%treeItemDesca57b00%",
+				"defaults": {
+					"dark": "#a57b00",
+					"light": "#a57b00"
+				}
+			},
+			{
+				"id": "treeItem.a6a500",
+				"description": "%treeItemDesca6a500%",
+				"defaults": {
+					"dark": "#a6a500",
+					"light": "#a6a500"
+				}
+			},
+			{
+				"id": "treeItem.63a500",
+				"description": "%treeItemDesc63a500%",
+				"defaults": {
+					"dark": "#63a500",
+					"light": "#63a500"
+				}
+			},
+			{
+				"id": "treeItem.00b300",
+				"description": "%treeItemDesc00b300%",
+				"defaults": {
+					"dark": "#00b300",
+					"light": "#00b300"
+				}
+			},
+			{
+				"id": "treeItem.00b559",
+				"description": "%treeItemDesc00b559%",
+				"defaults": {
+					"dark": "#00b559",
+					"light": "#00b559"
+				}
+			},
+			{
+				"id": "treeItem.00a3a4",
+				"description": "%treeItemDesc00a3a4%",
+				"defaults": {
+					"dark": "#00a3a4",
+					"light": "#00a3a4"
+				}
+			},
+			{
+				"id": "treeItem.0084c5",
+				"description": "%treeItemDesc0084c5%",
+				"defaults": {
+					"dark": "#0084c5",
+					"light": "#0084c5"
+				}
+			},
+			{
+				"id": "treeItem.024aea",
+				"description": "%treeItemDesc024aea%",
+				"defaults": {
+					"dark": "#024aea",
+					"light": "#024aea"
+				}
+			},
+			{
+				"id": "treeItem.0000ff",
+				"description": "%treeItemDesc0000ff%",
+				"defaults": {
+					"dark": "#0000ff",
+					"light": "#0000ff"
+				}
+			},
+			{
+				"id": "treeItem.7000e6",
+				"description": "%treeItemDesc7000e6%",
+				"defaults": {
+					"dark": "#7000e6",
+					"light": "#7000e6"
+				}
+			},
+			{
+				"id": "treeItem.c600c6",
+				"description": "%treeItemDescc600c6%",
+				"defaults": {
+					"dark": "#c600c6",
+					"light": "#c600c6"
+				}
+			},
+			{
+				"id": "treeItem.e60073",
+				"description": "%treeItemDesce60073%",
+				"defaults": {
+					"dark": "#e60073",
+					"light": "#e60073"
+				}
+			},
+			{
+				"id": "treeItem.313031",
+				"description": "%treeItemDesc313031%",
+				"defaults": {
+					"dark": "#313031",
+					"light": "#313031"
+				}
+			},
+			{
+				"id": "treeItem.c60001",
+				"description": "%treeItemDescc60001%",
+				"defaults": {
+					"dark": "#c60001",
+					"light": "#c60001"
+				}
+			},
+			{
+				"id": "treeItem.a52801",
+				"description": "%treeItemDesca52801%",
+				"defaults": {
+					"dark": "#a52801",
+					"light": "#a52801"
+				}
+			},
+			{
+				"id": "treeItem.a35202",
+				"description": "%treeItemDesca35202%",
+				"defaults": {
+					"dark": "#a35202",
+					"light": "#a35202"
+				}
+			},
+			{
+				"id": "treeItem.926b00",
+				"description": "%treeItemDesc926b00%",
+				"defaults": {
+					"dark": "#926b00",
+					"light": "#926b00"
+				}
+			},
+			{
+				"id": "treeItem.929400",
+				"description": "%treeItemDesc929400%",
+				"defaults": {
+					"dark": "#929400",
+					"light": "#929400"
+				}
+			},
+			{
+				"id": "treeItem.5a9400",
+				"description": "%treeItemDesc5a9400%",
+				"defaults": {
+					"dark": "#5a9400",
+					"light": "#5a9400"
+				}
+			},
+			{
+				"id": "treeItem.00a404",
+				"description": "%treeItemDesc00a404%",
+				"defaults": {
+					"dark": "#00a404",
+					"light": "#00a404"
+				}
+			},
+			{
+				"id": "treeItem.00a450",
+				"description": "%treeItemDesc00a450%",
+				"defaults": {
+					"dark": "#00a450",
+					"light": "#00a450"
+				}
+			},
+			{
+				"id": "treeItem.00948f",
+				"description": "%treeItemDesc00948f%",
+				"defaults": {
+					"dark": "#00948f",
+					"light": "#00948f"
+				}
+			},
+			{
+				"id": "treeItem.026ba5",
+				"description": "%treeItemDesc026ba5%",
+				"defaults": {
+					"dark": "#026ba5",
+					"light": "#026ba5"
+				}
+			},
+			{
+				"id": "treeItem.0041c6",
+				"description": "%treeItemDesc0041c6%",
+				"defaults": {
+					"dark": "#0041c6",
+					"light": "#0041c6"
+				}
+			},
+			{
+				"id": "treeItem.0100d4",
+				"description": "%treeItemDesc0100d4%",
+				"defaults": {
+					"dark": "#0100d4",
+					"light": "#0100d4"
+				}
+			},
+			{
+				"id": "treeItem.6200c6",
+				"description": "%treeItemDesc6200c6%",
+				"defaults": {
+					"dark": "#6200c6",
+					"light": "#6200c6"
+				}
+			},
+			{
+				"id": "treeItem.a700a5",
+				"description": "%treeItemDesca700a5%",
+				"defaults": {
+					"dark": "#a700a5",
+					"light": "#a700a5"
+				}
+			},
+			{
+				"id": "treeItem.c40060",
+				"description": "%treeItemDescc40060%",
+				"defaults": {
+					"dark": "#c40060",
+					"light": "#c40060"
+				}
+			},
+			{
+				"id": "treeItem.212121",
+				"description": "%treeItemDesc212121%",
+				"defaults": {
+					"dark": "#212121",
+					"light": "#212121"
+				}
+			},
+			{
+				"id": "treeItem.920000",
+				"description": "%treeItemDesc920000%",
+				"defaults": {
+					"dark": "#920000",
+					"light": "#920000"
+				}
+			},
+			{
+				"id": "treeItem.942100",
+				"description": "%treeItemDesc942100%",
+				"defaults": {
+					"dark": "#942100",
+					"light": "#942100"
+				}
+			},
+			{
+				"id": "treeItem.844200",
+				"description": "%treeItemDesc844200%",
+				"defaults": {
+					"dark": "#844200",
+					"light": "#844200"
+				}
+			},
+			{
+				"id": "treeItem.836400",
+				"description": "%treeItemDesc836400%",
+				"defaults": {
+					"dark": "#836400",
+					"light": "#836400"
+				}
+			},
+			{
+				"id": "treeItem.717201",
+				"description": "%treeItemDesc717201%",
+				"defaults": {
+					"dark": "#717201",
+					"light": "#717201"
+				}
+			},
+			{
+				"id": "treeItem.528401",
+				"description": "%treeItemDesc528401%",
+				"defaults": {
+					"dark": "#528401",
+					"light": "#528401"
+				}
+			},
+			{
+				"id": "treeItem.008500",
+				"description": "%treeItemDesc008500%",
+				"defaults": {
+					"dark": "#008500",
+					"light": "#008500"
+				}
+			},
+			{
+				"id": "treeItem.018443",
+				"description": "%treeItemDesc018443%",
+				"defaults": {
+					"dark": "#018443",
+					"light": "#018443"
+				}
+			},
+			{
+				"id": "treeItem.008485",
+				"description": "%treeItemDesc008485%",
+				"defaults": {
+					"dark": "#008485",
+					"light": "#008485"
+				}
+			},
+			{
+				"id": "treeItem.036494",
+				"description": "%treeItemDesc036494%",
+				"defaults": {
+					"dark": "#036494",
+					"light": "#036494"
+				}
+			},
+			{
+				"id": "treeItem.003193",
+				"description": "%treeItemDesc003193%",
+				"defaults": {
+					"dark": "#003193",
+					"light": "#003193"
+				}
+			},
+			{
+				"id": "treeItem.0000a6",
+				"description": "%treeItemDesc0000a6%",
+				"defaults": {
+					"dark": "#0000a6",
+					"light": "#0000a6"
+				}
+			},
+			{
+				"id": "treeItem.490094",
+				"description": "%treeItemDesc490094%",
+				"defaults": {
+					"dark": "#490094",
+					"light": "#490094"
+				}
+			},
+			{
+				"id": "treeItem.910091",
+				"description": "%treeItemDesc910091%",
+				"defaults": {
+					"dark": "#910091",
+					"light": "#910091"
+				}
+			},
+			{
+				"id": "treeItem.95014c",
+				"description": "%treeItemDesc95014c%",
+				"defaults": {
+					"dark": "#95014c",
+					"light": "#95014c"
+				}
+			},
+			{
+				"id": "treeItem.101010",
+				"description": "%treeItemDesc101010%",
+				"defaults": {
+					"dark": "#101010",
+					"light": "#101010"
+				}
+			},
+			{
+				"id": "treeItem.730000",
+				"description": "%treeItemDesc730000%",
+				"defaults": {
+					"dark": "#730000",
+					"light": "#730000"
+				}
+			},
+			{
+				"id": "treeItem.731800",
+				"description": "%treeItemDesc731800%",
+				"defaults": {
+					"dark": "#731800",
+					"light": "#731800"
+				}
+			},
+			{
+				"id": "treeItem.623002",
+				"description": "%treeItemDesc623002%",
+				"defaults": {
+					"dark": "#623002",
+					"light": "#623002"
+				}
+			},
+			{
+				"id": "treeItem.634a01",
+				"description": "%treeItemDesc634a01%",
+				"defaults": {
+					"dark": "#634a01",
+					"light": "#634a01"
+				}
+			},
+			{
+				"id": "treeItem.636401",
+				"description": "%treeItemDesc636401%",
+				"defaults": {
+					"dark": "#636401",
+					"light": "#636401"
+				}
+			},
+			{
+				"id": "treeItem.3a6300",
+				"description": "%treeItemDesc3a6300%",
+				"defaults": {
+					"dark": "#3a6300",
+					"light": "#3a6300"
+				}
+			},
+			{
+				"id": "treeItem.006100",
+				"description": "%treeItemDesc006100%",
+				"defaults": {
+					"dark": "#006100",
+					"light": "#006100"
+				}
+			},
+			{
+				"id": "treeItem.006232",
+				"description": "%treeItemDesc006232%",
+				"defaults": {
+					"dark": "#006232",
+					"light": "#006232"
+				}
+			},
+			{
+				"id": "treeItem.026365",
+				"description": "%treeItemDesc026365%",
+				"defaults": {
+					"dark": "#026365",
+					"light": "#026365"
+				}
+			},
+			{
+				"id": "treeItem.004871",
+				"description": "%treeItemDesc004871%",
+				"defaults": {
+					"dark": "#004871",
+					"light": "#004871"
+				}
+			},
+			{
+				"id": "treeItem.012173",
+				"description": "%treeItemDesc012173%",
+				"defaults": {
+					"dark": "#012173",
+					"light": "#012173"
+				}
+			},
+			{
+				"id": "treeItem.000085",
+				"description": "%treeItemDesc000085%",
+				"defaults": {
+					"dark": "#000085",
+					"light": "#000085"
+				}
+			},
+			{
+				"id": "treeItem.380171",
+				"description": "%treeItemDesc380171%",
+				"defaults": {
+					"dark": "#380171",
+					"light": "#380171"
+				}
+			},
+			{
+				"id": "treeItem.720073",
+				"description": "%treeItemDesc720073%",
+				"defaults": {
+					"dark": "#720073",
+					"light": "#720073"
+				}
+			},
+			{
+				"id": "treeItem.730038",
+				"description": "%treeItemDesc730038%",
+				"defaults": {
+					"dark": "#730038",
+					"light": "#730038"
+				}
+			},
+			{
+				"id": "treeItem.000000",
+				"description": "%treeItemDesc000000%",
+				"defaults": {
+					"dark": "#000000",
+					"light": "#000000"
+				}
+			},
+			{
+				"id": "treeItem.520000",
+				"description": "%treeItemDesc520000%",
+				"defaults": {
+					"dark": "#520000",
+					"light": "#520000"
+				}
+			},
+			{
+				"id": "treeItem.521000",
+				"description": "%treeItemDesc521000%",
+				"defaults": {
+					"dark": "#521000",
+					"light": "#521000"
+				}
+			},
+			{
+				"id": "treeItem.512700",
+				"description": "%treeItemDesc512700%",
+				"defaults": {
+					"dark": "#512700",
+					"light": "#512700"
+				}
+			},
+			{
+				"id": "treeItem.4f3800",
+				"description": "%treeItemDesc4f3800%",
+				"defaults": {
+					"dark": "#4f3800",
+					"light": "#4f3800"
+				}
+			},
+			{
+				"id": "treeItem.535203",
+				"description": "%treeItemDesc535203%",
+				"defaults": {
+					"dark": "#535203",
+					"light": "#535203"
+				}
+			},
+			{
+				"id": "treeItem.315200",
+				"description": "%treeItemDesc315200%",
+				"defaults": {
+					"dark": "#315200",
+					"light": "#315200"
+				}
+			},
+			{
+				"id": "treeItem.005100",
+				"description": "%treeItemDesc005100%",
+				"defaults": {
+					"dark": "#005100",
+					"light": "#005100"
+				}
+			},
+			{
+				"id": "treeItem.005026",
+				"description": "%treeItemDesc005026%",
+				"defaults": {
+					"dark": "#005026",
+					"light": "#005026"
+				}
+			},
+			{
+				"id": "treeItem.014f51",
+				"description": "%treeItemDesc014f51%",
+				"defaults": {
+					"dark": "#014f51",
+					"light": "#014f51"
+				}
+			},
+			{
+				"id": "treeItem.003151",
+				"description": "%treeItemDesc003151%",
+				"defaults": {
+					"dark": "#003151",
+					"light": "#003151"
+				}
+			},
+			{
+				"id": "treeItem.001954",
+				"description": "%treeItemDesc001954%",
+				"defaults": {
+					"dark": "#001954",
+					"light": "#001954"
+				}
+			},
+			{
+				"id": "treeItem.000050",
+				"description": "%treeItemDesc000050%",
+				"defaults": {
+					"dark": "#000050",
+					"light": "#000050"
+				}
+			},
+			{
+				"id": "treeItem.2c0054",
+				"description": "%treeItemDesc2c0054%",
+				"defaults": {
+					"dark": "#2c0054",
+					"light": "#2c0054"
+				}
+			},
+			{
+				"id": "treeItem.530052",
+				"description": "%treeItemDesc530052%",
+				"defaults": {
+					"dark": "#530052",
+					"light": "#530052"
+				}
+			},
+			{
+				"id": "treeItem.52012a",
+				"description": "%treeItemDesc52012a%",
+				"defaults": {
+					"dark": "#52012a",
+					"light": "#52012a"
+				}
+			}
+		]
+	},
+	"dependencies": {
+		"oci-database": "2.89.0",
+		"oci-identity": "2.89.0",
+		"oci-core": "2.89.0",
+		"unzipper": "0.12.1",
+		"vscode-languageclient": "8.1.0",
+		"vscode-languageserver-textdocument": "1.0.8",
+		"vscode-languageserver-types": "3.17.3",
+		"vscode-nls": "5.2.0",
+		"@vscode/debugprotocol": "1.64.0",
+		"knockout": "^3.4.2"
+	},
+	"extensionDependencies": [
+		"ms-dotnettools.vscode-dotnet-runtime"
+	],
+	"__metadata": {
+		"id": "c5c6e24d-14be-49d2-9251-af57491b74bf",
+		"publisherId": "387b4c2f-44a8-4cb0-9a04-6fa0832e5c5e",
+		"publisherDisplayName": "Oracle Corporation",
+		"targetPlatform": "undefined",
+		"isApplicationScoped": false,
+		"isPreReleaseVersion": false,
+		"hasPreReleaseVersion": false,
+		"installedTimestamp": 1732023121322,
+		"pinned": false,
+		"preRelease": false,
+		"source": "gallery"
+	}
+}

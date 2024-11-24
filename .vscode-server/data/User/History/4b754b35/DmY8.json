@@ -1,0 +1,29 @@
+{
+    "workbench.colorTheme": "Visual Studio Light",
+    "explorer.confirmDelete": false,
+    "remote.SSH.remotePlatform": {
+        "203.249.87.58": "linux"
+    },
+    "breadcrumbs.enabled": false,
+    "editor.stickyScroll.enabled": false,
+    "editor.minimap.enabled": false,
+    "php.problems.exclude": {
+        "/": [
+            "PHP2014"
+        ]
+    },
+    "workbench.settings.useSplitJSON": true,
+    "database-client.autoSync": true,
+    "oracledevtools.connectionConfiguration.configFilesFolder": "/var/www/html/2_team/2_team5/Oracle/network/admin",
+    "[oraclesql]": {
+        "editor.suggest.showSnippets": true,
+        "editor.quickSuggestions": {
+            "comments": "on",
+            "strings": "on",
+            "other": "on"
+        }
+    },
+    "oracledevtools.connectionConfiguration.walletFileFolder": "/var/www/html/2_team/2_team5/Oracle/network/admin",
+    "oracledevtools.bookmarkFileFolder": "/var/www/html/2_team/2_team5/Oracle/oracle.oracledevtools",
+    "oracledevtools.download.otherFolder": "/var/www/html/2_team/2_team5/downloads"
+}

@@ -1,0 +1,337 @@
+<msg time='2024-10-14T14:44:18.709+09:00' org_id='oracle' comp_id='clients'
+ msg_id='dbgrmmdcrf_create_relation_full:1960:1503427940' type='NOTIFICATION' group='create'
+ level='16' host_id='selab-PowerEdge-R230' host_addr='127.0.1.1'
+ pid='359689' version='3'>
+ <txt>Create Relation ADR_CONTROL
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:18.791+09:00' org_id='oracle' comp_id='clients'
+ msg_id='dbgrmmdcrf_create_relation_full:1960:1503427940' type='NOTIFICATION' group='create'
+ level='16' host_id='selab-PowerEdge-R230' host_addr='127.0.1.1'
+ pid='359689'>
+ <txt>Create Relation ADR_INVALIDATION
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:18.803+09:00' org_id='oracle' comp_id='clients'
+ msg_id='dbgrmmdcrf_create_relation_full:1960:1503427940' type='NOTIFICATION' group='create'
+ level='16' host_id='selab-PowerEdge-R230' host_addr='127.0.1.1'
+ pid='359689'>
+ <txt>Create Relation INC_METER_IMPT_DEF
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:18.913+09:00' org_id='oracle' comp_id='clients'
+ msg_id='dbgrmmdcrf_create_relation_full:1960:1503427940' type='NOTIFICATION' group='create'
+ level='16' host_id='selab-PowerEdge-R230' host_addr='127.0.1.1'
+ pid='359689'>
+ <txt>Create Relation INC_METER_PK_IMPTS
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:19.003+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='359689'>
+ <txt>
+
+***********************************************************************
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:19.003+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='359689'>
+ <txt>
+Fatal NI connect error 12541, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SERVICE_NAME=orcl)(CID=(PROGRAM=sqlplus)(HOST=selab-PowerEdge-R230)(USER=502_team5))(CONNECTION_ID=JGpT8BNYfQngYwEBAH+/tg==))(ADDRESS=(PROTOCOL=tcp)(HOST=203.249.87.58)(PORT=1521)))
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:19.004+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='359689'>
+ <txt>
+  VERSION INFORMATION:
+	TNS for Linux: Version 21.0.0.0.0 - Production
+	TCP/IP NT Protocol Adapter for Linux: Version 21.0.0.0.0 - Production
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:19.004+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='359689'>
+ <txt>  Version 21.8.0.0.0
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:19.004+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='359689'>
+ <txt>  Time: 14-OCT-2024 14:44:19
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:19.004+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='359689'>
+ <txt>  Tracing not turned on. Process Id = 359689
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:19.004+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='359689'>
+ <txt>  Tns error struct:
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:19.004+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='359689'>
+ <txt>    ns main err code: 12541
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:19.004+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='359689'>
+ <txt>    
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:19.024+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='359689'>
+ <txt>TNS-12541: TNS:no listener
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:19.024+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='359689'>
+ <txt>    ns secondary err code: 12560
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:19.024+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='359689'>
+ <txt>    nt main err code: 511
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:19.024+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='359689'>
+ <txt>    
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:19.024+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='359689'>
+ <txt>TNS-00511: No listener
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:19.024+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='359689'>
+ <txt>    nt secondary err code: 111
+ </txt>
+</msg>
+<msg time='2024-10-14T14:44:19.024+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='359689'>
+ <txt>    nt OS err code: 0
+ </txt>
+</msg>
+<msg time='2024-10-14T19:55:11.045+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='365122'>
+ <txt>
+
+***********************************************************************
+ </txt>
+</msg>
+<msg time='2024-10-14T19:55:11.062+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='365122'>
+ <txt>
+Fatal NI connect error 12541, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SERVICE_NAME=orcl)(CID=(PROGRAM=sqlplus)(HOST=selab-PowerEdge-R230)(USER=502_team5))(CONNECTION_ID=JG6rtIPekkLgYwEBAH+4VQ==))(ADDRESS=(PROTOCOL=tcp)(HOST=203.249.87.58)(PORT=1521)))
+ </txt>
+</msg>
+<msg time='2024-10-14T19:55:11.062+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='365122'>
+ <txt>
+  VERSION INFORMATION:
+	TNS for Linux: Version 21.0.0.0.0 - Production
+	TCP/IP NT Protocol Adapter for Linux: Version 21.0.0.0.0 - Production
+ </txt>
+</msg>
+<msg time='2024-10-14T19:55:11.063+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='365122'>
+ <txt>  Version 21.8.0.0.0
+ </txt>
+</msg>
+<msg time='2024-10-14T19:55:11.063+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='365122'>
+ <txt>  Time: 14-OCT-2024 19:55:11
+ </txt>
+</msg>
+<msg time='2024-10-14T19:55:11.063+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='365122'>
+ <txt>  Tracing not turned on. Process Id = 365122
+ </txt>
+</msg>
+<msg time='2024-10-14T19:55:11.063+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='365122'>
+ <txt>  Tns error struct:
+ </txt>
+</msg>
+<msg time='2024-10-14T19:55:11.063+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='365122'>
+ <txt>    ns main err code: 12541
+ </txt>
+</msg>
+<msg time='2024-10-14T19:55:11.063+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='365122'>
+ <txt>    
+ </txt>
+</msg>
+<msg time='2024-10-14T19:55:11.063+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='365122'>
+ <txt>TNS-12541: TNS:no listener
+ </txt>
+</msg>
+<msg time='2024-10-14T19:55:11.064+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='365122'>
+ <txt>    ns secondary err code: 12560
+ </txt>
+</msg>
+<msg time='2024-10-14T19:55:11.064+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='365122'>
+ <txt>    nt main err code: 511
+ </txt>
+</msg>
+<msg time='2024-10-14T19:55:11.064+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='365122'>
+ <txt>    
+ </txt>
+</msg>
+<msg time='2024-10-14T19:55:11.064+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='365122'>
+ <txt>TNS-00511: No listener
+ </txt>
+</msg>
+<msg time='2024-10-14T19:55:11.064+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='365122'>
+ <txt>    nt secondary err code: 111
+ </txt>
+</msg>
+<msg time='2024-10-14T19:55:11.064+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='365122'>
+ <txt>    nt OS err code: 0
+ </txt>
+</msg>
+<msg time='2024-10-15T16:17:47.761+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='387206'>
+ <txt>
+
+***********************************************************************
+ </txt>
+</msg>
+<msg time='2024-10-15T16:17:47.778+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='387206'>
+ <txt>
+Fatal NI connect error 12541, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SERVICE_NAME=orcl)(CID=(PROGRAM=sqlplus)(HOST=selab-PowerEdge-R230)(USER=502_team5))(CONNECTION_ID=JH/AGxnh6IbgYwEBAH8ZCA==))(ADDRESS=(PROTOCOL=tcp)(HOST=203.249.87.58)(PORT=1521)))
+ </txt>
+</msg>
+<msg time='2024-10-15T16:17:47.778+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='387206'>
+ <txt>
+  VERSION INFORMATION:
+	TNS for Linux: Version 21.0.0.0.0 - Production
+	TCP/IP NT Protocol Adapter for Linux: Version 21.0.0.0.0 - Production
+ </txt>
+</msg>
+<msg time='2024-10-15T16:17:47.778+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='387206'>
+ <txt>  Version 21.8.0.0.0
+ </txt>
+</msg>
+<msg time='2024-10-15T16:17:47.778+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='387206'>
+ <txt>  Time: 15-OCT-2024 16:17:47
+ </txt>
+</msg>
+<msg time='2024-10-15T16:17:47.778+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='387206'>
+ <txt>  Tracing not turned on. Process Id = 387206
+ </txt>
+</msg>
+<msg time='2024-10-15T16:17:47.778+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='387206'>
+ <txt>  Tns error struct:
+ </txt>
+</msg>
+<msg time='2024-10-15T16:17:47.778+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='387206'>
+ <txt>    ns main err code: 12541
+ </txt>
+</msg>
+<msg time='2024-10-15T16:17:47.778+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='387206'>
+ <txt>    
+ </txt>
+</msg>
+<msg time='2024-10-15T16:17:47.778+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='387206'>
+ <txt>TNS-12541: TNS:no listener
+ </txt>
+</msg>
+<msg time='2024-10-15T16:17:47.778+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='387206'>
+ <txt>    ns secondary err code: 12560
+ </txt>
+</msg>
+<msg time='2024-10-15T16:17:47.779+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='387206'>
+ <txt>    nt main err code: 511
+ </txt>
+</msg>
+<msg time='2024-10-15T16:17:47.779+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='387206'>
+ <txt>    
+ </txt>
+</msg>
+<msg time='2024-10-15T16:17:47.779+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='387206'>
+ <txt>TNS-00511: No listener
+ </txt>
+</msg>
+<msg time='2024-10-15T16:17:47.779+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='387206'>
+ <txt>    nt secondary err code: 111
+ </txt>
+</msg>
+<msg time='2024-10-15T16:17:47.779+09:00' org_id='oracle' comp_id='clients'
+ type='UNKNOWN' level='16' host_id='selab-PowerEdge-R230'
+ host_addr='127.0.1.1' pid='387206'>
+ <txt>    nt OS err code: 0
+ </txt>
+</msg>

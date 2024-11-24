@@ -1,0 +1,1 @@
+define(["require","exports"],(function(require,n){"use strict";Object.defineProperty(n,"__esModule",{value:!0}),n.authenticationType=void 0,function(n){n[n.NonAdmin=1]="NonAdmin",n[n.AdminSYSDBA=2]="AdminSYSDBA",n[n.AdminSYSOPER=3]="AdminSYSOPER"}(n.authenticationType||(n.authenticationType={}))}));

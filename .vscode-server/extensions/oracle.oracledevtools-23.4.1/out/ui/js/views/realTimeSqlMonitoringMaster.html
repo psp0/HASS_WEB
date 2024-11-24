@@ -1,0 +1,404 @@
+<link type="text/css" rel="stylesheet" href="css/rtsm.css"/>
+
+<div id="rtsmMasterPanelBody" class="rtsm-master-panel-body">
+  <div id="rtsmMasterPanelToolbar" class="rtsm-master-panel-toolbar">
+    <span style="display: flex;">
+      <oj-buttonset-many id="freezeContent" value="{{contentFrozen}}" display="icons"
+        aria-label="Freeze Content Button" 
+        chroming="borderless">
+        <oj-option value="frozen">
+          <span slot="startIcon" :class="[[classesFreezeContentIcon]]"></span>
+          <oj-bind-text value="[[lc.rtsmFreezeContentLabel]]"></oj-bind-text>
+        </oj-option>
+      </oj-buttonset-many>
+      <oj-menu-button
+        id="saveReport"
+        chroming="borderless" 
+        display="icons"
+        style="margin-right: 2px;"
+        disabled="false">
+        <span slot="startIcon" class="oj-ux-ico-save"></span>
+        <oj-bind-text value="[[lc.rtsmMenuSaveSelectedReport]]"></oj-bind-text>
+        <oj-menu id="saveReportMenu" slot="menu"
+          on-oj-menu-action="[[saveDetailedReportXML]]">
+          <oj-bind-for-each data="[[saveMenuItems]]">
+            <template>
+              <oj-option
+                value="[[$current.data.id]]"
+                disabled="[[$current.data.disabled]]"
+                :id="[[$current.data.id]]"
+                :title="[[$current.data.detail]]">
+                <oj-bind-if test="[[$current.data.icon]]">
+                  <span slot="startIcon" :class="[[$current.data.icon]]"></span>
+                </oj-bind-if>
+                <oj-bind-text value="[[$current.data.label]]"></oj-bind-text>
+              </oj-option>
+            </template>
+          </oj-bind-for-each>
+        </oj-menu>
+      </oj-menu-button>
+
+      <oj-label for="activityTimeComboBox" class="oj-label-nocomp oj-label-nowrap oj-flex" 
+        style="padding-top: 5px; padding-left: 5px;padding-right: 10px; min-width: fit-content;"
+        :title = "[[lc.rtsmActivityTimeComboTooltip]]">
+        <oj-bind-text value="[[lc.rtsmActivityTimeLabel]]"></oj-bind-text>
+      </oj-label>     
+      <oj-combobox-one
+        id="activityTimeComboBox"
+        value="{{activityTimeValue}}"
+        class="oj-form-control-width-sm"
+        on-value-changed="[[UpdateSettingsHandler]]"
+        style="margin-right: 4px;"
+        :title = "[[lc.rtsmActivityTimeComboTooltip]]"
+        onkeydown='javascript: if((event.key != "Tab")){ return false;}' 
+        onpaste="return false;"
+        onCut="return false"
+         >
+        <oj-bind-for-each data="[[activityTimeOptions]]">
+          <template>
+            <oj-option
+              value="[[$current.data.id]]"
+              disabled="[[$current.data.disabled]]"
+              :id="[[$current.data.id]]"
+              :title="[[$current.data.detail]]"
+              >
+              <oj-bind-if test="[[$current.data.icon]]">
+                <span slot="startIcon" :class="[[$current.data.icon]]" style="vertical-align:middle; margin-right:0.8rem;"></span>
+              </oj-bind-if>
+              <oj-bind-text value="[[$current.data.label]]" style="vertical-align:middle"></oj-bind-text>
+            </oj-option>
+          </template>
+        </oj-bind-for-each>
+      </oj-combobox-one>
+      <oj-label for="top100ComboBox" class="oj-label-nocomp oj-label-nowrap oj-flex" 
+        style="padding-top: 5px; padding-left: 5px;padding-right: 10px; min-width: fit-content;"
+        :title = "[[lc.rtsmTop100ByComboTooltip]]">
+        <oj-bind-text value="[[lc.rtsmTop100ByLabel]]"></oj-bind-text>
+      </oj-label>     
+      <oj-combobox-one
+        id="top100ComboBox"
+        value="{{top100Value}}"
+        class="oj-form-control-width-sm"
+        on-value-changed="[[UpdateSettingsHandler]]"
+        style="margin-right: 4px;"
+        :title = "[[lc.rtsmTop100ByComboTooltip]]"
+        onkeydown='javascript: if((event.key != "Tab")){ return false;}' 
+        onpaste="return false;"
+        onCut="return false"
+         >
+        <oj-bind-for-each data="[[top100Options]]">
+          <template>
+            <oj-option
+              value="[[$current.data.id]]"
+              disabled="[[$current.data.disabled]]"
+              :id="[[$current.data.id]]"
+              :title="[[$current.data.detail]]"
+              >
+              <oj-bind-if test="[[$current.data.icon]]">
+                <span slot="startIcon" :class="[[$current.data.icon]]" style="vertical-align:middle; margin-right:0.8rem;"></span>
+              </oj-bind-if>
+              <oj-bind-text value="[[$current.data.label]]" style="vertical-align:middle"></oj-bind-text>
+            </oj-option>
+          </template>
+        </oj-bind-for-each>
+
+      </oj-combobox-one>
+    </span>
+    <span style="display:flex;">
+      <oj-label for="refreshComboBox" class="oj-label-nocomp oj-label-nowrap oj-flex" 
+        style="padding-top: 5px; padding-left: 5px;padding-right: 10px; min-width: fit-content;"
+        :title = "[[lc.rtsmRefreshTimeoutTooltip]]">
+        <oj-bind-text value="[[lc.rtsmAutoRefreshLabel]]"></oj-bind-text>
+      </oj-label>     
+      <oj-combobox-one
+        id="refreshComboBox"
+        value="{{refreshValue}}"
+        on-oj-value-updated="[[updateRefreshValue]]"
+        on-value-changed="[[UpdateRefreshSettingsHandler]]"
+        class="oj-form-control-width-sm"
+        style="margin-right: 4px;"
+        :title = "[[lc.rtsmRefreshComboTooltip]]"
+        onkeydown='javascript: if((event.key != "Tab")){ return false;}' 
+        onpaste="return false;"
+        onCut="return false"
+         >
+        <oj-bind-for-each data="[[refreshOptions]]">
+          <template>
+            <oj-option
+              value="[[$current.data.id]]"
+              disabled="[[$current.data.disabled]]"
+              :id="[[$current.data.id]]"
+              :title="[[$current.data.detail]]"
+              >
+              <oj-bind-if test="[[$current.data.icon]]">
+                <span slot="startIcon" :class="[[$current.data.icon]]" style="vertical-align:middle; margin-right:0.8rem;"></span>
+              </oj-bind-if>
+              <oj-bind-text value="[[$current.data.label]]" style="vertical-align:middle"></oj-bind-text>
+            </oj-option>
+          </template>
+        </oj-bind-for-each>
+
+      </oj-combobox-one>
+    <oj-button id="refreshButton" display="icons" chroming="borderless" 
+      on-oj-action="[[refreshMasterTableXML]]">
+      <span slot="startIcon" class="oj-ux-ico-refresh"></span>
+      <oj-bind-text value="[[lc.rtsmRefreshNowLabel]]"></oj-bind-text>
+    </oj-button>
+    </span>
+  </div>
+    <div id="rtsmTableUpdateElement" :title="[[rtsmTableUpdateCount]]" style="display: none">
+  </div>
+  <oj-table
+    id="rtsmMasterTable"
+    class="rtsm-master-table-data-grid"
+    aria-label="Real-Time SQL Monitoring Master Table"
+    accessibility.row-header="depName"
+    data="[[rtsmMasterDataProvider]]"
+    selection-mode='{"row": "single"}'
+    dnd='{"reorder": {"columns": "enabled"}}'
+    scroll-policy="loadAll"
+    columns='[[tableColumns]]'
+    display="grid"
+    layout="fixed"
+    on-oj-animate-start='[[tableAnimateStart]]'
+    class="demo-table-container">
+    <template slot="rowTemplate" data-oj-as="row">
+      <tr>
+        <td>
+          <oj-bind-if test="[[row.data.status.toUpperCase().startsWith('DONE')]]">
+            <span
+              class="oj-icon-color-success oj-ux-ico-success-s"
+              role="img"
+              aria-label="success"
+              :title="[[row.data.status]]">
+            </span>
+          </oj-bind-if>
+          <oj-bind-if test="[[row.data.status.toUpperCase().includes('ERROR')]]">
+            <span
+              class="oj-icon-color-warning oj-ux-ico-error-s"
+              role="img"
+              aria-label="error"
+              :title="[[row.data.status]]">
+            </span>
+          </oj-bind-if>
+          <oj-bind-if test="[[!row.data.status.toUpperCase().startsWith('DONE')]]">
+            <span
+              class="oj-icon-color-warning oj-ux-ico-error-s"
+              role="img"
+              aria-label="success"
+              :title="[[row.data.status]]">
+            </span>
+          </oj-bind-if>
+        </td>
+        <td>
+          <span style="display: flex;align-items: center;">
+            <oj-chart
+              id="dbTimeChart"
+              type="bar"
+              orientation="horizontal"
+              stack="on"
+              x-axis.major-tick.rendered="off"
+              y-axis.major-tick.rendered="off"
+              x-axis.tick-label.rendered="off"
+              y-axis.tick-label.rendered="off"
+              x-axis.axis-line.rendered="off"
+              y-axis.axis-line.rendered="off"
+              x-axis.minor-tick.rendered="off"
+              y-axis.minor-tick.rendered="off"
+              style-defaults.group-separators.rendered="off"
+              legend.rendered="off"
+              legend.max-size="0"
+              data="[[GetRtsmDurationSeriesForRow(row.data, row.index)]]"
+              class="rtsm-grid-gauge"
+              animation-on-display="none"
+              animation-on-data-change="none"          
+              hover-behavior="dim">
+              <template slot="itemTemplate" data-oj-as="item">
+                <oj-chart-item
+                  value="[[item.data.value]]"
+                  group-id="[1]"
+                  series-id="[[item.data.series]]"
+                  color="[[item.data.color]]"
+                  short-desc="[[item.data.shortDesc]]"
+                  >
+                </oj-chart-item>
+              </template>
+            </oj-chart>
+            <span :title="[[`${row.data.duration} ${lc.rtsmTooltipSeconds}`]]" style="min-width: fit-content;">
+              <oj-bind-text value="[[`${(+row.data.duration).toFixed(2)} s`]]"></oj-bind-text>
+            </span>
+          </span>
+        </td>
+        <td>
+          <span :title="[[row.data.last_refresh_time]]" class="rtsm-grid-text">
+            <oj-bind-text value="[[row.data.last_refresh_time]]"></oj-bind-text>
+          </span>
+        </td>
+        <td>
+          <span style="display:flex;align-items: center;">
+            <oj-bind-if test="[[(row.data.plan_hash && row.data.plan_hash != 0)]]">
+              <span style="margin-right: 10px;"
+                class="oj-icon-color-success oj-ux-ico-database-file"
+                role="img"
+                aria-label="SQL"
+                :title="SQL Statement">
+              </span>
+            </oj-bind-if>
+            <oj-bind-if test="[[(!row.data.plan_hash || row.data.plan_hash == 0) ]]">
+              <span style="margin-right: 10px;"
+                class="oj-icon-color-warning oj-ux-ico-file-code"
+                role="img"
+                aria-label="PL/SQL"
+                :title="PL/SQL Statement">
+              </span>
+            </oj-bind-if>
+            <span class="rtsm-grid-text" :title="[[row.data.sql_text]]" style="padding: 1px;">
+              <a 
+                :id = "sql_id_anchor"
+                tabindex="0"
+                data-bind="click: function(data, event) {sqlIdActionClick([[row.data]])}, clickBubble: false,
+                           event: {keydown : function(data, event) {sqlIdActionEvent([[row.data]],event)}}"
+                >
+                <oj-bind-text value="[[row.data.sql_id]]"></oj-bind-text>
+              </a>
+            </span>
+          </span>
+        </td>
+        <td>
+          <span :title="[[row.data.plan_hash]]" class="rtsm-grid-text">
+            <oj-bind-text value="[[row.data.plan_hash]]"></oj-bind-text>
+          </span>
+        </td>
+        <td>
+          <span :title="[[GetTooltipForUser(row.data)]]" class="rtsm-grid-text">
+            <oj-bind-text value="[[row.data.user]]"></oj-bind-text>
+          </span>
+        </td>
+        <td>
+          <oj-bind-if test="[[row.data.dop]]">
+            <span style="display:flex;align-items: center;">
+              <span
+                class="oj-ux-ico-multi-class"
+                style="margin-right: 5px; width: 80%; color:olivedrab"
+                role="img"
+                aria-label="yes"
+                :title="[[`${lc.rtsmTableTooltipDegreeOfParallelism} ${row.data.dop}`]]">
+              </span>
+              <span :title="[[`${lc.rtsmTableTooltipDegreeOfParallelism} ${row.data.dop}`]]" style="min-width: fit-content;">
+                <oj-bind-text value="[[row.data.dop]]"></oj-bind-text>
+              </span>
+            </span>
+          </oj-bind-if>
+          <oj-bind-if test="[[!row.data.dop]]">
+            <span style="width: 100%; height:100%; display:block" :title="[[`${lc.rtsmTableTooltipNoParallelism}`]]">
+            </span>
+          </oj-bind-if>
+        </td>
+        <td>
+          <span style="display:flex;align-items: center;">
+            <oj-chart
+            id="dbTimeChart"
+            type="bar"
+            orientation="horizontal"
+            stack="on"
+            x-axis.major-tick.rendered="off"
+            y-axis.major-tick.rendered="off"
+            x-axis.tick-label.rendered="off"
+            y-axis.tick-label.rendered="off"
+            x-axis.axis-line.rendered="off"
+            y-axis.axis-line.rendered="off"
+            x-axis.minor-tick.rendered="off"
+            y-axis.minor-tick.rendered="off"
+            style-defaults.group-separators.rendered="off"
+            legend.rendered="off"
+            legend.max-size="0"
+            data="[[GetRtsmDbTimeSeriesForRow(row.data, row.index)]]"
+            class="rtsm-grid-gauge"
+            animation-on-display="none"
+            animation-on-data-change="none"          
+            hover-behavior="dim">
+            <template slot="itemTemplate" data-oj-as="item">
+              <oj-chart-item
+                value="[[item.data.value]]"
+                group-id="[1]"
+                series-id="[[item.data.series]]"
+                color="[[item.data.color]]"
+                short-desc="[[item.data.shortDesc]]"
+                >
+              </oj-chart-item>
+            </template>
+            </oj-chart>
+            <span :title="[[`${lc.rtsmTableTooltipElapsedTime} ${row.data.elapsed_time/1000000.} ${lc.rtsmTooltipSeconds}`]]" style="min-width: fit-content;">
+              <oj-bind-text value="[[`${(row.data.elapsed_time/1000000).toFixed(2)} s`]]"></oj-bind-text>
+            </span>
+          </span>
+        </td>
+        <td>
+          <span style="display:flex;align-items: center;">
+            <oj-chart
+            id="dbIOChart"
+            type="bar"
+            orientation="horizontal"
+            stack="on"
+            x-axis.major-tick.rendered="off"
+            y-axis.major-tick.rendered="off"
+            x-axis.tick-label.rendered="off"
+            y-axis.tick-label.rendered="off"
+            x-axis.axis-line.rendered="off"
+            y-axis.axis-line.rendered="off"
+            x-axis.minor-tick.rendered="off"
+            y-axis.minor-tick.rendered="off"
+            style-defaults.group-separators.rendered="off"
+            legend.rendered="off"
+            legend.max-size="0"
+            data="[[GetRtsmIORequestsSeriesForRow(row.data, row.index)]]"
+            class="rtsm-grid-gauge"
+            animation-on-display="none"
+            animation-on-data-change="none"          
+            hover-behavior="dim">
+            <template slot="itemTemplate" data-oj-as="item">
+              <oj-chart-item
+                value="[[item.data.value]]"
+                group-id="[1]"
+                series-id="[[item.data.series]]"
+                color="[[item.data.color]]"
+                short-desc="[[item.data.shortDesc]]"
+                >
+              </oj-chart-item>
+            </template>
+            </oj-chart>
+            <span :title="[[`${lc.rtsmTableTooltipTotalIORequests} ${row.data.read_write_reqs}`]]" style="min-width: fit-content;">
+              <oj-bind-text value="[[nc.format(row.data.read_write_reqs)]]"></oj-bind-text>
+            </span>
+          </span>
+        </td>
+        <td>
+          <span :title="[[row.data.sql_text]]" class="rtsm-grid-text">
+            <oj-bind-text value="[[row.data.sql_text]]"></oj-bind-text>
+          </span>
+        </td>
+      </tr>
+    </template>
+    <oj-menu
+      slot="contextMenu"
+      on-oj-menu-action="[[rtsmMasterTableAction]]"
+      on-oj-before-open="[[rtsmMasterTableBeforeOpen]]"
+      aria-label="RTSM Master Table Context Menu">
+      <oj-bind-for-each data="[[contextMenuItems]]">
+        <template>
+          <oj-option
+            value="[[$current.data.id]]"
+            disabled="[[$current.data.disabled]]"
+            :id="[[$current.data.id]]"
+            :title="[[$current.data.detail]]"
+            :data-oj-command="[[$current.data.command]]">
+            <oj-bind-if test="[[$current.data.icon]]">
+              <span slot="startIcon" :class="[[$current.data.icon]]"></span>
+            </oj-bind-if>
+            <oj-bind-text value="[[$current.data.label]]"></oj-bind-text>
+          </oj-option>
+        </template>
+      </oj-bind-for-each>
+    </oj-menu>
+  </oj-table> 
+</div>

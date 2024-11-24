@@ -1,0 +1,104 @@
+<div class="dbmsCloudBody">
+ 
+    <div class="dbmsCloudBodyHeaderContainer">
+      <label class="compilerDlgHeader">
+        <oj-bind-text value='[[labelTexts.dbmsCloudAISettingsTitle]]'></oj-bind-text>
+      </label>
+      <div style="padding: 10px 0px;">
+        <label class="llmConfigSubHeader">
+            <oj-bind-text value="[[labelTexts.llmAccessConfigDescription]]"></oj-bind-text>
+        </label>
+      </div>
+    </div>
+    
+    <hr class="hrstyle" />
+
+    <div class="dbmsCloudBodyInputContainer">
+      <div class="oj-flex dbmsCloudInputItem">
+        <div class="oj-flex-item dbmsCloudInputLabel">
+          <oj-label for="host" slot="label">
+            <label class="leftalign">
+              <p>
+                <oj-bind-text value="[[labelTexts.aiProvider]]"></oj-bind-text>
+              </p>
+            </label>
+          </oj-label>
+        </div>
+        <div class="oj-flex-item dbmsCloudInputValue">
+          <oj-combobox-one id='host' options="[[hosts]]" value="{{host}}"
+            on-value-changed="[[onValueChanged]]" slot="value" maximum-result-count="0">
+          </oj-combobox-one>
+        </div>
+      </div>
+
+      <div class="oj-flex dbmsCloudInputItem">
+        <div class="oj-flex-item dbmsCloudInputLabel">
+          <oj-label for="username" slot="label">
+            <label class="leftalign">
+              <p>
+                <oj-bind-text value="[[labelTexts.usernameStr]]"></oj-bind-text>
+              </p>
+            </label>
+          </oj-label>
+        </div>
+        <div class="oj-flex-item dbmsCloudInputValue">
+          <oj-combobox-one id='username' options="[[usernamesDP]]" value="{{username}}" slot="value"
+            maximum-result-count="0" on-value-changed="[[onValueChanged]]" onCut="return false;" onpaste="return false;">
+          </oj-combobox-one>
+          <oj-bind-if test="[[isGetUsernamesInProgress]]">
+                  <oj-progress-circle size="sm" id="progressCircle" value="-1"
+                          style="padding-left: 5px;"></oj-progress-circle>
+          </oj-bind-if>
+        </div>
+      </div>
+
+      <div class="oj-flex dbmsCloudInputItem">
+        <div class="oj-flex-item dbmsCloudInputLabel">
+          <oj-label></oj-label>
+        </div>
+        <div class="oj-flex-item dbmsCloudInputValue" flex-direction="row">
+          <oj-button id='saveButton' class='oj-button-lg' style="margin-right:5px;" disabled="[[saveButtonDisabled()]]" on-oj-action="[[onSave]]">
+            <oj-bind-text value="[[labelTexts.save]]"></oj-bind-text>
+          </oj-button>
+          <oj-bind-if test="[[isSaving]]">
+            <oj-progress-circle size="sm" id="progressCircle" value="-1"></oj-progress-circle>
+          </oj-bind-if>
+        </div>
+      </div>
+
+      <!-- show sql -->
+      <div class="oj-flex dbmsCloudInputItem">
+        <div class="oj-flex-item dbmsCloudInputLabel">
+          <oj-label></oj-label>
+        </div>
+        <div class="oj-flex-item dbmsCloudInputValue" flex-direction="row">
+          <oj-checkboxset value="{{showSQLOption}}" id="showSQLCheckbox">
+            <oj-option value="Yes"><oj-bind-text value="[[labelTexts.showSQL]]"></oj-bind-text></oj-option>
+          </oj-checkboxset>
+        </div>
+      </div>
+
+      <oj-bind-if test="[[doShowSQL()]]">
+        <div style="padding: 10px 0px;">
+          <oj-label for="aiProviderSampleCode">
+            <label class="compilerDlgSubHeader">
+              <oj-bind-text value='[[labelTexts.sampleCodeDescription]]'></oj-bind-text>
+            </label>
+          </oj-label>
+        </div>
+        <div class="dbmsCloudInputItem">
+          <oj-text-area id="aiProviderSampleCode" aria-label="PL/SQL to Configure Network Access" class="selectAISampleCode" rows="13" readonly="true" value='[[sampleCode]]'
+            oncontextmenu="return false">
+          </oj-text-area>
+        </div>
+        <div class="dbmsCloudInputItem">
+          <oj-button id='copyButton' class='oj-button-lg' on-oj-action='[[onCopySampleCode]]' style="margin-right:5px;">
+            <oj-bind-text value="[[labelTexts.copy]]"></oj-bind-text>
+          </oj-button>
+        </div>
+      </oj-bind-if>
+
+    </div>
+
+</div>
+<oj-messages position="[[msgPos]]" messages="[[messagesDataProvider]]" display="notification"></oj-messages>
