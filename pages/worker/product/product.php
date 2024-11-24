@@ -143,41 +143,32 @@ include BASE_PATH . '/includes/worker_header.php';
         $status = htmlspecialchars($product['PRODUCT_STATUS']);
         $modelName = htmlspecialchars($product['MODEL_NAME']);
 
-        $subscriptionQuery = "SELECT S.SUBSCRIPTION_ID, S.CUSTOMER_ID, S.BEGIN_DATE, S.EXPIRED_DATE
-                              FROM SUBSCRIPTION_PRODUCT SP
-                              JOIN SUBSCRIPTION S ON SP.SUBSCRIPTION_ID = S.SUBSCRIPTION_ID
-                              WHERE SP.SERIAL_NUMBER = :serial";
+
+        $subscriptionQuery = "SELECT SUBSCRIPTION_ID, CUSTOMER_ID, BEGIN_DATE, EXPIRED_DATE
+                              FROM SUBSCRIPTION
+                              WHERE SERIAL_NUMBER = :serial";
         $subscriptionStmt = oci_parse($conn, $subscriptionQuery);
         oci_bind_by_name($subscriptionStmt, ':serial', $serial);
         oci_execute($subscriptionStmt);
-
-        $repairQuery = "SELECT VR.PROBLEM_DETAIL, VR.SOLUTION_DETAIL, V.WORKER_ID, V.VISIT_DATE
-                        FROM PRODUCT P
-                        JOIN SUBSCRIPTION_PRODUCT SP ON P.SERIAL_NUMBER = SP.SERIAL_NUMBER
-                        JOIN SUBSCRIPTION S ON SP.SUBSCRIPTION_ID = S.SUBSCRIPTION_ID
-                        JOIN REQUEST R ON S.SUBSCRIPTION_ID = R.SUBSCRIPTION_ID
-                        JOIN VISIT V ON R.REQUEST_ID = V.REQUEST_ID
-                        JOIN VISIT_REPAIR VR ON V.VISIT_ID = VR.VISIT_ID
-                        WHERE P.SERIAL_NUMBER = :serial";
-        $repairStmt = oci_parse($conn, $repairQuery);
-        oci_bind_by_name($repairStmt, ':serial', $serial);
-        oci_execute($repairStmt);
         ?>
 
         <div class="space-y-4 mb-6">
             <div class="bg-gray-50 p-4 rounded-lg shadow-sm product-info">
-                <img src="https://via.placeholder.com/100" alt="Product Image" class="product-image">
+                <?php
+                $imagePath = BASE_PATH . "/pages/customer/model/model_img/model{$modelId}.jpg";
+                $imageUrl = file_exists($imagePath) ? TEAM_PATH . "/pages/customer/model/model_img/model{$modelId}.jpg" : 'https://via.placeholder.com/100';
+                ?>
+                <img src="<?= $imageUrl ?>" alt="Product Image" class="product-image">
+
                 <div class="product-details">
                     <p><strong>시리얼 번호:</strong> <?= $serial ?></p>
                     <p><strong>모델 ID:</strong> <?= $modelId ?></p>
-                    <p><strong>모델명: </strong> <?= $modelName ?></p>
+                    <p><strong>모델명:</strong> <?= $modelName ?></p>
                     <p><strong>상태:</strong> <?= $status ?></p>
                 </div>
                 <div class="buttons">
                     <button class="text-blue-500 hover:underline"
                         onclick="toggleDetails('subscription<?= $serial ?>')">구독기록</button>
-                    <button class="text-blue-500 hover:underline"
-                        onclick="toggleDetails('repair<?= $serial ?>')">수리기록</button>
                 </div>
             </div>
 
@@ -197,38 +188,19 @@ include BASE_PATH . '/includes/worker_header.php';
                             <tr>
                                 <td class="border px-4 py-2"><?= htmlspecialchars($subscription['SUBSCRIPTION_ID']) ?></td>
                                 <td class="border px-4 py-2"><?= htmlspecialchars($subscription['CUSTOMER_ID']) ?></td>
-                                <td class="border px-4 py-2"><?= date('Y-m-d', strtotime($subscription['BEGIN_DATE'])) ?></td>
-                                <td class="border px-4 py-2"><?= date('Y-m-d', strtotime($subscription['EXPIRED_DATE'])) ?></td>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
-            </div>
-
-            <div id="repair<?= $serial ?>" class="hidden mt-4">
-                <h2 class="section-title">수리 기록</h2>
-                <table class="min-w-full bg-white">
-                    <thead>
-                        <tr>
-                            <th class="py-2">고장내용</th>
-                            <th class="py-2">수리내용</th>
-                            <th class="py-2">기사 ID</th>
-                            <th class="py-2">수리일자</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php while ($repair = oci_fetch_array($repairStmt, OCI_ASSOC + OCI_RETURN_NULLS)) { ?>
-                            <tr>
-                                <td class="border px-4 py-2"><?= htmlspecialchars($repair['PROBLEM_DETAIL']) ?></td>
-                                <td class="border px-4 py-2"><?= htmlspecialchars($repair['SOLUTION_DETAIL']) ?></td>
-                                <td class="border px-4 py-2"><?= htmlspecialchars($repair['WORKER_ID']) ?></td>
-                                <td class="border px-4 py-2"><?= date('Y-m-d', strtotime($repair['VISIT_DATE'])) ?></td>
+                                <td class="border px-4 py-2">
+                                    <?= $subscription['BEGIN_DATE'] ? date('Y-m-d', strtotime($subscription['BEGIN_DATE'])) : 'NULL' ?>
+                                </td>
+                                <td class="border px-4 py-2">
+                                    <?= $subscription['EXPIRED_DATE'] ? date('Y-m-d', strtotime($subscription['EXPIRED_DATE'])) : 'NULL' ?>
+                                </td>
                             </tr>
                         <?php } ?>
                     </tbody>
                 </table>
             </div>
         </div>
+
     <?php }
 
     if (!$hasProducts) {
