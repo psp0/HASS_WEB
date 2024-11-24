@@ -1,6 +1,6 @@
 <?php
 require '../../config.php';
-include BASE_PATH . '/includes/worker_header.php';
+include BASE_PATH . '/includes/customer_header.php';
 ?>
 
 <style>
@@ -44,7 +44,7 @@ include BASE_PATH . '/includes/worker_header.php';
             width: 90%;
             padding: 10px;
             margin: 10px 0;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .button-container {
@@ -88,23 +88,24 @@ include BASE_PATH . '/includes/worker_header.php';
         .signup-button:hover {
             background-color: #45a049; 
         }
-    </style>
-    
-    <div class="login-container">
-        <div class="header-container">
-            <h2>기사 로그인</h2>
-            <a href="<?php echo TEAM_PATH; ?>/pages/login/customer_login.php" class="login-button">고객 로그인</a>     
-            <a href="<?php echo TEAM_PATH; ?>/pages/login/company_login.php" class="login-button">회사 로그인</a>
-        </div>
+</style>
 
-        <form action="worker_login.php" method="POST">
-            <input type="text" name="id" placeholder="ID" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <div class="button-container">
-                <button type="submit">로그인</button>                
-            </div>
-        </form>
+<div class="login-container">
+    <div class="header-container">
+        <h2>고객 로그인</h2>
+        <a href="<?php echo TEAM_PATH; ?>/pages/login/worker_login.php" class="login-button">기사 로그인</a>
+        <a href="<?php echo TEAM_PATH; ?>/pages/login/company_login.php" class="login-button">회사 로그인</a>       
     </div>
+
+    <form action="customer_login.php" method="POST">
+        <input type="text" name="id" placeholder="ID" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <div class="button-container">
+            <button type="submit">로그인</button>
+            <a href="signup.php" class="signup-button">회원가입</a>
+        </div>
+    </form>
+</div>
 
 <div class="login-container">
     <?php
@@ -126,7 +127,7 @@ include BASE_PATH . '/includes/worker_header.php';
         $id = $_POST['id'];
         $password = $_POST['password'];
 
-        $query = "SELECT AUTH_ID, PW_HASH FROM WORKER_AUTH WHERE AUTH_ID = :id";
+        $query = "SELECT AUTH_ID, PW_HASH FROM CUSTOMER_AUTH WHERE AUTH_ID = :id";
         $stmt = oci_parse($conn, $query);
         oci_bind_by_name($stmt, ':id', $id);
         oci_execute($stmt);
@@ -138,18 +139,17 @@ include BASE_PATH . '/includes/worker_header.php';
             $_SESSION['logged_in'] = true;
 
             echo "<script>alert('로그인 되었습니다. 환영합니다!');</script>";
-            echo "<script>location.href='pages/worker/main.php';</script>";
+            echo "<script>location.href='../../index.php';</script>";
             exit;
             } else {
                 echo "<script>alert('ID 또는 비밀번호가 잘못되었습니다.');</script>";
-                echo "<script>location.href='worker_login.php';</script>";
+                echo "<script>location.href='customer_login.php';</script>";
             }
             oci_free_statement($stmt);
         }
         oci_close($conn);
         ?>
     </div> 
-
 
 <?php
 include BASE_PATH . '/includes/footer.php';

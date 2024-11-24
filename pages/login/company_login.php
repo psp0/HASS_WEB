@@ -1,21 +1,9 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>회사 로그인</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f0f0f0;
-        }
+<?php
+require '../../config.php';
+include BASE_PATH . '/includes/company_header.php';
+?>
 
+<style>
         .login-container {
             background-color: white;
             padding: 20px;
@@ -46,7 +34,6 @@
             border-radius: 5px;
             text-decoration: none;
             font-size: 14px;
-            cursor: pointer;
         }
 
         .login-button:hover {
@@ -57,39 +44,114 @@
             width: 90%;
             padding: 10px;
             margin: 10px 0;
-            font-size: 16px;
+            font-size: 14px;
         }
 
-        .login-container button {
-            padding: 10px;
+        .button-container {
+            display: flex; 
+            justify-content: space-between; 
+            margin-top: 10px; 
+            font-size: 14px;
+        }
+
+        .button-container button {
+            padding: 8px;
             background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            width: 50%;
-            margin-top: 10px;
+            flex: 1; 
+            margin: 0 5px; 
         }
 
-        .login-container button:hover {
+        .button-container button:hover {
             background-color: #45a049;
         }
-    </style>
-</head>
-<body>
 
+        .signup-button {
+            padding: 10px; 
+            background-color: gray; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            text-decoration: none; 
+            display: flex; 
+            justify-content: center;
+            align-items: center; 
+            flex: 1; 
+            margin: 0 5px; 
+            font-size: 14px;
+        }
+
+        .signup-button:hover {
+            background-color: #45a049; 
+        }
+    </style>
+    
     <div class="login-container">
         <div class="header-container">
             <h2>회사 로그인</h2>
-            <a href="pages/login/login_main.php" class="login-button">고객 로그인</a>
-            <a href="pages/login/worker_login.php" class="login-button">기사 로그인</a>
+           <a href="<?php echo TEAM_PATH; ?>/pages/login/customer_login.php" class="login-button">고객 로그인</a>
+            <a href="<?php echo TEAM_PATH; ?>/pages/login/worker_login.php" class="login-button">기사 로그인</a>
+
         </div>
 
-        <form action="pages/login/company_login.php" method="POST">
+        <form action="company_login.php" method="POST">
             <input type="text" name="id" placeholder="ID" required>
             <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">로그인</button>
+            <div class="button-container">
+                <button type="submit">로그인</button>                
+            </div>
         </form>
     </div>
-</body>
-</html>
+
+    <div class="login-container">
+    <?php
+    session_start();
+
+    $config = require '../../config.php'; 
+    $dsn = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)
+    (HOST={$config['host']})(PORT={$config['port']}))
+    (CONNECT_DATA=(SID={$config['sid']})))";  
+    $conn = oci_connect($config['username'], $config['password'], $dsn,'UTF8');
+        
+    if(!$conn) {
+        $e = oci_error();
+        echo "<p class='error'>연결 실패: ".htmlspecialchars($e['message'])."</p>";
+        exit;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $id = $_POST['id'];
+        $password = $_POST['password'];
+
+        $query = "SELECT AUTH_ID, PW_HASH FROM COMPANY_AUTH WHERE AUTH_ID = :id";
+        $stmt = oci_parse($conn, $query);
+        oci_bind_by_name($stmt, ':id', $id);
+        oci_execute($stmt);
+
+        $row = oci_fetch_array($stmt, OCI_ASSOC);
+
+        if ($row && password_verify($password, $row['PW_HASH']))  {
+            $_SESSION['auth_id'] = $row['AUTH_ID'];
+            $_SESSION['logged_in'] = true;
+
+            echo "<script>alert('로그인 되었습니다. 환영합니다!');</script>";
+            echo "<script>location.href='pages/company/main.php';</script>";
+            exit;
+            } else {
+                echo "<script>alert('ID 또는 비밀번호가 잘못되었습니다.');</script>";
+                echo "<script>location.href='company_login.php';</script>";
+            }
+            oci_free_statement($stmt);
+        }
+        oci_close($conn);
+        ?>
+    </div> 
+
+
+<?php
+include BASE_PATH . '/includes/footer.php';
+?>
