@@ -46,13 +46,14 @@ $avgRating = $ratingData['AVG_RATING'] ?? 0;
 $reviewQuery = "SELECT 
     MR.RATING, 
     MR.ADDITIONAL_COMMENT, 
-    TO_CHAR(MR.DATE_CREATED, 'YYYY-MM-DD') AS DATE_CREATED, 
+    TO_CHAR(MR.DATE_CREATED, 'YYYY-MM-DD HH24:MI:SS') AS DATE_CREATED, 
     C.CUSTOMER_NAME
 FROM CUSTOMER C
 JOIN MODEL_RATING MR ON C.CUSTOMER_ID = MR.CUSTOMER_ID
 WHERE MR.MODEL_ID = :modelId
 ORDER BY $orderBy
 ";
+
 
 
 $reviewStmt = oci_parse($conn, $reviewQuery);

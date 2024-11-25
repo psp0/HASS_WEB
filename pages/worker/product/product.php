@@ -144,9 +144,12 @@ include BASE_PATH . '/includes/worker_header.php';
         $modelName = htmlspecialchars($product['MODEL_NAME']);
 
 
-        $subscriptionQuery = "SELECT SUBSCRIPTION_ID, CUSTOMER_ID, BEGIN_DATE, EXPIRED_DATE
-                              FROM SUBSCRIPTION
-                              WHERE SERIAL_NUMBER = :serial";
+        $subscriptionQuery = "SELECT 
+        SUBSCRIPTION_ID, CUSTOMER_ID, TO_CHAR(BEGIN_DATE, 'YYYY-MM-DD HH24:MI:SS') AS BEGIN_DATE, 
+        TO_CHAR(EXPIRED_DATE, 'YYYY-MM-DD HH24:MI:SS') AS EXPIRED_DATE
+        FROM SUBSCRIPTION
+        WHERE SERIAL_NUMBER = :serial";
+
         $subscriptionStmt = oci_parse($conn, $subscriptionQuery);
         oci_bind_by_name($subscriptionStmt, ':serial', $serial);
         oci_execute($subscriptionStmt);
@@ -189,10 +192,10 @@ include BASE_PATH . '/includes/worker_header.php';
                                 <td class="border px-4 py-2"><?= htmlspecialchars($subscription['SUBSCRIPTION_ID']) ?></td>
                                 <td class="border px-4 py-2"><?= htmlspecialchars($subscription['CUSTOMER_ID']) ?></td>
                                 <td class="border px-4 py-2">
-                                    <?= $subscription['BEGIN_DATE'] ? date('Y-m-d', strtotime($subscription['BEGIN_DATE'])) : 'NULL' ?>
+                                    <?= htmlspecialchars($subscription['BEGIN_DATE'] ?? 'NULL') ?>
                                 </td>
                                 <td class="border px-4 py-2">
-                                    <?= $subscription['EXPIRED_DATE'] ? date('Y-m-d', strtotime($subscription['EXPIRED_DATE'])) : 'NULL' ?>
+                                    <?= htmlspecialchars($subscription['EXPIRED_DATE'] ?? 'NULL') ?>
                                 </td>
                             </tr>
                         <?php } ?>
