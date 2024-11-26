@@ -33,7 +33,7 @@ try {
 
     $row = oci_fetch_array($stmtA);
     if ($row['SUBSCRIPTION_STATUS'] === 'Subscribed') {
-        echo json_encode([
+        echo json_encode([ 
             'status' => 'error',
             'message' => '현재 구독 중인 상품이 있어 회원 탈퇴를 처리할 수 없습니다.'
         ]);

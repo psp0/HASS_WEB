@@ -310,7 +310,7 @@ b
                     echo "<script>alert('" . $response['message'] . "');</script>";
                     echo "<script>location.href='update_my_info.php';</script>";
                     exit;
-                }
+                }  
             } catch (Exception $e) {   
                 oci_rollback($conn);
                 $response = ['status' => 'error', 'message' => '예외 발생: ' . $e->getMessage()];

@@ -149,7 +149,7 @@ include BASE_PATH . '/includes/customer_header.php';
     $stmtB = oci_parse($conn, $queryB);
     oci_bind_by_name($stmtB, ':auth_id', $currentUserID);
 
-    if (oci_execute($stmtB)) {
+    if (oci_execute($stmtB)) { 
         $row = oci_fetch_array($stmtB);
         if ($row) {
             $street_address = $row['STREET_ADDRESS'];
