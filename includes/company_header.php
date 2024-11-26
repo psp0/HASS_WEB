@@ -56,7 +56,14 @@
         <a href="<?php echo TEAM_PATH; ?>/pages/company/main.php" class="icon-button">회사 메인</a>           
         <a href="<?php echo TEAM_PATH; ?>/pages/company/expiration/expiration.php" class="icon-button">만료관리</a>       
         <div class="button-container">        
-            <a href="<?php echo TEAM_PATH; ?>/pages/login/company_login.php" class="login-button">회사 로그인</a>        
+        <?php
+            session_start();
+            if (isset($_SESSION['company_logged_in']) && $_SESSION['company_logged_in'] === true) {
+                echo '<a href="' . TEAM_PATH . '/pages/login/logout.php" class="logout-button">로그아웃</a>';
+            } else {
+                echo '<a href="' . TEAM_PATH . '/pages/login/company_login.php" class="login-button">회사 로그인</a>';
+            }
+            ?>   
         </div>
     </header>
     <div class="main-content">
