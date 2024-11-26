@@ -309,7 +309,7 @@ b
             }
         }
         oci_free_statement($stmtC);
-        if (isset($stmtB)) {
+        if (isset($stmtD)) {
             oci_free_statement($stmtD);
         }
         oci_free_statement($stmtE);
