@@ -68,17 +68,14 @@ h3 {
         exit;
     }
 
-    $queryA = "SELECT 
-    (SELECT MODEL_ID 
-     FROM SUBSCRIPTION 
-     WHERE SUBSCRIPTION.SUBSCRIPTION_ID = REQUEST.SUBSCRIPTION_ID
-    ) AS MODEL_ID,
+    $queryA = "SELECT   
+    REQUEST.SUBSCRIPTION_ID,
     (SELECT MODEL_TYPE
      FROM MODEL
      WHERE MODEL_ID = (
          SELECT MODEL_ID
-         FROM SUBSCRIPTION
-         WHERE SUBSCRIPTION_ID = REQUEST.SUBSCRIPTION_ID
+         FROM PRODUCT
+         WHERE SERIAL_NUMBER = (SELECT SERIAL_NUMBER FROM SUBSCRIPTION WHERE SUBSCRIPTION_ID =  REQUEST.SUBSCRIPTION_ID)
      )
     ) AS MODEL_TYPE,
     REQUEST.REQUEST_TYPE,
@@ -143,14 +140,14 @@ ORDER BY
             <div class="table-container">
                 <table>
                     <tr>
-                        <th>모델 ID</th>
+                        <th>구독 ID</th>
                         <th>가전제품 종류</th>
                         <th>요청 종류</th>
                         <th>생성일</th>
                     </tr>
                     <?php while ($row = oci_fetch_assoc($stmtA)): ?>
                         <tr>
-                            <td><?= htmlspecialchars($row['MODEL_ID']) ?></td>
+                            <td><?= htmlspecialchars($row['SUBSCRIPTION_ID']) ?></td>
                             <td><?= htmlspecialchars($row['MODEL_TYPE']) ?></td>
                             <td><?= htmlspecialchars($row['REQUEST_TYPE']) ?></td>
                             <td><?= htmlspecialchars($row['DATE_CREATED']) ?></td>
