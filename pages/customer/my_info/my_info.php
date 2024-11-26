@@ -79,25 +79,25 @@ include BASE_PATH . '/includes/customer_header.php';
         }
         .address-fields {
             display: flex;
-            flex-direction: column; /* 세로 방향으로 정렬 */
-            gap: 10px; /* 입력 필드 간 간격 */
-            margin-left: 80px; /* 라벨과 입력 필드 간 간격 */
+            flex-direction: column; 
+            gap: 10px; 
+            margin-left: 80px; 
         }
 
         .address-fields input[type="text"] {
-            width: 100%; /* 입력 필드의 너비를 조정 */
+            width: 100%; 
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        /* 모든 입력 필드의 넓이 통일 */
+    
         .sidebar input[type="text"], 
         .address-fields input[type="text"] {
-            width: 100%; /* 입력 필드가 부모 컨테이너의 너비를 채우도록 설정 */
-            padding: 8px; /* 동일한 내부 여백 */
+            width: 100%; 
+            padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            box-sizing: border-box; /* 패딩과 너비 포함 */
+            box-sizing: border-box; 
         }
     </style>
 </head>

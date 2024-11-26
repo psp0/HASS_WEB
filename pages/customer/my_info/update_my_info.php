@@ -118,8 +118,17 @@ b
 <script>
     function confirmDelete() {
         if (confirm("정말로 회원 탈퇴하시겠습니까?")) {
-            // 회원 탈퇴 처리 로직 작성 (예: 서버에 탈퇴 요청 전송)
-            alert("회원 탈퇴가 처리되었습니다.");
+            $.ajax({
+                url: "confirmDelete.php",
+                type: "POST",
+                dataType: "json",
+                success: function(response) {
+                    alert(response.message);
+                    if (response.status === 'success') {
+                        location.href = '../../../index.php';
+                    }
+                }
+            });            
         }
     }
 
@@ -203,6 +212,7 @@ b
 </div>
 
 <div class="myinfo-container">
+    <h3 style="text-align: center; margin-bottom: 20px;">회원정보 수정</h3>
     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
         <label for="userID">ID</label>
         <input type="text" name="id" value="<?php echo htmlspecialchars($currentUserID); ?>" readonly>
