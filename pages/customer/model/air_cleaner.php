@@ -776,5 +776,5 @@ GROUP BY p.MODEL_ID";
   </script>
 
   <?php
-  include BASE_PATH . '/includes/customer_footer.php';
+  include BASE_PATH . '/includes/footer.php';
   ?>
