@@ -121,6 +121,14 @@ try {
     throw new Exception('REQUEST 테이블 삽입 쿼리 실행 오류: ' . $e['message']);
   }
 
+  // REQUEST_ID 가져오기
+  $requestIdStmt = oci_parse($conn, "SELECT R_SEQ.CURRVAL AS LAST_REQUEST_ID FROM DUAL");
+  if (!oci_execute($requestIdStmt)) {
+    $e = oci_error($requestIdStmt);
+    throw new Exception('REQUEST_ID 가져오기 실패: ' . $e['message']);
+  }
+  $requestId = oci_fetch_assoc($requestIdStmt)['LAST_REQUEST_ID'];
+
   // REQUEST_PREFERENCE_DATE 테이블에 선호 방문 일자 삽입
   $insertPreferenceQuery = "INSERT INTO REQUEST_PREFERENCE_DATE (PREFERENCE_ID, PREFER_DATE, REQUEST_ID)
                               VALUES (RPD_SEQ.NEXTVAL, TO_DATE(:prefer_date, 'YYYY-MM-DD HH24:MI'), :request_id)";
@@ -128,8 +136,7 @@ try {
 
   // 첫 번째 선호 방문 일자
   oci_bind_by_name($insertPreferenceStmt, ':prefer_date', $visitDate1);
-  oci_bind_by_name($insertPreferenceStmt, ':request_id', $subscriptionId);
-
+  oci_bind_by_name($insertPreferenceStmt, ':request_id', $requestId);
   if (!oci_execute($insertPreferenceStmt, OCI_NO_AUTO_COMMIT)) {
     $e = oci_error($insertPreferenceStmt);
     throw new Exception('첫 번째 선호 방문 일자 삽입 오류: ' . $e['message']);
@@ -137,6 +144,7 @@ try {
 
   // 두 번째 선호 방문 일자
   oci_bind_by_name($insertPreferenceStmt, ':prefer_date', $visitDate2);
+  oci_bind_by_name($insertPreferenceStmt, ':request_id', $requestId);
   if (!oci_execute($insertPreferenceStmt, OCI_NO_AUTO_COMMIT)) {
     $e = oci_error($insertPreferenceStmt);
     throw new Exception('두 번째 선호 방문 일자 삽입 오류: ' . $e['message']);

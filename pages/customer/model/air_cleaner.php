@@ -552,6 +552,24 @@ GROUP BY p.MODEL_ID";
 
   <script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
   <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const now = new Date();
+
+      const minimumHours = 24;
+      now.setHours(now.getHours() + minimumHours);
+
+      // 타임존 보정 (UTC+9)
+      const localISOTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+        .toISOString()
+        .slice(0, 16);
+
+      const visitDate1 = document.getElementById("visit-date-1");
+      const visitDate2 = document.getElementById("visit-date-2");
+      visitDate1.min = localISOTime;
+      visitDate2.min = localISOTime;
+    });
+
+
     document.addEventListener("DOMContentLoaded", () => {
       const filterForm = document.querySelector(".filter-panel form");
 
@@ -726,15 +744,34 @@ GROUP BY p.MODEL_ID";
         document.body.style.overflow = "auto"; 
       });
 
-      document.getElementById("submit-subscription").addEventListener("click", () => {
+
+      document.getElementById("submit-subscription").addEventListener("click", function(e) {
         const visitDate1 = document.getElementById("visit-date-1").value;
         const visitDate2 = document.getElementById("visit-date-2").value;
         const subscriptionPeriod = document.getElementById("subscription-period").value;
         const additionalRequest = document.getElementById("additional-request").value;
         const modelId = document.getElementById("subscription-model-id").value;
 
+        const minDateTime1 = document.getElementById("visit-date-1").min;
+        const minDateTime2 = document.getElementById("visit-date-2").min;
+
+
+        if (visitDate1 && new Date(visitDate1) < new Date(minDateTime1)) {
+          alert("첫 번째 방문 날짜는 현재 시각으로부터 최소 24시간 이후여야 합니다.");
+          e.preventDefault();
+          return;
+        }
+
+
+        if (visitDate2 && new Date(visitDate2) < new Date(minDateTime2)) {
+          alert("두 번째 방문 날짜는 현재 시각으로부터 최소 24시간 이후여야 합니다.");
+          e.preventDefault();
+          return;
+        }
+
         if (!visitDate1 || !visitDate2 || !subscriptionPeriod) {
-          alert("필수 정보를 입력해주세요.");
+          alert("모든 필수 항목을 입력해주세요.");
+          e.preventDefault();
           return;
         }
 
@@ -776,5 +813,5 @@ GROUP BY p.MODEL_ID";
   </script>
 
   <?php
-  include BASE_PATH . '/includes/customer_footer.php';
+  include BASE_PATH . '/includes/footer.php';
   ?>
