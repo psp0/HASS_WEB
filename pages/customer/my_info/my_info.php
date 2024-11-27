@@ -102,69 +102,68 @@ include BASE_PATH . '/includes/customer_header.php';
     </style>
 </head>
 
-<div class="container">
-    <?php
-    $config = require '../../../config.php'; 
-    $dsn = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)
-    (HOST={$config['host']})(PORT={$config['port']}))
-    (CONNECT_DATA=(SID={$config['sid']})))"; 
-    $conn = oci_connect($config['username'], $config['password'], $dsn,'UTF8');
+
+<?php
+$config = require '../../../config.php'; 
+$dsn = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)
+(HOST={$config['host']})(PORT={$config['port']}))
+(CONNECT_DATA=(SID={$config['sid']})))"; 
+$conn = oci_connect($config['username'], $config['password'], $dsn,'UTF8');
         
-    if(!$conn) {
-        $e = oci_error();
-        echo "<p class='error'>연결 실패: ".htmlspecialchars($e['message'])."</p>";
-        exit;
+if(!$conn) {
+    $e = oci_error();
+    echo "<p class='error'>연결 실패: ".htmlspecialchars($e['message'])."</p>";
+    exit;
+}
+
+if (!isset($_SESSION['auth_id']) || empty($_SESSION['auth_id'])) {
+    echo "<script>alert('로그인이 필요합니다.');</script>";
+    echo "<script>location.href='/2_team/2_team5/pages/login/customer_login.php';</script>";
+}
+
+$currentUserID = $_SESSION['auth_id'];
+$customer_name = '';
+$main_phone_number = '';
+$street_address = '';
+$detail_address = '';
+$postal_code = '';
+
+$queryA = "SELECT CUSTOMER_NAME, MAIN_PHONE_NUMBER  
+            FROM CUSTOMER WHERE CUSTOMER_ID = (SELECT CUSTOMER_ID FROM CUSTOMER_AUTH WHERE AUTH_ID = :auth_id)";
+$stmtA = oci_parse($conn, $queryA);
+oci_bind_by_name($stmtA, ':auth_id', $currentUserID);
+
+if (oci_execute($stmtA)) {
+    $row = oci_fetch_array($stmtA);
+    if ($row) {
+        $customer_name = $row['CUSTOMER_NAME'];
+        $main_phone_number = $row['MAIN_PHONE_NUMBER'];
     }
+} else {
+    $e = oci_error($stmtA);
+    die("<p class='error'>CUSTOMER_AUTH 데이터 가져오기 실패: " . htmlspecialchars($e['message']) . "</p>");
+}
 
-    if (!isset($_SESSION['auth_id']) || empty($_SESSION['auth_id'])) {
-        echo "<script>alert('로그인이 필요합니다.');</script>";
-        echo "<script>location.href='/2_team/2_team5/pages/login/customer_login.php';</script>";
+$queryB = "SELECT STREET_ADDRESS, DETAILED_ADDRESS, POSTAL_CODE
+            FROM CUSTOMER_ADDRESS WHERE CUSTOMER_ID = (SELECT CUSTOMER_ID FROM CUSTOMER_AUTH WHERE AUTH_ID = :auth_id)";
+$stmtB = oci_parse($conn, $queryB);
+oci_bind_by_name($stmtB, ':auth_id', $currentUserID);
+
+if (oci_execute($stmtB)) { 
+    $row = oci_fetch_array($stmtB);
+    if ($row) {
+        $street_address = $row['STREET_ADDRESS'];
+        $detail_address = $row['DETAILED_ADDRESS'];
+        $postal_code = $row['POSTAL_CODE'];
     }
-
-    $currentUserID = $_SESSION['auth_id'];
-    $customer_name = '';
-    $main_phone_number = '';
-    $street_address = '';
-    $detail_address = '';
-    $postal_code = '';
-
-    $queryA = "SELECT CUSTOMER_NAME, MAIN_PHONE_NUMBER  
-                FROM CUSTOMER WHERE CUSTOMER_ID = (SELECT CUSTOMER_ID FROM CUSTOMER_AUTH WHERE AUTH_ID = :auth_id)";
-    $stmtA = oci_parse($conn, $queryA);
-    oci_bind_by_name($stmtA, ':auth_id', $currentUserID);
-
-    if (oci_execute($stmtA)) {
-        $row = oci_fetch_array($stmtA);
-        if ($row) {
-            $customer_name = $row['CUSTOMER_NAME'];
-            $main_phone_number = $row['MAIN_PHONE_NUMBER'];
-        }
-    } else {
-        $e = oci_error($stmtA);
-        die("<p class='error'>CUSTOMER_AUTH 데이터 가져오기 실패: " . htmlspecialchars($e['message']) . "</p>");
-    }
-
-    $queryB = "SELECT STREET_ADDRESS, DETAILED_ADDRESS, POSTAL_CODE
-                FROM CUSTOMER_ADDRESS WHERE CUSTOMER_ID = (SELECT CUSTOMER_ID FROM CUSTOMER_AUTH WHERE AUTH_ID = :auth_id)";
-    $stmtB = oci_parse($conn, $queryB);
-    oci_bind_by_name($stmtB, ':auth_id', $currentUserID);
-
-    if (oci_execute($stmtB)) { 
-        $row = oci_fetch_array($stmtB);
-        if ($row) {
-            $street_address = $row['STREET_ADDRESS'];
-            $detail_address = $row['DETAILED_ADDRESS'];
-            $postal_code = $row['POSTAL_CODE'];
-        }
-    } else {
-        $e = oci_error($stmtB);
-        die("<p class='error'>CUSTOMER_ADDRESS 데이터 가져오기 실패: " . htmlspecialchars($e['message']) . "</p>");
-    }
-    oci_free_statement($stmtA);
-    oci_free_statement($stmtB);
-    oci_close($conn);
-    ?>
-</div>
+} else {
+    $e = oci_error($stmtB);
+    die("<p class='error'>CUSTOMER_ADDRESS 데이터 가져오기 실패: " . htmlspecialchars($e['message']) . "</p>");
+}
+oci_free_statement($stmtA);
+oci_free_statement($stmtB);
+oci_close($conn);
+?>
 
 <body>
     <div class="container">
