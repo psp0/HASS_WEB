@@ -1,6 +1,6 @@
 <?php
 require '../../config.php';
-include BASE_PATH . '/includes/worker_header.php';
+include BASE_PATH . '/includes/company_header.php';
 ?>
 <style>
 .data-container {
@@ -15,7 +15,9 @@ table {
     border-collapse: collapse;
 }
 
-table, th, td {
+table,
+th,
+td {
     border: 1px solid #ddd;
 }
 
@@ -31,7 +33,8 @@ th {
     overflow-y: auto;
 }
 
-th, td {
+th,
+td {
     padding: 8px;
     text-align: left;
 }
@@ -56,14 +59,15 @@ h3 {
     $queryA = "SELECT
     SUBSCRIPTION.SUBSCRIPTION_ID,
     SUBSCRIPTION.CUSTOMER_ID,
-    TO_CHAR(SUBSCRIPTION.EXPIRED_DATE, 'YY.MM.DD HH24:MI') AS EXPIRED_DATE
+    TO_CHAR(SUBSCRIPTION.EXPIRED_DATE, 'YY.MM.DD HH24:MI') AS EXPIRED_DATE,
+    TO_CHAR(SUBSCRIPTION.BEGIN_DATE, 'YY.MM.DD HH24:MI') AS BEGIN_DATE,
+    SUBSCRIPTION.SERIAL_NUMBER
 FROM
     SUBSCRIPTION
 LEFT JOIN REQUEST ON SUBSCRIPTION.SUBSCRIPTION_ID = REQUEST.SUBSCRIPTION_ID
     AND REQUEST.REQUEST_TYPE = '회수'
 WHERE
-    SUBSCRIPTION.EXPIRED_DATE < SYSDATE
-    AND REQUEST.SUBSCRIPTION_ID IS NULL
+     REQUEST.SUBSCRIPTION_ID IS NULL
 ORDER BY
     EXPIRED_DATE ASC";
 
@@ -73,33 +77,58 @@ ORDER BY
 
 
     ?>
-    
+
     <div class="data-container">
 
         <div class="section" id="A">
-            <h3>만료된 구독</h3>
+            <h3>구독 현황</h3>
             <div class="table-container">
                 <table>
                     <tr>
                         <th>구독 ID</th>
                         <th>고객 ID</th>
-                        <th>구독 만료일자</th>                        
+                        <th>구독제품 시리얼 번호</th>
+                        <th>구독 시작일자</th>
+                        <th>구독 만료일자</th>
+                        <th>상태</th>
                     </tr>
                     <?php while ($row = oci_fetch_assoc($stmtA)): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($row['SUBSCRIPTION_ID']) ?></td>
-                            <td><?= htmlspecialchars($row['CUSTOMER_ID']) ?></td>
-                            <td><?= htmlspecialchars($row['EXPIRED_DATE']) ?></td>
-                            
-                        </tr>
+                    <tr>
+                        <td><?= htmlspecialchars($row['SUBSCRIPTION_ID']) ?></td>
+                        <td><?= htmlspecialchars($row['CUSTOMER_ID']) ?></td>
+                        <td><?= htmlspecialchars($row['SERIAL_NUMBER']) ?></td>
+                        <td><?= htmlspecialchars($row['BEGIN_DATE']) ?></td>
+                        <td><?= htmlspecialchars($row['EXPIRED_DATE']) ?></td>
+
+                        <td>
+                            <?php  
+                                if (empty($row['EXPIRED_DATE'])) {
+                                    echo '구독대기';
+                                } else {  
+                                    $expiredDate = DateTime::createFromFormat('y.m.d H:i', $row['EXPIRED_DATE']);            
+                                        $currentDate = new DateTime(); 
+                                        if ($expiredDate > $currentDate) {
+                                            echo '구독중';
+                                        }
+                                        else {
+                                            echo '구독만료됨';
+                                        }
+                                    
+                                }
+                                ?>
+                        </td>
+
+
+
+                    </tr>
                     <?php endwhile; ?>
                 </table>
             </div>
-    
+
+
+        </div>
 
     </div>
-
-</div>
 
     <?php 
     oci_free_statement($stmtA);
@@ -107,6 +136,6 @@ ORDER BY
     ?>
 </div>
 
-    <?php
+<?php
     include BASE_PATH . '/includes/footer.php';
 ?>
