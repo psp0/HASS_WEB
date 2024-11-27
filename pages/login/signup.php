@@ -192,92 +192,90 @@ include BASE_PATH . '/includes/customer_header.php';
     }
 </script>
 
-<div class="signup-container">
-    <?php
-    $config = require '../../config.php';
-    $dsn = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)
-        (HOST={$config['host']})(PORT={$config['port']}))
-        (CONNECT_DATA=(SID={$config['sid']})))";
-    $conn = oci_connect($config['username'], $config['password'], $dsn, 'UTF8');
+<?php
+$config = require '../../config.php';
+$dsn = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)
+    (HOST={$config['host']})(PORT={$config['port']}))
+    (CONNECT_DATA=(SID={$config['sid']})))";
+$conn = oci_connect($config['username'], $config['password'], $dsn, 'UTF8');
 
-    if (!$conn) {
-        $e = oci_error();
-        echo "<p class='error'>연결 실패: " . htmlspecialchars($e['message']) . "</p>";
-        exit;
-    }
+if (!$conn) {
+    $e = oci_error();
+    echo "<p class='error'>연결 실패: " . htmlspecialchars($e['message']) . "</p>";
+    exit;
+}
     
-    $response = null;
+$response = null;
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $auth_id = $_POST['id'] ?? '';
-        $password = $_POST['password'] ?? '';
-        $customer_name = $_POST['name'] ?? '';
-        $main_phone = $_POST['main_phone'] ?? '';
-        $sub_phone = $_POST['sub_phone'] ?? '';
-        $postal_code = $_POST['postal_code'] ?? '';
-        $road_address = $_POST['road_address'] ?? '';
-        $detail_address = $_POST['detail_address'] ?? '';
-        $created_date = date('Y-m-d');
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $auth_id = $_POST['id'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $customer_name = $_POST['name'] ?? '';
+    $main_phone = $_POST['main_phone'] ?? '';
+    $sub_phone = $_POST['sub_phone'] ?? '';
+    $postal_code = $_POST['postal_code'] ?? '';
+    $road_address = $_POST['road_address'] ?? '';
+    $detail_address = $_POST['detail_address'] ?? '';
+    $created_date = date('Y-m-d');
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     
-        try {
-            // 트랜잭션 시작
-            oci_execute(oci_parse($conn, "BEGIN"));
-    
-            // 고객 테이블에 데이터 삽입
-            $queryA = "INSERT INTO CUSTOMER (CUSTOMER_ID, CUSTOMER_NAME, MAIN_PHONE_NUMBER, SUB_PHONE_NUMBER, DATE_CREATED)
-                        VALUES (C_SEQ.NEXTVAL, :customer_name, :main_phone, :sub_phone, TO_DATE(:created_date, 'YYYY-MM-DD'))
-                        RETURNING CUSTOMER_ID INTO :customer_id";
-            $stmtA = oci_parse($conn, $queryA);
-            oci_bind_by_name($stmtA, ':customer_id', $customer_id);
-            oci_bind_by_name($stmtA, ':customer_name', $customer_name);
-            oci_bind_by_name($stmtA, ':main_phone', $main_phone);
-            oci_bind_by_name($stmtA, ':sub_phone', $sub_phone);
-            oci_bind_by_name($stmtA, ':created_date', $created_date);
-            $executeA = oci_execute($stmtA);
-    
-            // 고객 인증 정보 삽입
-            $queryB = "INSERT INTO CUSTOMER_AUTH(CUSTOMER_ID, AUTH_ID, PW_HASH) VALUES (:customer_id, :auth_id, :hashed_password)";
-            $stmtB = oci_parse($conn, $queryB);
-            oci_bind_by_name($stmtB, ':customer_id', $customer_id);
-            oci_bind_by_name($stmtB, ':auth_id', $auth_id);
-            oci_bind_by_name($stmtB, ':hashed_password', $hashed_password);
-            $executeB = oci_execute($stmtB);
-    
-            // 고객 주소 삽입
-            $queryC = "INSERT INTO CUSTOMER_ADDRESS(CUSTOMER_ID, STREET_ADDRESS, DETAILED_ADDRESS, POSTAL_CODE)
-                        VALUES (:customer_id, :road_address, :detail_address, :postal_code)";
-            $stmtC = oci_parse($conn, $queryC);
-            oci_bind_by_name($stmtC, ':customer_id', $customer_id);
-            oci_bind_by_name($stmtC, ':road_address', $road_address);
-            oci_bind_by_name($stmtC, ':detail_address', $detail_address);
-            oci_bind_by_name($stmtC, ':postal_code', $postal_code);
-            $executeC = oci_execute($stmtC);
+    try {
+        // 트랜잭션 시작
+        oci_execute(oci_parse($conn, "BEGIN"));
+
+        // 고객 테이블에 데이터 삽입
+        $queryA = "INSERT INTO CUSTOMER (CUSTOMER_ID, CUSTOMER_NAME, MAIN_PHONE_NUMBER, SUB_PHONE_NUMBER, DATE_CREATED)
+                     VALUES (C_SEQ.NEXTVAL, :customer_name, :main_phone, :sub_phone, TO_DATE(:created_date, 'YYYY-MM-DD'))
+                     RETURNING CUSTOMER_ID INTO :customer_id";
+        $stmtA = oci_parse($conn, $queryA);
+        oci_bind_by_name($stmtA, ':customer_id', $customer_id);
+        oci_bind_by_name($stmtA, ':customer_name', $customer_name);
+        oci_bind_by_name($stmtA, ':main_phone', $main_phone);
+        oci_bind_by_name($stmtA, ':sub_phone', $sub_phone);
+        oci_bind_by_name($stmtA, ':created_date', $created_date);
+        $executeA = oci_execute($stmtA);
+
+        // 고객 인증 정보 삽입
+        $queryB = "INSERT INTO CUSTOMER_AUTH(CUSTOMER_ID, AUTH_ID, PW_HASH) VALUES (:customer_id, :auth_id, :hashed_password)";
+        $stmtB = oci_parse($conn, $queryB);
+        oci_bind_by_name($stmtB, ':customer_id', $customer_id);
+        oci_bind_by_name($stmtB, ':auth_id', $auth_id);
+        oci_bind_by_name($stmtB, ':hashed_password', $hashed_password);
+        $executeB = oci_execute($stmtB);
+
+        // 고객 주소 삽입
+        $queryC = "INSERT INTO CUSTOMER_ADDRESS(CUSTOMER_ID, STREET_ADDRESS, DETAILED_ADDRESS, POSTAL_CODE)
+                    VALUES (:customer_id, :road_address, :detail_address, :postal_code)";
+        $stmtC = oci_parse($conn, $queryC);
+        oci_bind_by_name($stmtC, ':customer_id', $customer_id);
+        oci_bind_by_name($stmtC, ':road_address', $road_address);
+        oci_bind_by_name($stmtC, ':detail_address', $detail_address);
+        oci_bind_by_name($stmtC, ':postal_code', $postal_code);
+        $executeC = oci_execute($stmtC);
             
-            if ($executeA && $executeB && $executeC) {
-                oci_commit($conn);
-                $response = ['status' => 'success', 'message' => '회원가입이 완료되었습니다.'];
-                echo "<script>alert('" . $response['message'] . "');</script>";
-                echo "<script>location.href='customer_login.php';</script>";
-            } else {
-                oci_rollback($conn);
-                $response = ['status' => 'error', 'message' => '회원가입 중 오류가 발생했습니다.'];
-                echo "<script>alert('" . $response['message'] . "');</script>";
-                echo "<script>location.href='signup.php';</script>";
-            }
-        } catch (Exception $e) {
+        if ($executeA && $executeB && $executeC) {
+            oci_commit($conn);
+            $response = ['status' => 'success', 'message' => '회원가입이 완료되었습니다.'];
+            echo "<script>alert('" . $response['message'] . "');</script>";
+            echo "<script>location.href='customer_login.php';</script>";
+        } else {
             oci_rollback($conn);
-            $response = ['status' => 'error', 'message' => '예외 발생: ' . $e->getMessage()];
+            $response = ['status' => 'error', 'message' => '회원가입 중 오류가 발생했습니다.'];
             echo "<script>alert('" . $response['message'] . "');</script>";
             echo "<script>location.href='signup.php';</script>";
-        } 
-        oci_free_statement($stmtA);
-        oci_free_statement($stmtB);
-        oci_free_statement($stmtC);
-        oci_close($conn);
-    }
-    ?>
-</div>    
+        }
+    } catch (Exception $e) {
+        oci_rollback($conn);
+        $response = ['status' => 'error', 'message' => '예외 발생: ' . $e->getMessage()];
+        echo "<script>alert('" . $response['message'] . "');</script>";
+        echo "<script>location.href='signup.php';</script>";
+    } 
+    oci_free_statement($stmtA);
+    oci_free_statement($stmtB);
+    oci_free_statement($stmtC);
+    oci_close($conn);
+}
+?>   
 
 <?php
 include BASE_PATH . '/includes/footer.php';

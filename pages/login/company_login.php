@@ -107,50 +107,48 @@ include BASE_PATH . '/includes/company_header.php';
         </form>
     </div>
 
-    <div class="login-container">
-    <?php
-    session_start();
 
-    $config = require '../../config.php'; 
-    $dsn = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)
-    (HOST={$config['host']})(PORT={$config['port']}))
-    (CONNECT_DATA=(SID={$config['sid']})))";  
-    $conn = oci_connect($config['username'], $config['password'], $dsn,'UTF8');
+<?php
+session_start();
+
+$config = require '../../config.php'; 
+$dsn = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)
+(HOST={$config['host']})(PORT={$config['port']}))
+(CONNECT_DATA=(SID={$config['sid']})))";  
+$conn = oci_connect($config['username'], $config['password'], $dsn,'UTF8');
         
-    if(!$conn) {
-        $e = oci_error();
-        echo "<p class='error'>연결 실패: ".htmlspecialchars($e['message'])."</p>";
+if(!$conn) {
+    $e = oci_error();
+    echo "<p class='error'>연결 실패: ".htmlspecialchars($e['message'])."</p>";
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = $_POST['id'];
+    $password = $_POST['password'];
+
+    $query = "SELECT AUTH_ID, PW_HASH FROM COMPANY_AUTH WHERE AUTH_ID = :id";
+    $stmt = oci_parse($conn, $query);
+    oci_bind_by_name($stmt, ':id', $id);
+    oci_execute($stmt);
+
+    $row = oci_fetch_array($stmt, OCI_ASSOC);
+
+    if ($row && password_verify($password, $row['PW_HASH']))  {
+        $_SESSION['auth_id'] = $row['AUTH_ID'];
+        $_SESSION['logged_in'] = true;
+
+        echo "<script>alert('로그인 되었습니다. 환영합니다!');</script>";
+        echo "<script>location.href='pages/company/main.php';</script>";
         exit;
+        } else {
+            echo "<script>alert('ID 또는 비밀번호가 잘못되었습니다.');</script>";
+            echo "<script>location.href='company_login.php';</script>";
     }
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $id = $_POST['id'];
-        $password = $_POST['password'];
-
-        $query = "SELECT AUTH_ID, PW_HASH FROM COMPANY_AUTH WHERE AUTH_ID = :id";
-        $stmt = oci_parse($conn, $query);
-        oci_bind_by_name($stmt, ':id', $id);
-        oci_execute($stmt);
-
-        $row = oci_fetch_array($stmt, OCI_ASSOC);
-
-        if ($row && password_verify($password, $row['PW_HASH']))  {
-            $_SESSION['auth_id'] = $row['AUTH_ID'];
-            $_SESSION['logged_in'] = true;
-
-            echo "<script>alert('로그인 되었습니다. 환영합니다!');</script>";
-            echo "<script>location.href='pages/company/main.php';</script>";
-            exit;
-            } else {
-                echo "<script>alert('ID 또는 비밀번호가 잘못되었습니다.');</script>";
-                echo "<script>location.href='company_login.php';</script>";
-            }
-            oci_free_statement($stmt);
-        }
-        oci_close($conn);
-        ?>
-    </div> 
-
+    oci_free_statement($stmt);
+}
+oci_close($conn);
+?>
 
 <?php
 include BASE_PATH . '/includes/footer.php';
