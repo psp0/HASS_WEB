@@ -54,7 +54,7 @@ try {
         ]);
     } else {
         oci_rollback($conn);
-        throw new Exception('회원 탈퇴 처리 중 오류가 발생했습니다12.');
+        throw new Exception('회원 탈퇴 처리 중 오류가 발생했습니다.');
     }
 } catch (Exception $e) {
     oci_rollback($conn);
