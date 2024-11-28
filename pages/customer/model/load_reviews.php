@@ -47,6 +47,7 @@ $reviewQuery = "SELECT
     MR.RATING, 
     MR.ADDITIONAL_COMMENT, 
     TO_CHAR(MR.DATE_CREATED, 'YYYY-MM-DD HH24:MI:SS') AS DATE_CREATED, 
+    TO_CHAR(MR.DATE_EDITED, 'YYYY-MM-DD HH24:MI:SS') AS DATE_EDITED, 
     C.CUSTOMER_NAME
 FROM CUSTOMER C
 JOIN MODEL_RATING MR ON C.CUSTOMER_ID = MR.CUSTOMER_ID
@@ -82,7 +83,7 @@ oci_execute($reviewStmt);
 
     foreach ($stars as $star => $count) {
         $percentage = ($totalReviews > 0) ? round(($count / $totalReviews) * 100, 1) : 0;
-        ?>
+    ?>
         <div class="rating-bar">
             <span class="rating-label"><?= $star ?>점</span>
             <div class="bar">
@@ -115,19 +116,23 @@ oci_execute($reviewStmt);
         if (mb_strlen($name) <= 1) {
             return $name;
         }
-        $firstChar = mb_substr($name, 0, 1); 
-        $lastChar = mb_substr($name, -1);   
-        return $firstChar . 'x' . $lastChar; 
+        $firstChar = mb_substr($name, 0, 1);
+        $lastChar = mb_substr($name, -1);
+        return $firstChar . 'x' . $lastChar;
     }
     while ($row = oci_fetch_array($reviewStmt, OCI_ASSOC + OCI_RETURN_NULLS)) {
         $hasReviews = true;
         $maskedName = maskName($row['CUSTOMER_NAME']);
-        ?>
+    ?>
         <div class="review-item">
             <div class="review-details">
                 <span class="stars"><?= str_repeat('★', htmlspecialchars($row['RATING'])) ?></span>
                 <span class="review-author-date"><?= htmlspecialchars($maskedName) ?> |
-                    <?= htmlspecialchars($row['DATE_CREATED']) ?></span>
+                    <?php if (!empty($row['DATE_EDITED'])): ?>
+                        수정됨: <?= htmlspecialchars($row['DATE_EDITED']) ?>
+                    <?php else: ?>
+                        <?= htmlspecialchars($row['DATE_CREATED']) ?>
+                    <?php endif; ?>
             </div>
             <div class="review-text"><?= htmlspecialchars($row['ADDITIONAL_COMMENT']) ?></div>
         </div>
