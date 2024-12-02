@@ -175,8 +175,68 @@ if (!oci_execute($stmt_del_req, OCI_NO_AUTO_COMMIT)) {
 }
 oci_free_statement($stmt_del_req);
 
-// REQUEST_TYPE이 '설치'인 경우, SUBSCRIPTION도 삭제
+// REQUEST_TYPE이 '설치'인 경우
 if ($request_type === '설치') {
+    
+    $query_serial_number = "
+        SELECT SERIAL_NUMBER 
+        FROM SUBSCRIPTION 
+        WHERE SUBSCRIPTION_ID = :subscription_id
+    ";
+    $stmt_serial_number = oci_parse($conn, $query_serial_number);
+    oci_bind_by_name($stmt_serial_number, ':subscription_id', $subscription_id);
+
+    if (!oci_execute($stmt_serial_number)) {
+        $e = oci_error($stmt_serial_number);
+        echo json_encode([
+            'success' => false,
+            'message' => 'SUBSCRIPTION에서 SERIAL_NUMBER 조회 중 오류가 발생했습니다.',
+            'error' => $e['message']
+        ]);
+        oci_free_statement($stmt_serial_number);
+        oci_rollback($conn);
+        oci_close($conn);
+        exit;
+    }
+
+    $row_serial = oci_fetch_array($stmt_serial_number, OCI_ASSOC);
+    $serial_number = $row_serial['SERIAL_NUMBER'] ?? null;
+    oci_free_statement($stmt_serial_number);
+
+    if ($serial_number) {
+        // PRODUCT 상태를 재고로 업데이트
+        $update_product_status_query = "
+            UPDATE PRODUCT
+            SET PRODUCT_STATUS = '재고'
+            WHERE SERIAL_NUMBER = :serial_number
+        ";
+        $stmt_update_product_status = oci_parse($conn, $update_product_status_query);
+        oci_bind_by_name($stmt_update_product_status, ':serial_number', $serial_number);
+
+        if (!oci_execute($stmt_update_product_status, OCI_NO_AUTO_COMMIT)) {
+            $e = oci_error($stmt_update_product_status);
+            echo json_encode([
+                'success' => false,
+                'message' => 'PRODUCT 상태 업데이트 중 오류가 발생했습니다.',
+                'error' => $e['message']
+            ]);
+            oci_free_statement($stmt_update_product_status);
+            oci_rollback($conn);
+            oci_close($conn);
+            exit;
+        }
+        oci_free_statement($stmt_update_product_status);
+    } else {
+        echo json_encode([
+            'success' => false,
+            'message' => 'SUBSCRIPTION에 연결된 SERIAL_NUMBER를 찾을 수 없습니다.'
+        ]);
+        oci_rollback($conn);
+        oci_close($conn);
+        exit;
+    }
+
+    // SUBSCRIPTION 삭제
     $delete_sub_query = "
         DELETE FROM SUBSCRIPTION 
         WHERE SUBSCRIPTION_ID = :subscription_id
@@ -199,6 +259,7 @@ if ($request_type === '설치') {
     oci_free_statement($stmt_del_sub);
 }
 
+
 // 커밋
 if (!oci_commit($conn)) {
     $e = oci_error($conn);
@@ -219,4 +280,3 @@ echo json_encode([
 
 oci_close($conn);
 exit;
-?>
