@@ -4,13 +4,11 @@ include BASE_PATH . '/includes/worker_header.php';
 ?>
 
 <style>
-    html, body {
-        height: 100%;
-        margin: 0;
+    .w-main-content {
         display: flex;
         justify-content: center;
+        height: 80vh;
         align-items: center;
-        background-color: #f7f7f7;
     }
 
     .login-container {
@@ -20,7 +18,6 @@ include BASE_PATH . '/includes/worker_header.php';
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         text-align: center;
         width: 400px;
-        box-sizing: border-box;
     }
 
     .header-container {
@@ -54,13 +51,13 @@ include BASE_PATH . '/includes/worker_header.php';
         width: 90%;
         padding: 10px;
         margin: 10px 0;
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .button-container {
-        display: flex; 
-        justify-content: space-between; 
-        margin-top: 10px; 
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
         font-size: 14px;
     }
 
@@ -71,44 +68,44 @@ include BASE_PATH . '/includes/worker_header.php';
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        flex: 1; 
-        margin: 0 5px; 
+        flex: 1;
+        margin: 0 5px;
     }
 
     .button-container button:hover {
         background-color: #0056b3;
     }
 </style>
-    
-    <div class="login-container">
-        <div class="header-container">
-            <h2>기사 로그인</h2>
-            <a href="<?php echo TEAM_PATH; ?>/pages/login/customer_login.php" class="login-button">고객 로그인</a>     
-            <a href="<?php echo TEAM_PATH; ?>/pages/login/company_login.php" class="login-button">회사 로그인</a>
-        </div>
 
-        <form action="worker_login.php" method="POST">
-            <input type="text" name="id" placeholder="ID" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <div class="button-container">
-                <button type="submit">로그인</button>                
-            </div>
-        </form>
+<div class="login-container">
+    <div class="header-container">
+        <h2>기사 로그인</h2>
+        <a href="<?php echo TEAM_PATH; ?>/pages/login/customer_login.php" class="login-button">고객 로그인</a>
+        <a href="<?php echo TEAM_PATH; ?>/pages/login/company_login.php" class="login-button">회사 로그인</a>
     </div>
+
+    <form action="worker_login.php" method="POST">
+        <input type="text" name="id" placeholder="ID" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <div class="button-container">
+            <button type="submit">로그인</button>
+        </div>
+    </form>
+</div>
 
 
 <?php
 session_start();
 
-$config = require '../../config.php'; 
+$config = require '../../config.php';
 $dsn = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)
 (HOST={$config['host']})(PORT={$config['port']}))
-(CONNECT_DATA=(SID={$config['sid']})))";  
-$conn = oci_connect($config['username'], $config['password'], $dsn,'UTF8');
-        
-if(!$conn) {
+(CONNECT_DATA=(SID={$config['sid']})))";
+$conn = oci_connect($config['username'], $config['password'], $dsn, 'UTF8');
+
+if (!$conn) {
     $e = oci_error();
-    echo "<p class='error'>연결 실패: ".htmlspecialchars($e['message'])."</p>";
+    echo "<p class='error'>연결 실패: " . htmlspecialchars($e['message']) . "</p>";
     exit;
 }
 
@@ -123,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $row = oci_fetch_array($stmt, OCI_ASSOC);
 
-    if ($row && password_verify($password, $row['PW_HASH']))  {
+    if ($row && password_verify($password, $row['PW_HASH'])) {
         $_SESSION['auth_id'] = $row['AUTH_ID'];
         $_SESSION['worker_logged_in'] = true;
         $_SESSION['logged_in'] = true;
@@ -132,13 +129,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "<script>alert('로그인 되었습니다. 환영합니다!');</script>";
         echo "<script>location.href='" . TEAM_PATH . "/pages/worker/main.php';</script>";
         exit;
-        } else {
-            echo "<script>alert('ID 또는 비밀번호가 잘못되었습니다.');</script>";
-            echo "<script>location.href='worker_login.php';</script>";
-        }
-        oci_free_statement($stmt);
+    } else {
+        echo "<script>alert('ID 또는 비밀번호가 잘못되었습니다.');</script>";
+        echo "<script>location.href='worker_login.php';</script>";
     }
-    oci_close($conn);
+    oci_free_statement($stmt);
+}
+oci_close($conn);
 ?>
 
 <?php

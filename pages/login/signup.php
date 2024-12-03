@@ -5,15 +5,10 @@ include BASE_PATH . '/includes/customer_header.php';
 ?>
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        height: 100vh;
+    .main-content {
         display: flex;
         justify-content: center;
-        align-items: center;
-        background-color: #f0f0f0;
+
     }
 
     .signup-container {
@@ -132,25 +127,25 @@ include BASE_PATH . '/includes/customer_header.php';
             <label for="sub_phone">예비 전화번호</label>
             <input type="text" name="sub_phone">
 
-            <div class="address-container">
-                <label for="postalCode">주소 <span class="required">*</span></label>
-                <div class="postal-container">
-                    <input type="text" id="postalCode" name="postal_code" required readonly>
-                    <button type="button" class="search-button" onclick="openPostcode()">우편번호 검색</button>
-                </div>
-                <input type="text" id="roadAddress" name="road_address" required readonly>
-                <input type="text" name="detail_address" placeholder="상세 주소" required>
+        <div class="address-container">
+            <label for="postalCode">주소 <span class="required">*</span></label>
+            <div class="postal-container">
+                <input type="text" id="postalCode" name="postal_code" required readonly>
+                <button type="button" class="search-button" onclick="openPostcode()">우편번호 검색</button>
             </div>
-            <button type="submit">회원가입</button>
-        </form>
-        <script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    </div>
+            <input type="text" id="roadAddress" name="road_address" required readonly>
+            <input type="text" name="detail_address" placeholder="상세 주소" required>
+        </div>
+        <button type="submit">회원가입</button>
+    </form>
+    <script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</div>
 
 <script>
     function openPostcode() {
         new daum.Postcode({
-            oncomplete: function (data) {
+            oncomplete: function(data) {
                 document.getElementById('postalCode').value = data.zonecode;
                 document.getElementById('roadAddress').value = data.roadAddress;
             }
@@ -165,8 +160,10 @@ include BASE_PATH . '/includes/customer_header.php';
         $.ajax({
             url: "check_duplicate.php", // 서버에 중복확인 요청을 보낼 PHP 파일
             type: "POST",
-            data: { id: userID },
-            success: function (response) {
+            data: {
+                id: userID
+            },
+            success: function(response) {
 
                 var resultElement = document.getElementById("checkResult");
 
@@ -224,7 +221,7 @@ if (!$conn) {
     echo "<p class='error'>연결 실패: " . htmlspecialchars($e['message']) . "</p>";
     exit;
 }
-    
+
 $response = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -237,9 +234,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $road_address = $_POST['road_address'] ?? '';
     $detail_address = $_POST['detail_address'] ?? '';
     $created_date = date('Y-m-d');
-    $options = [ 'cost' => 12, ];
+    $options = ['cost' => 12,];
     $hashed_password = password_hash($password, PASSWORD_BCRYPT, $options);
-    
+
     try {
         // 트랜잭션 시작
         oci_execute(oci_parse($conn, "BEGIN"));
@@ -273,7 +270,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         oci_bind_by_name($stmtC, ':detail_address', $detail_address);
         oci_bind_by_name($stmtC, ':postal_code', $postal_code);
         $executeC = oci_execute($stmtC);
-            
+
         if ($executeA && $executeB && $executeC) {
             oci_commit($conn);
             $response = ['status' => 'success', 'message' => '회원가입이 완료되었습니다.'];
@@ -290,13 +287,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $response = ['status' => 'error', 'message' => '예외 발생: ' . $e->getMessage()];
         echo "<script>alert('" . $response['message'] . "');</script>";
         echo "<script>location.href='signup.php';</script>";
-    } 
+    }
     oci_free_statement($stmtA);
     oci_free_statement($stmtB);
     oci_free_statement($stmtC);
     oci_close($conn);
 }
-?>   
+?>
 
 <?php
 include BASE_PATH . '/includes/footer.php';

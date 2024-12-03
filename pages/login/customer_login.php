@@ -4,13 +4,11 @@ include BASE_PATH . '/includes/customer_header.php';
 ?>
 
 <style>
-    html, body {
-        height: 100%;
-        margin: 0;
+    .c-main-content {
         display: flex;
         justify-content: center;
+        height: 80vh;
         align-items: center;
-        background-color: #f7f7f7;
     }
 
     .login-container {
@@ -20,7 +18,6 @@ include BASE_PATH . '/includes/customer_header.php';
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         text-align: center;
         width: 400px;
-        box-sizing: border-box;
     }
 
     .header-container {
@@ -58,9 +55,9 @@ include BASE_PATH . '/includes/customer_header.php';
     }
 
     .button-container {
-        display: flex; 
-        justify-content: space-between; 
-        margin-top: 10px; 
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
         font-size: 14px;
     }
 
@@ -71,8 +68,8 @@ include BASE_PATH . '/includes/customer_header.php';
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        flex: 1; 
-        margin: 0 5px; 
+        flex: 1;
+        margin: 0 5px;
     }
 
     .button-container button:hover {
@@ -80,18 +77,18 @@ include BASE_PATH . '/includes/customer_header.php';
     }
 
     .signup-button {
-        padding: 8px; 
-        background-color: lightblue; 
-        color: white; 
-        border: none; 
-        border-radius: 5px; 
-        cursor: pointer; 
-        text-decoration: none; 
-        display: flex; 
+        padding: 10px;
+        background-color: gray;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        display: flex;
         justify-content: center;
-        align-items: center; 
-        flex: 1; 
-        margin: 0 5px; 
+        align-items: center;
+        flex: 1;
+        margin: 0 5px;
         font-size: 14px;
     }
 
@@ -104,7 +101,7 @@ include BASE_PATH . '/includes/customer_header.php';
     <div class="header-container">
         <h2>고객 로그인</h2>
         <a href="<?php echo TEAM_PATH; ?>/pages/login/worker_login.php" class="login-button">기사 로그인</a>
-        <a href="<?php echo TEAM_PATH; ?>/pages/login/company_login.php" class="login-button">회사 로그인</a>       
+        <a href="<?php echo TEAM_PATH; ?>/pages/login/company_login.php" class="login-button">회사 로그인</a>
     </div>
 
     <form action="customer_login.php" method="POST">
@@ -120,15 +117,15 @@ include BASE_PATH . '/includes/customer_header.php';
 <?php
 session_start();
 
-$config = require '../../config.php'; 
+$config = require '../../config.php';
 $dsn = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)
 (HOST={$config['host']})(PORT={$config['port']}))
-(CONNECT_DATA=(SID={$config['sid']})))";  
-$conn = oci_connect($config['username'], $config['password'], $dsn,'UTF8');
-        
-if(!$conn) {
+(CONNECT_DATA=(SID={$config['sid']})))";
+$conn = oci_connect($config['username'], $config['password'], $dsn, 'UTF8');
+
+if (!$conn) {
     $e = oci_error();
-    echo "<p class='error'>연결 실패: ".htmlspecialchars($e['message'])."</p>";
+    echo "<p class='error'>연결 실패: " . htmlspecialchars($e['message']) . "</p>";
     exit;
 }
 
@@ -143,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $row = oci_fetch_array($stmt, OCI_ASSOC);
 
-    if ($row && password_verify($password, $row['PW_HASH']))  {
+    if ($row && password_verify($password, $row['PW_HASH'])) {
         $_SESSION['auth_id'] = $row['AUTH_ID'];
         $_SESSION['customer_id'] = $row['CUSTOMER_ID'];
         $_SESSION['logged_in'] = true;
@@ -152,15 +149,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "<script>alert('로그인 되었습니다. 환영합니다!');</script>";
         echo "<script>location.href='../../index.php';</script>";
         exit;
-        } else {
-            echo "<script>alert('ID 또는 비밀번호가 잘못되었습니다.');</script>";
-            echo "<script>location.href='customer_login.php';</script>";
-        }
-        oci_free_statement($stmt);
+    } else {
+        echo "<script>alert('ID 또는 비밀번호가 잘못되었습니다.');</script>";
+        echo "<script>location.href='customer_login.php';</script>";
     }
-    oci_close($conn);
+    oci_free_statement($stmt);
+}
+oci_close($conn);
 ?>
- 
+
+
 <?php
 include BASE_PATH . '/includes/footer.php';
 ?>

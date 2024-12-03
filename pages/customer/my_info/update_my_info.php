@@ -5,17 +5,11 @@ include BASE_PATH . '/includes/customer_header.php';
 ?>
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        height: 100vh;
+    .main-content{
         display: flex;
         justify-content: center;
-        align-items: center;
-        background-color: #f0f0f0;
+        
     }
-
     .myinfo-container {
         background-color: white;
         padding: 20px;
