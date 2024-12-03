@@ -217,7 +217,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $road_address = $_POST['road_address'] ?? '';
     $detail_address = $_POST['detail_address'] ?? '';
     $created_date = date('Y-m-d');
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    $options = [ 'cost' => 12, ];
+    $hashed_password = password_hash($password, PASSWORD_BCRYPT, $options);
     
     try {
         // 트랜잭션 시작
