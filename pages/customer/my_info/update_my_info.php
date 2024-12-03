@@ -47,11 +47,11 @@ include BASE_PATH . '/includes/customer_header.php';
     }
 
     .myinfo-container .submit-button {
-        background-color: #4CAF50;
+        background-color: #007bff;
     }
 
     .myinfo-container .submit-button:hover {
-        background-color: #45a049;
+        background-color: #0056b3;
     }
 
     .myinfo-container .delete-button {
@@ -94,7 +94,7 @@ include BASE_PATH . '/includes/customer_header.php';
     .search-button {
         padding: 6px 8px;
         font-size: 12px;
-        background-color: #4CAF50;
+        background-color: #007bff;
         color: white;
         border: none;
         border-radius: 5px;
@@ -102,7 +102,7 @@ include BASE_PATH . '/includes/customer_header.php';
     }
 
     .search-button:hover {
-        background-color: #45a049;
+        background-color: #0056b3;
     }
 
     .required {
