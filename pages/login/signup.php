@@ -34,7 +34,7 @@ include BASE_PATH . '/includes/customer_header.php';
 
     .signup-container button {
         padding: 5px;
-        background-color: #4CAF50;
+        background-color: #007bff;
         color: white;
         border: none;
         border-radius: 5px;
@@ -45,7 +45,7 @@ include BASE_PATH . '/includes/customer_header.php';
     }
 
     .signup-container button:hover {
-        background-color: #45a049;
+        background-color: #0056b3;
     }
 
     .error-message {
@@ -217,7 +217,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $road_address = $_POST['road_address'] ?? '';
     $detail_address = $_POST['detail_address'] ?? '';
     $created_date = date('Y-m-d');
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    $options = [ 'cost' => 12, ];
+    $hashed_password = password_hash($password, PASSWORD_BCRYPT, $options);
     
     try {
         // 트랜잭션 시작

@@ -28,7 +28,7 @@ include BASE_PATH . '/includes/customer_header.php';
 
         .login-button {
             padding: 5px 10px;
-            background-color: #4CAF50;
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
@@ -37,7 +37,7 @@ include BASE_PATH . '/includes/customer_header.php';
         }
 
         .login-button:hover {
-            background-color: #45a049;
+            background-color: #0056b3;
         }
 
         .login-container input {
@@ -56,7 +56,7 @@ include BASE_PATH . '/includes/customer_header.php';
 
         .button-container button {
             padding: 8px;
-            background-color: #4CAF50;
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
@@ -66,7 +66,7 @@ include BASE_PATH . '/includes/customer_header.php';
         }
 
         .button-container button:hover {
-            background-color: #45a049;
+            background-color: #0056b3;
         }
 
         .signup-button {
