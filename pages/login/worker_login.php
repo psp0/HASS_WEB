@@ -135,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($row && password_verify($password, $row['PW_HASH']))  {
         $_SESSION['auth_id'] = $row['AUTH_ID'];
-        $_SESSION['logged_in'] = true;
+        $_SESSION['worker_logged_in'] = true;
 
         echo "<script>alert('로그인 되었습니다. 환영합니다!');</script>";
         echo "<script>location.href='" . TEAM_PATH . "/pages/worker/main.php';</script>";
