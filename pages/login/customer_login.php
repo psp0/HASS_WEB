@@ -147,6 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['auth_id'] = $row['AUTH_ID'];
         $_SESSION['customer_id'] = $row['CUSTOMER_ID'];
         $_SESSION['logged_in'] = true;
+        $_SESSION['user_type'] = 'customer';
 
         echo "<script>alert('로그인 되었습니다. 환영합니다!');</script>";
         echo "<script>location.href='../../index.php';</script>";

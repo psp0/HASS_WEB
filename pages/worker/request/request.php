@@ -128,6 +128,11 @@ table .request-row:hover {
         echo "<p class='error'>연결 실패: " . htmlspecialchars($e['message']) . "</p>";
         exit;
     }
+    if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'worker') {
+        echo "<script>alert('기사 전용 페이지 입니다. 기사 로그인을 해주세요.');</script>";
+        echo "<script>location.href='" . TEAM_PATH . "/pages/login/worker_login.php';</script>";
+        exit;
+    }
 
     // A 쿼리 실행
     $queryA = "SELECT 

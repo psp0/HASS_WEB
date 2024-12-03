@@ -55,6 +55,11 @@ h3 {
         echo "<p class='error'>연결 실패: " . htmlspecialchars($e['message']) . "</p>";
         exit;
     }
+    if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'company') {
+        echo "<script>alert('회사 전용 페이지 입니다. 회사 로그인을 해주세요.');</script>";
+        echo "<script>location.href='" . TEAM_PATH . "/pages/login/company_login.php';</script>";
+        exit;
+    }
 
     $queryA = "SELECT
     SUBSCRIPTION.SUBSCRIPTION_ID,
