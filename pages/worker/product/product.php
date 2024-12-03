@@ -3,55 +3,9 @@ $config = require '../../../config.php';
 include BASE_PATH . '/includes/worker_header.php';
 ?>
 
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-    body {
-        font-family: 'Noto Sans KR', sans-serif;
-    }
+<link rel="stylesheet" href="./worker_product.css">
 
-    .product-info {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
-
-    .product-details {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .product-image {
-        width: 120px;
-        height: 120px;
-    }
-
-    .buttons {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        position: relative;
-        top: 10px;
-        left: 10px;
-    }
-
-    .section-title {
-        color: #1D4ED8;
-        font-weight: bold;
-        font-size: 1.25rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .no-product-message {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: red;
-        text-align: center;
-        margin-top: 20px;
-    }
-</style>
-
-<div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+<div class="container">
 
     <?php
     $dsn = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST={$config['host']})(PORT={$config['port']}))(CONNECT_DATA=(SID={$config['sid']})))";
@@ -59,7 +13,7 @@ include BASE_PATH . '/includes/worker_header.php';
 
     if (!$conn) {
         $e = oci_error();
-        echo "<p class='text-red-500'>연결 실패: " . htmlspecialchars($e['message']) . "</p>";
+        echo "<p class='error-message'>연결 실패: " . htmlspecialchars($e['message']) . "</p>";
         exit;
     }
 
@@ -68,11 +22,11 @@ include BASE_PATH . '/includes/worker_header.php';
     $serialNumber = $_GET['serialNumber'] ?? '';
     ?>
 
-    <h1 class="text-2xl font-bold mb-4">제품 관리</h1>
-    <form method="GET" action="" class="flex items-center space-x-4 mb-6">
-        <div>
-            <label for="modelType" class="block text-sm font-medium text-gray-700">모델 타입:</label>
-            <select name="modelType" id="modelType" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+    <h1 class="title">제품 관리</h1>
+    <form method="GET" action="" class="form-row">
+        <div class="form-group">
+            <label for="modelType">모델 타입:</label>
+            <select name="modelType" id="modelType">
                 <option value="" <?= $modelType == '' ? 'selected' : '' ?>>전체</option>
                 <option value="공기청정기" <?= $modelType == '공기청정기' ? 'selected' : '' ?>>공기청정기</option>
                 <option value="건조기" <?= $modelType == '건조기' ? 'selected' : '' ?>>건조기</option>
@@ -80,145 +34,142 @@ include BASE_PATH . '/includes/worker_header.php';
                 <option value="세탁기" <?= $modelType == '세탁기' ? 'selected' : '' ?>>세탁기</option>
             </select>
         </div>
-        <div>
-            <label for="productStatus" class="block text-sm font-medium text-gray-700">제품 상태:</label>
-            <select name="productStatus" id="productStatus"
-                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+        <div class="form-group">
+            <label for="productStatus">제품 상태:</label>
+            <select name="productStatus" id="productStatus">
                 <option value="" <?= $productStatus == '' ? 'selected' : '' ?>>전체</option>
                 <option value="재고" <?= $productStatus == '재고' ? 'selected' : '' ?>>재고</option>
                 <option value="구독대기" <?= $productStatus == '구독대기' ? 'selected' : '' ?>>구독대기</option>
                 <option value="구독중" <?= $productStatus == '구독중' ? 'selected' : '' ?>>구독중</option>
             </select>
         </div>
-        <div class="flex-1">
-            <label for="serialNumber" class="block text-sm font-medium text-gray-700">시리얼번호:</label>
+        <div class="form-group">
+            <label for="serialNumber">시리얼번호:</label>
             <input type="text" name="serialNumber" id="serialNumber" placeholder="시리얼번호 검색"
-                value="<?= htmlspecialchars($serialNumber) ?>"
-                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                value="<?= htmlspecialchars($serialNumber) ?>">
         </div>
-        <button type="submit" class="mt-6 bg-blue-500 text-white px-5 py-3 rounded-md shadow-sm">검색</button>
-        <button type="reset" class="mt-6 bg-blue-500 text-white px-2 py-1 rounded-md shadow-sm"
-            onclick="location.href='product.php'">초기화</button>
+        <div class="button-group">
+            <button type="submit" class="button">검색</button>
+            <button type="reset" class="button-reset" onclick="location.href='product.php'">초기화</button>
+        </div>
     </form>
 
-    <?php
-    $query = "SELECT P.SERIAL_NUMBER, P.PRODUCT_STATUS, M.MODEL_ID, M.MODEL_NAME, M.MODEL_TYPE
-              FROM PRODUCT P
-              JOIN MODEL M ON P.MODEL_ID = M.MODEL_ID";
-    $conditions = [];
+    <div class="product-list">
+        <?php
+        $query = "SELECT P.SERIAL_NUMBER, P.PRODUCT_STATUS, M.MODEL_ID, M.MODEL_NAME, M.MODEL_TYPE
+                  FROM PRODUCT P
+                  JOIN MODEL M ON P.MODEL_ID = M.MODEL_ID";
+        $conditions = [];
 
-    if ($modelType) {
-        $conditions[] = "M.MODEL_TYPE = :modelType";
-    }
-    if ($productStatus) {
-        $conditions[] = "P.PRODUCT_STATUS = :productStatus";
-    }
-    if ($serialNumber) {
-        $conditions[] = "P.SERIAL_NUMBER = :serialNumber";
-    }
+        if ($modelType) {
+            $conditions[] = "M.MODEL_TYPE = :modelType";
+        }
+        if ($productStatus) {
+            $conditions[] = "P.PRODUCT_STATUS = :productStatus";
+        }
+        if ($serialNumber) {
+            $conditions[] = "P.SERIAL_NUMBER = :serialNumber";
+        }
 
-    if (count($conditions) > 0) {
-        $query .= " WHERE " . implode(" AND ", $conditions);
-    }
+        if (count($conditions) > 0) {
+            $query .= " WHERE " . implode(" AND ", $conditions);
+        }
 
-    $stmt = oci_parse($conn, $query);
+        $stmt = oci_parse($conn, $query);
 
-    if ($modelType) {
-        oci_bind_by_name($stmt, ':modelType', $modelType);
-    }
-    if ($productStatus) {
-        oci_bind_by_name($stmt, ':productStatus', $productStatus);
-    }
-    if ($serialNumber) {
-        oci_bind_by_name($stmt, ':serialNumber', $serialNumber);
-    }
+        if ($modelType) {
+            oci_bind_by_name($stmt, ':modelType', $modelType);
+        }
+        if ($productStatus) {
+            oci_bind_by_name($stmt, ':productStatus', $productStatus);
+        }
+        if ($serialNumber) {
+            oci_bind_by_name($stmt, ':serialNumber', $serialNumber);
+        }
 
-    oci_execute($stmt);
-    $hasProducts = false;
+        oci_execute($stmt);
+        $hasProducts = false;
 
-    while ($product = oci_fetch_array($stmt, OCI_ASSOC + OCI_RETURN_NULLS)) {
-        $hasProducts = true;
-        $serial = htmlspecialchars($product['SERIAL_NUMBER']);
-        $modelId = htmlspecialchars($product['MODEL_ID']);
-        $status = htmlspecialchars($product['PRODUCT_STATUS']);
-        $modelName = htmlspecialchars($product['MODEL_NAME']);
+        while ($product = oci_fetch_array($stmt, OCI_ASSOC + OCI_RETURN_NULLS)) {
+            $hasProducts = true;
+            $serial = htmlspecialchars($product['SERIAL_NUMBER']);
+            $modelId = htmlspecialchars($product['MODEL_ID']);
+            $status = htmlspecialchars($product['PRODUCT_STATUS']);
+            $modelName = htmlspecialchars($product['MODEL_NAME']);
 
 
-        $subscriptionQuery = "SELECT 
-        SUBSCRIPTION_ID, CUSTOMER_ID, TO_CHAR(BEGIN_DATE, 'YYYY-MM-DD HH24:MI:SS') AS BEGIN_DATE, 
-        TO_CHAR(EXPIRED_DATE, 'YYYY-MM-DD HH24:MI:SS') AS EXPIRED_DATE
-        FROM SUBSCRIPTION
-        WHERE SERIAL_NUMBER = :serial";
+            $subscriptionQuery = "SELECT 
+            SUBSCRIPTION_ID, CUSTOMER_ID, TO_CHAR(BEGIN_DATE, 'YYYY-MM-DD HH24:MI:SS') AS BEGIN_DATE, 
+            TO_CHAR(EXPIRED_DATE, 'YYYY-MM-DD HH24:MI:SS') AS EXPIRED_DATE
+            FROM SUBSCRIPTION
+            WHERE SERIAL_NUMBER = :serial";
 
-        $subscriptionStmt = oci_parse($conn, $subscriptionQuery);
-        oci_bind_by_name($subscriptionStmt, ':serial', $serial);
-        oci_execute($subscriptionStmt);
-        ?>
+            $subscriptionStmt = oci_parse($conn, $subscriptionQuery);
+            oci_bind_by_name($subscriptionStmt, ':serial', $serial);
+            oci_execute($subscriptionStmt);
+            ?>
 
-        <div class="space-y-4 mb-6">
-            <div class="bg-gray-50 p-4 rounded-lg shadow-sm product-info">
-                <?php
-                $imagePath = BASE_PATH . "/pages/customer/model/model_img/model{$modelId}.jpg";
-                $imageUrl = file_exists($imagePath) ? TEAM_PATH . "/pages/customer/model/model_img/model{$modelId}.jpg" : 'https://via.placeholder.com/100';
-                ?>
-                <img src="<?= $imageUrl ?>" alt="Product Image" class="product-image">
+            <div class="product-item">
+                <div class="product-card">
+                    <?php
+                    $imagePath = BASE_PATH . "/pages/customer/model/model_img/model{$modelId}.jpg";
+                    $imageUrl = file_exists($imagePath) ? TEAM_PATH . "/pages/customer/model/model_img/model{$modelId}.jpg" : 'https://via.placeholder.com/100';
+                    ?>
+                    <img src="<?= $imageUrl ?>" alt="Product Image" class="product-image">
 
-                <div class="product-details">
-                    <p><strong>시리얼 번호:</strong> <?= $serial ?></p>
-                    <p><strong>모델 ID:</strong> <?= $modelId ?></p>
-                    <p><strong>모델명:</strong> <?= $modelName ?></p>
-                    <p><strong>상태:</strong> <?= $status ?></p>
+                    <div class="product-details">
+                        <p><strong>시리얼 번호:</strong> <?= $serial ?></p>
+                        <p><strong>모델 ID:</strong> <?= $modelId ?></p>
+                        <p><strong>모델명:</strong> <?= $modelName ?></p>
+                        <p><strong>상태:</strong> <?= $status ?></p>
+                    </div>
+                    <div class="product-buttons">
+                        <button class="toggle-button"
+                            onclick="toggleDetails('subscription<?= $serial ?>')">구독기록</button>
+                    </div>
                 </div>
-                <div class="buttons">
-                    <button class="text-blue-500 hover:underline"
-                        onclick="toggleDetails('subscription<?= $serial ?>')">구독기록</button>
-                </div>
-            </div>
 
-            <div id="subscription<?= $serial ?>" class="hidden mt-4">
-                <h2 class="section-title">구독 기록</h2>
-                <table class="min-w-full bg-white">
-                    <thead>
-                        <tr>
-                            <th class="py-2">구독번호</th>
-                            <th class="py-2">고객ID</th>
-                            <th class="py-2">시작일</th>
-                            <th class="py-2">만료일</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php while ($subscription = oci_fetch_array($subscriptionStmt, OCI_ASSOC + OCI_RETURN_NULLS)) { ?>
+                <div id="subscription<?= $serial ?>" class="subscription-details">
+                    <h2 class="section-title">구독 기록</h2>
+                    <table>
+                        <thead>
                             <tr>
-                                <td class="border px-4 py-2"><?= htmlspecialchars($subscription['SUBSCRIPTION_ID']) ?></td>
-                                <td class="border px-4 py-2"><?= htmlspecialchars($subscription['CUSTOMER_ID']) ?></td>
-                                <td class="border px-4 py-2">
-                                    <?= htmlspecialchars($subscription['BEGIN_DATE'] ?? 'NULL') ?>
-                                </td>
-                                <td class="border px-4 py-2">
-                                    <?= htmlspecialchars($subscription['EXPIRED_DATE'] ?? 'NULL') ?>
-                                </td>
+                                <th>구독번호</th>
+                                <th>고객ID</th>
+                                <th>시작일</th>
+                                <th>만료일</th>
                             </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php while ($subscription = oci_fetch_array($subscriptionStmt, OCI_ASSOC + OCI_RETURN_NULLS)) { ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($subscription['SUBSCRIPTION_ID']) ?></td>
+                                    <td><?= htmlspecialchars($subscription['CUSTOMER_ID']) ?></td>
+                                    <td><?= htmlspecialchars($subscription['BEGIN_DATE'] ?? 'NULL') ?></td>
+                                    <td><?= htmlspecialchars($subscription['EXPIRED_DATE'] ?? 'NULL') ?></td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
-    <?php }
+        <?php }
 
-    if (!$hasProducts) {
-        echo "<p class='no-product-message'>존재하는 제품이 없습니다.</p>";
-    }
+        if (!$hasProducts) {
+            echo "<p class='no-product-message'>존재하는 제품이 없습니다.</p>";
+        }
 
-    oci_free_statement($stmt);
-    oci_close($conn);
-    ?>
+        oci_free_statement($stmt);
+        oci_close($conn);
+        ?>
+    </div>
 </div>
 
 <script>
     function toggleDetails(id) {
         const element = document.getElementById(id);
-        element.classList.toggle('hidden');
+        element.classList.toggle('active');
     }
 </script>
 
