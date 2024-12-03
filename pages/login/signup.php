@@ -34,7 +34,7 @@ include BASE_PATH . '/includes/customer_header.php';
 
     .signup-container button {
         padding: 5px;
-        background-color: #4CAF50;
+        background-color: #007bff;
         color: white;
         border: none;
         border-radius: 5px;
@@ -45,7 +45,7 @@ include BASE_PATH . '/includes/customer_header.php';
     }
 
     .signup-container button:hover {
-        background-color: #45a049;
+        background-color: #0056b3;
     }
 
     .error-message {

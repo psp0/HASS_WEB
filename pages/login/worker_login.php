@@ -28,7 +28,7 @@ include BASE_PATH . '/includes/worker_header.php';
 
         .login-button {
             padding: 5px 10px;
-            background-color: #4CAF50;
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
@@ -37,7 +37,7 @@ include BASE_PATH . '/includes/worker_header.php';
         }
 
         .login-button:hover {
-            background-color: #45a049;
+            background-color: #0056b3;
         }
 
         .login-container input {
@@ -56,7 +56,7 @@ include BASE_PATH . '/includes/worker_header.php';
 
         .button-container button {
             padding: 8px;
-            background-color: #4CAF50;
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
@@ -66,27 +66,7 @@ include BASE_PATH . '/includes/worker_header.php';
         }
 
         .button-container button:hover {
-            background-color: #45a049;
-        }
-
-        .signup-button {
-            padding: 10px; 
-            background-color: gray; 
-            color: white; 
-            border: none; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            text-decoration: none; 
-            display: flex; 
-            justify-content: center;
-            align-items: center; 
-            flex: 1; 
-            margin: 0 5px; 
-            font-size: 14px;
-        }
-
-        .signup-button:hover {
-            background-color: #45a049; 
+            background-color: #0056b3;
         }
     </style>
     
