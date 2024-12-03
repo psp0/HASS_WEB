@@ -26,7 +26,7 @@ include BASE_PATH . '/includes/customer_header.php';
     }
 
     .signup-container input {
-        width: 97%;
+        width: 100%;
         padding: 3px;
         margin: 5px 0;
         font-size: 13px;
@@ -74,7 +74,7 @@ include BASE_PATH . '/includes/customer_header.php';
     .search-button {
         padding: 6px 8px;
         font-size: 12px;
-        background-color: #4CAF50;
+        background-color: #007bff;
         color: white;
         border: none;
         border-radius: 5px;
@@ -82,13 +82,13 @@ include BASE_PATH . '/includes/customer_header.php';
     }
 
     .search-button:hover {
-        background-color: #45a049;
+        background-color: #0056b3;
     }
 
     .duplicate-check-button {
         padding: 4px;
         font-size: 12px;
-        background-color: #2196F3;
+        background-color: #007bff;
         color: white;
         border: none;
         border-radius: 5px;
@@ -97,7 +97,7 @@ include BASE_PATH . '/includes/customer_header.php';
     }
 
     .duplicate-check-button:hover {
-        background-color: #1976D2;
+        background-color: #0056b3;
     }
 
     .postal-container {
