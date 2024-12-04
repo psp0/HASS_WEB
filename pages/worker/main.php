@@ -14,6 +14,7 @@ include BASE_PATH . '/includes/worker_header.php';
         display: flex;
         flex-wrap: wrap;
         width: 100%;
+        height: calc(100vh - 90px); 
         box-sizing: border-box;
     }
 
