@@ -3,45 +3,53 @@ require '../../config.php';
 include BASE_PATH . '/includes/company_header.php';
 ?>
 <style>
-.data-container {
-    display: flex;
-    width: 100%;
-    height: 100vh;
-    overflow-y: auto;
-}
+    .data-container {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        height: 85vh;
+        overflow-y: auto;
+        align-items: flex-start;
+    }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+    table {
+        width: 100%;
+        background-color: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-collapse: collapse;
+        margin: auto;
+    }
 
-table,
-th,
-td {
-    border: 1px solid #ddd;
-}
+    table,
+    th,
+    td {
+        border: 1px solid #ddd;
+    }
 
-th {
-    background-color: #f2f2f2;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-}
+    th {
+        background-color: #d1d5db;
+        color: #4b5563;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
 
-.table-container {
-    max-height: 50vh;
-    overflow-y: auto;
-}
+    .table-container {
+        max-height: 50vh;
+        overflow-y: auto;
+    }
 
-th,
-td {
-    padding: 8px;
-    text-align: left;
-}
+    th,
+    td {
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: center;
+    }
 
-h3 {
+    h3 {
+    color: #007bff;
+    font-size: 1.5em;
     margin-top: 0;
-    font-size: 1.2em;
 }
 </style>
 <div class="data-container">
@@ -55,6 +63,7 @@ h3 {
         echo "<p class='error'>연결 실패: " . htmlspecialchars($e['message']) . "</p>";
         exit;
     }
+
     if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'company') {
         echo "<script>alert('회사 전용 페이지 입니다. 회사 로그인을 해주세요.');</script>";
         echo "<script>location.href='" . TEAM_PATH . "/pages/login/company_login.php';</script>";

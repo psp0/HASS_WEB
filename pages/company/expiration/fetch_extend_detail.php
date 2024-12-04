@@ -119,7 +119,6 @@ if ($subscriptionId && $customerId) {
     echo "<input type='hidden' id='subscriptionId' name='subscriptionId' value='" . htmlspecialchars($subscriptionId) . "' />";  
         
     // 전문가 선택 박스
-    echo "<label for='extension_years'>연장할 년수 선택:</label>";
     echo "<select name='extension_years' id='extension_years'>";
     echo "<option value='' selected disabled>선택하세요</option>";  // 디폴트로 '선택하세요' 옵션 추가
     echo "<option value='1'>+1년</option>";

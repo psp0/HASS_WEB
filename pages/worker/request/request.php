@@ -3,124 +3,180 @@ require '../../../config.php';
 include BASE_PATH . '/includes/worker_header.php';
 ?>
 <style>
-/* 데이터 컨테이너 스타일 */
-.data-container {
-    display: block;
-    /* flex 대신 block을 사용하여 세로로 배치 */
-    width: 100%;
-    height: 100vh;
-    overflow-y: auto;
-}
+    .data-container {
+        display: block;
+        width: 100%;
+        height: 90vh;
+        overflow-y: auto;
+    }
 
-/* 각 섹션 스타일 */
-.section {
-    padding: 10px;
-    box-sizing: border-box;
-    margin-bottom: 20px;
-    /* 섹션 간 여백 추가 */
-    overflow-y: auto;
-}
+    #modal-content form {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
 
-/* 테이블 스타일 */
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+    #modal-content form label,
+    #modal-content form select,
+    #modal-content form button {
+        width: 100%;
+        margin-bottom: 15px;
+    }
 
-table,
-th,
-td {
-    border: 1px solid #ddd;
-}
+    #modal-content form br {
+        display: none;
+    }
 
-th {
-    background-color: #f2f2f2;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-}
+    #modal-content form label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        margin-top: 7px;
+        font-size: 14px;
+    }
 
-th,
-td {
-    padding: 8px;
-    text-align: left;
-}
+    #modal-content form select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
 
-/* 테이블 내부 스크롤을 위한 컨테이너 */
-.table-container {
-    max-height: 50vh;
-    /* 화면의 절반 크기 */
-    overflow-y: auto;
-}
+    #modal-content form button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
 
-/* 제목 스타일 */
-h2 {
-    color: #007bff;
-    font-size: 1.5em;
-    margin-bottom: 10px;
-}
+    #modal-content form button:hover {
+        background-color: #0056b3;
+    }
 
-/* 오류 메시지 스타일 */
-.error {
-    color: red;
-    font-weight: bold;
-}
+    .section {
+        padding: 10px;
+        box-sizing: border-box;
+        margin-bottom: 20px;
+        overflow-y: auto;
+    }
 
-/* 모달 스타일 */
-.modal {
-    display: none;
-    /* 기본적으로 모달 숨김 */
-    position: fixed;
-    z-index: 1;
-    /* 모달이 다른 콘텐츠 위에 표시되도록 설정 */
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    /* 배경 색상 */
-}
+    table {
+        width: 100%;
+        background-color: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-collapse: collapse;
+    }
 
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-}
+    table,
+    th,
+    td {
+        border: 1px solid #ddd;
+    }
 
-/* 닫기 버튼 스타일 */
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
+    th {
+        background-color: #d1d5db;
+        color: #4b5563;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
+    th,
+    td {
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: left;
+    }
 
-/* 테이블 행에 마우스를 올렸을 때 스타일 추가 */
-table .request-row {
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
+    .table-container {
+        max-height: 28vh;
+        overflow-y: auto;
+    }
 
-table .request-row:hover {
-    background-color: #f0f0f0;
-    cursor: pointer;
-    transform: scale(0.98);
-}
+    h2 {
+        color: #007bff;
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+
+    /* 오류 메시지 스타일 */
+    .error {
+        color: red;
+        font-weight: bold;
+    }
+
+
+    /* 모달 스타일 */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+        background-color: rgba(0, 0, 0, 0.4);
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    /* 닫기 버튼 스타일 */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    table .request-row {
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    table .request-row:hover {
+        background-color: #f0f0f0;
+        cursor: pointer;
+        transform: scale(0.98);
+    }
+
+    .btn-detail {
+        color: #3b82f6;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+    .btn-detail:hover {
+        color: #2563eb;
+    }
 </style>
 
 <div class="data-container">
     <?php
     // 데이터베이스 연결
-    $config = require '../../../config.php'; 
-    $dsn = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST={$config['host']})(PORT={$config['port']}))(CONNECT_DATA=(SID={$config['sid']})))";      
+    $config = require '../../../config.php';
+    $dsn = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST={$config['host']})(PORT={$config['port']}))(CONNECT_DATA=(SID={$config['sid']})))";
     $conn = oci_connect($config['username'], $config['password'], $dsn, 'UTF8');
 
     if (!$conn) {
@@ -128,6 +184,7 @@ table .request-row:hover {
         echo "<p class='error'>연결 실패: " . htmlspecialchars($e['message']) . "</p>";
         exit;
     }
+
     if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'worker') {
         echo "<script>alert('기사 전용 페이지 입니다. 기사 로그인을 해주세요.');</script>";
         echo "<script>location.href='" . TEAM_PATH . "/pages/login/worker_login.php';</script>";
@@ -166,10 +223,10 @@ WHERE
 ORDER BY 
     REQUEST.REQUEST_STATUS, REQUEST.DATE_CREATED DESC
 ";
-    
+
     $stmtA = oci_parse($conn, $queryA);
     oci_execute($stmtA);
-    
+
     // B 쿼리 실행
     $queryB = "SELECT 
         REQUEST.REQUEST_ID,
@@ -191,7 +248,7 @@ ORDER BY
         (SELECT VISIT_DATE 
          FROM VISIT 
          WHERE REQUEST.REQUEST_ID = VISIT.REQUEST_ID) DESC";
-    
+
     $stmtB = oci_parse($conn, $queryB);
     oci_execute($stmtB);
 
@@ -221,7 +278,7 @@ ORDER BY
         echo "<td>" . htmlspecialchars($rowA['REQUEST_TYPE']) . "</td>";
         echo "<td>" . htmlspecialchars($rowA['REQUEST_STATUS']) . "</td>";
         echo "<td>" . htmlspecialchars($rowA['VISIT_DATE']) . "</td>";
-        echo "<td><button type=\"button\">자세히</button></td>";
+        echo "<td><button class='btn-detail' type=\"button\">자세히</button></td>";
         echo "</tr>";
     }
     echo "</tbody></table>
@@ -252,7 +309,7 @@ ORDER BY
         echo "<td>" . htmlspecialchars($rowB['REQUEST_TYPE']) . "</td>";
         echo "<td>" . htmlspecialchars($rowB['VISIT_DATE']) . "</td>";
         echo "<td>" . htmlspecialchars($rowB['WORKER_NAME']) . "</td>";
-        echo "<td><button type=\"button\">자세히</button></td>";
+        echo "<td><button class='btn-detail' type=\"button\">자세히</button></td>";
         echo "</tr>";
     }
     echo "</tbody></table>
@@ -276,47 +333,47 @@ ORDER BY
 </div>
 
 <script>
-// 모든 행을 선택합니다.
-const rows = document.querySelectorAll('.request-row');
-const modal = document.getElementById('myModal');
-const modalContent = document.getElementById('modal-content');
-const closeBtn = document.querySelector('.close'); // 닫기 버튼
+    // 모든 행을 선택합니다.
+    const rows = document.querySelectorAll('.request-row');
+    const modal = document.getElementById('myModal');
+    const modalContent = document.getElementById('modal-content');
+    const closeBtn = document.querySelector('.close'); // 닫기 버튼
 
-// 각 행에 클릭 이벤트 리스너 추가
-rows.forEach(row => {
-    row.addEventListener('click', function() {
-        const requestId = this.getAttribute('data-id');
+    // 각 행에 클릭 이벤트 리스너 추가
+    rows.forEach(row => {
+        row.addEventListener('click', function() {
+            const requestId = this.getAttribute('data-id');
 
-        // AJAX 요청 보내기
-        fetch('fetch_request_detail.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `requestId=${requestId}`
-            })
-            .then(response => response.text())
-            .then(data => {
-                modalContent.innerHTML = data; // PHP에서 받은 HTML을 모달에 표시
-                modal.style.display = 'block'; // 모달 표시
-            })
-            .catch(error => console.error('Error:', error));
+            // AJAX 요청 보내기
+            fetch('fetch_request_detail.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `requestId=${requestId}`
+                })
+                .then(response => response.text())
+                .then(data => {
+                    modalContent.innerHTML = data; // PHP에서 받은 HTML을 모달에 표시
+                    modal.style.display = 'block'; // 모달 표시
+                })
+                .catch(error => console.error('Error:', error));
+        });
     });
-});
 
-// 모달 닫기 버튼 클릭 시 모달 닫기
-closeBtn.addEventListener('click', () => {
-    modal.style.display = 'none';
-});
-
-// 모달 밖을 클릭하면 모달 닫기
-window.addEventListener('click', (event) => {
-    if (event.target === modal) {
+    // 모달 닫기 버튼 클릭 시 모달 닫기
+    closeBtn.addEventListener('click', () => {
         modal.style.display = 'none';
-    }
-});
+    });
+
+    // 모달 밖을 클릭하면 모달 닫기
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
 </script>
 
 <?php
-    include BASE_PATH . '/includes/footer.php';
+include BASE_PATH . '/includes/footer.php';
 ?>

@@ -130,7 +130,7 @@ if ($subscriptionId && $customerId) {
     echo "</div>"; // additional_comment-container div 닫힘
     echo "</div>"; // additional_comment div 닫힘
     
-    echo "<br><button type='submit' id='subscriptionExtendButton'>구독 연장</button>";
+    echo "<br><button type='submit' id='returnRequestButton'>회수 요청</button>";
     echo "</form>";
     
     

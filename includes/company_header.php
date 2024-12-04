@@ -5,13 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HASS - 회사</title>
-    <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Leckerli+One&family=Inter:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         .c-main-content {
             display: flex;
             justify-content: center;
-            height: 80vh;
+            height: 85vh;
             align-items: center;
         }
 
@@ -126,9 +125,8 @@
 
 <body>
     <header class="c-header">
-        <h1 class="c-header-title"><a href="<?php echo TEAM_PATH; ?>/index.php">HASS</a></h1>
+        <h1 class="c-header-title"><a href="<?php echo TEAM_PATH; ?>/pages/company/main.php">HASS</a></h1>
         <div class="c-header-nav-links">
-            <a href="<?php echo TEAM_PATH; ?>/pages/company/main.php" class="c-header-nav-button">회사 메인</a>
             <a href="<?php echo TEAM_PATH; ?>/pages/company/expiration/expiration.php" class="c-header-nav-button">만료관리</a>
         </div>
         <div class="c-header-button-container">

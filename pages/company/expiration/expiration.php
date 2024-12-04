@@ -9,6 +9,7 @@ include BASE_PATH . '/includes/company_header.php';
         width: 100%;
         height: 100vh;
         overflow-y: auto;
+        margin-top: 60px;
     }
 
     /* 각 섹션 스타일 */
@@ -32,7 +33,8 @@ include BASE_PATH . '/includes/company_header.php';
     }
 
     th {
-        background-color: #f2f2f2;
+        background-color: #d1d5db;
+        color: #4b5563;
         position: sticky;
         top: 0;
         z-index: 1;
@@ -72,15 +74,20 @@ include BASE_PATH . '/includes/company_header.php';
         top: 0;
         width: 100%;
         height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+        background-color: rgba(0, 0, 0, 0.4);
         background-color: rgba(0, 0, 0, 0.4);
     }
 
     .modal-content {
         background-color: #fefefe;
-        margin: 15% auto;
+        margin: 5% auto;
         padding: 20px;
         border: 1px solid #888;
         width: 80%;
+        max-height: 90vh;
+        overflow-y: auto;
     }
 
     /* 닫기 버튼 스타일 */
@@ -96,6 +103,84 @@ include BASE_PATH . '/includes/company_header.php';
         color: black;
         text-decoration: none;
         cursor: pointer;
+    }
+
+    .btn-detail {
+        color: #3b82f6;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    .btn-detail:hover {
+        color: #2563eb;
+    }
+
+    .modal-content form {
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .modal-content form br {
+        display: none;
+    }
+
+    .modal-content form label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-size: 14px;
+        display: block;
+    }
+
+    .modal-content form input,
+    .modal-content form textarea,
+    .modal-content form select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+    }
+
+    .modal-content form input,
+    .modal-content form textarea {
+
+        width: 30vw;
+        max-width: 1200px;
+        padding: 12px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+        font-size: 16px;
+
+    }
+
+    .modal-content form button {
+        padding: 10px 20px;
+        width: 100%;
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        align-self: flex-start;
+    }
+
+
+    .modal-content form button:hover {
+        background-color: #0056b3;
     }
 </style>
 
@@ -117,7 +202,7 @@ include BASE_PATH . '/includes/company_header.php';
         echo "<script>location.href='" . TEAM_PATH . "/pages/login/company_login.php';</script>";
         exit;
     }
-    
+
     // A 쿼리 실행
     $queryA = "SELECT
     SUBSCRIPTION.SUBSCRIPTION_ID,    
@@ -174,8 +259,8 @@ ORDER BY
         echo "<td>" . htmlspecialchars($rowA['CUSTOMER_NAME']) . "</td>";
         echo "<td>" . htmlspecialchars($rowA['MAIN_PHONE_NUMBER']) . "</td>";
         echo "<td>" . htmlspecialchars($rowA['SUB_PHONE_NUMBER']) . "</td>";
-        echo "<td><button type='button' class='extend-btn'>연장</button></td>";
-        echo "<td><button type='button' class='return-btn'>회수</button></td>";
+        echo "<td><button type='button' class='btn-detail extend-btn'>연장</button></td>";
+        echo "<td><button type='button' class='btn-detail return-btn'>회수</button></td>";
         echo "</tr>";
     }
 

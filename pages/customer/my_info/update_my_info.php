@@ -5,7 +5,7 @@ include BASE_PATH . '/includes/customer_header.php';
 ?>
 
 <style>
-    .main-content{
+    .c-main-content{
         display: flex;
         justify-content: center;
         

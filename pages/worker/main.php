@@ -3,45 +3,70 @@ require '../../config.php';
 include BASE_PATH . '/includes/worker_header.php';
 ?>
 <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+    }
+
     .data-container {
         display: flex;
+        flex-wrap: wrap;
         width: 100%;
-        height: 100vh;
-        overflow-y: auto;
+        box-sizing: border-box;
     }
 
     .left-section,
     .right-section {
-        padding: 10px;
+        padding: 20px;
         box-sizing: border-box;
         overflow-y: auto;
     }
 
     .left-section {
-        width: 50%;
+        flex: 1 1 70%;
+        min-width: 300px;
     }
 
     .right-section {
-        width: 50%;
+        flex: 1 1 30%;
+        min-width: 300px;
         border-left: 2px solid #ccc;
     }
 
     table {
         width: 100%;
         border-collapse: collapse;
+        background-color: #fff;
+        margin-bottom: 20px;
     }
 
-    table,
     th,
     td {
+        padding: 12px 15px;
+        text-align: left;
         border: 1px solid #ddd;
     }
 
     th {
-        background-color: #f2f2f2;
+        background-color: #d1d5db;
+        color: #4b5563;
         position: sticky;
         top: 0;
         z-index: 1;
+        font-size: 1em;
+        border-bottom: 2px solid #ddd;
+    }
+
+
+    tr {
+        border-bottom: 1px solid #ddd;
+    }
+
+
+    tr:last-child {
+        border-bottom: none;
     }
 
     .table-container {
@@ -49,16 +74,13 @@ include BASE_PATH . '/includes/worker_header.php';
         overflow-y: auto;
     }
 
-    th,
-    td {
-        padding: 8px;
-        text-align: left;
-    }
-
     h3 {
         margin-top: 0;
-        font-size: 1.2em;
+        margin-bottom: 15px;
+        font-size: 1.5em;
+        color: #007bff;
     }
+    
 </style>
 <div class="data-container">
     <?php

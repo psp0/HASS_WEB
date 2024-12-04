@@ -5,13 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HASS - 기사</title>
-    <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Leckerli+One&family=Inter:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         .w-main-content {
             display: flex;
             justify-content: center;
-            height: 80vh;
+            height: 85vh;
             align-items: center;
         }
 
@@ -126,9 +125,8 @@
 
 <body>
     <header class="w-header">
-        <h1 class="w-header-title"><a href="<?php echo TEAM_PATH; ?>/index.php">HASS</a></h1>
+        <h1 class="w-header-title"><a href="<?php echo TEAM_PATH; ?>/pages/worker/main.php">HASS</a></h1>
         <div class="w-header-nav-links">
-            <a href="<?php echo TEAM_PATH; ?>/pages/worker/main.php" class="w-header-nav-button">기사 메인</a>
             <a href="<?php echo TEAM_PATH; ?>/pages/worker/product/product.php" class="w-header-nav-button">제품 관리</a>
             <a href="<?php echo TEAM_PATH; ?>/pages/worker/request/request.php" class="w-header-nav-button">요청 관리</a>
         </div>
