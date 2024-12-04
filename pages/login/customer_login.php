@@ -4,90 +4,100 @@ include BASE_PATH . '/includes/customer_header.php';
 ?>
 
 <style>
-        .login-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 400px;
-        }
+    html, body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f7f7f7;
+    }
 
-        .header-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+    .login-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 400px;
+        box-sizing: border-box;
+    }
 
-        .header-container h2 {
-            margin: 0;
-            font-size: 24px;
-        }
+    .header-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
 
-        .login-button {
-            padding: 5px 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 14px;
-        }
+    .header-container h2 {
+        margin: 0;
+        font-size: 24px;
+    }
 
-        .login-button:hover {
-            background-color: #0056b3;
-        }
+    .login-button {
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 14px;
+    }
 
-        .login-container input {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 14px;
-        }
+    .login-button:hover {
+        background-color: #0056b3;
+    }
 
-        .button-container {
-            display: flex; 
-            justify-content: space-between; 
-            margin-top: 10px; 
-            font-size: 14px;
-        }
+    .login-container input {
+        width: 90%;
+        padding: 10px;
+        margin: 10px 0;
+        font-size: 14px;
+    }
 
-        .button-container button {
-            padding: 8px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            flex: 1; 
-            margin: 0 5px; 
-        }
+    .button-container {
+        display: flex; 
+        justify-content: space-between; 
+        margin-top: 10px; 
+        font-size: 14px;
+    }
 
-        .button-container button:hover {
-            background-color: #0056b3;
-        }
+    .button-container button {
+        padding: 8px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        flex: 1; 
+        margin: 0 5px; 
+    }
 
-        .signup-button {
-            padding: 10px; 
-            background-color: gray; 
-            color: white; 
-            border: none; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            text-decoration: none; 
-            display: flex; 
-            justify-content: center;
-            align-items: center; 
-            flex: 1; 
-            margin: 0 5px; 
-            font-size: 14px;
-        }
+    .button-container button:hover {
+        background-color: #0056b3;
+    }
 
-        .signup-button:hover {
-            background-color: #45a049; 
-        }
+    .signup-button {
+        padding: 8px; 
+        background-color: lightblue; 
+        color: white; 
+        border: none; 
+        border-radius: 5px; 
+        cursor: pointer; 
+        text-decoration: none; 
+        display: flex; 
+        justify-content: center;
+        align-items: center; 
+        flex: 1; 
+        margin: 0 5px; 
+        font-size: 14px;
+    }
+
+    .signup-button:hover {
+            background-color: lightskyblue; 
+    }
 </style>
 
 <div class="login-container">

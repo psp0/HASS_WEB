@@ -4,6 +4,15 @@ include BASE_PATH . '/includes/company_header.php';
 ?>
 
 <style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f7f7f7;
+    }
+    
         .login-container {
             background-color: white;
             padding: 20px;
@@ -11,6 +20,7 @@ include BASE_PATH . '/includes/company_header.php';
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
             width: 400px;
+            box-sizing: border-box;
         }
 
         .header-container {

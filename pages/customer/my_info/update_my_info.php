@@ -26,14 +26,13 @@ include BASE_PATH . '/includes/customer_header.php';
     }
 
     .myinfo-container input {
-        width: 97%;
+        width: 100%;
         padding: 3px;
         margin: 5px 0;
         font-size: 13px;
     }
 
     .myinfo-container input[readonly] {
-        background-color: #e9e9e9;
         cursor: not-allowed;
     }
 
@@ -236,10 +235,10 @@ oci_free_statement($stmtB);
         <div class="address-container">
             <label for="postalCode">주소</label>
             <div class="postal-container">
-                <input type="text" id="postalCode" name="postal_code" value="<?php echo htmlspecialchars($postal_code); ?>" required readonly>
+                <input type="text" id="postalCode" name="postal_code" value="<?php echo htmlspecialchars($postal_code); ?>" readonly>
                 <button type="button" class="search-button" onclick="openPostcode()">우편번호 검색</button>
             </div>
-            <input type="text" id="roadAddress" name="road_address"  value="<?php echo htmlspecialchars($street_address); ?>" required readonly>
+            <input type="text" id="roadAddress" name="road_address"  value="<?php echo htmlspecialchars($street_address); ?>" readonly>
             <input type="text" name="detail_address" value="<?php echo htmlspecialchars($detail_address); ?>">
         </div>
 
