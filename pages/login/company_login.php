@@ -13,72 +13,72 @@ include BASE_PATH . '/includes/company_header.php';
         background-color: #f7f7f7;
     }
     
-        .login-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 400px;
-            box-sizing: border-box;
-        }
+    .login-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 400px;
+        box-sizing: border-box;
+    }
 
-        .header-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+    .header-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
 
-        .header-container h2 {
-            margin: 0;
-            font-size: 24px;
-        }
+    .header-container h2 {
+        margin: 0;
+        font-size: 24px;
+    }
 
-        .login-button {
-            padding: 5px 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 14px;
-        }
+    .login-button {
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 14px;
+    }
 
-        .login-button:hover {
-            background-color: #0056b3;
-        }
+    .login-button:hover {
+        background-color: #0056b3;
+    }
 
-        .login-container input {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 14px;
-        }
+    .login-container input {
+        width: 90%;
+        padding: 10px;
+        margin: 10px 0;
+        font-size: 14px;
+    }
 
-        .button-container {
-            display: flex; 
-            justify-content: space-between; 
-            margin-top: 10px; 
-            font-size: 14px;
-        }
+    .button-container {
+        display: flex; 
+        justify-content: space-between; 
+        margin-top: 10px; 
+        font-size: 14px;
+    }
 
-        .button-container button {
-            padding: 8px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            flex: 1; 
-            margin: 0 5px; 
-        }
+    .button-container button {
+        padding: 8px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        flex: 1; 
+        margin: 0 5px; 
+    }
 
-        .button-container button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    .button-container button:hover {
+        background-color: #0056b3;
+    }
+</style>
     
     <div class="login-container">
         <div class="header-container">
