@@ -114,10 +114,10 @@ include BASE_PATH . '/includes/customer_header.php';
 </style>
 
 <div class="signup-container">
-        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" onsubmit="return validateForm()">
             <label for="userID">ID <span class="required">*</span></label>
             <div class="postal-container">
-                <input type="text" name="id">
+                <input type="text" name="id" oninput="isDuplicateChecked = false;">
                 <button type="button" class="duplicate-check-button" onclick="checkDuplicate()">중복확인</button>
             </div>
             <label for="password">Password <span class="required">*</span></label>
@@ -157,6 +157,8 @@ include BASE_PATH . '/includes/customer_header.php';
         }).open();
     }
 
+    var isDuplicateChecked = false;
+
     function checkDuplicate() {
         var userID = document.querySelector('input[name="id"]').value;
 
@@ -182,13 +184,31 @@ include BASE_PATH . '/includes/customer_header.php';
                     //alert("이미 사용 중인 ID입니다.");
                     resultElement.textContent = "중복된 ID입니다.";
                     resultElement.style.color = "red";
+                    isDuplicateChecked = false;
                 } else if (response === "available") {
                     //alert("사용 가능한 ID입니다.");
                     resultElement.textContent = "사용 가능한 ID입니다!";
                     resultElement.style.color = "blue";
+                    isDuplicateChecked = true;
                 }
             }
         });
+    }
+
+    document.querySelector('input[name="id"]').addEventListener('input', function() {
+        var resultElement = document.getElementById("checkResult");
+        if (resultElement) {
+            resultElement.textContent = '';
+        }
+        isDuplicateChecked = false;
+    });
+
+    function validateForm() {
+        if (!isDuplicateChecked) {
+            alert("ID 중복확인이 필요합니다.");
+            return false;
+        }
+        return true;
     }
 </script>
 
