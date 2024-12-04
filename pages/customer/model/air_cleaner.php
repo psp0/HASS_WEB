@@ -549,7 +549,7 @@ GROUP BY p.MODEL_ID";
       </div>
     </div>
   </div>
-
+</div>
   <script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {

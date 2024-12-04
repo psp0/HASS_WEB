@@ -520,273 +520,274 @@ GROUP BY p.MODEL_ID";
       </div>
     </div>
   </div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const now = new Date();
+<script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const now = new Date();
 
-      const minimumHours = 24;
-      now.setHours(now.getHours() + minimumHours);
+    const minimumHours = 24;
+    now.setHours(now.getHours() + minimumHours);
 
-      // 타임존 보정 (UTC+9)
-      const localISOTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
-        .toISOString()
-        .slice(0, 16);
+    // 타임존 보정 (UTC+9)
+    const localISOTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+      .toISOString()
+      .slice(0, 16);
 
-      const visitDate1 = document.getElementById("visit-date-1");
-      const visitDate2 = document.getElementById("visit-date-2");
-      visitDate1.min = localISOTime;
-      visitDate2.min = localISOTime;
+    const visitDate1 = document.getElementById("visit-date-1");
+    const visitDate2 = document.getElementById("visit-date-2");
+    visitDate1.min = localISOTime;
+    visitDate2.min = localISOTime;
+  });
+
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const filterForm = document.querySelector(".filter-panel form");
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
+        } else {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        }
+      });
+    }
+
+
+    var minFee = parseInt(<?= json_encode($minFee) ?>, 10);
+    var maxFee = parseInt(<?= json_encode($maxFee) ?>, 10);
+    var startMin = <?= json_encode(isset($_GET['yearly_fee_min']) ? $_GET['yearly_fee_min'] : $minFee) ?>;
+    var startMax = <?= json_encode(isset($_GET['yearly_fee_max']) ? $_GET['yearly_fee_max'] : $maxFee) ?>;
+
+    var subscriptionSlider = document.getElementById('subscription-slider');
+
+    noUiSlider.create(subscriptionSlider, {
+      start: [startMin, startMax],
+      connect: true,
+      step: 1000,
+      range: {
+        'min': minFee,
+        'max': maxFee
+      }
+    });
+
+    subscriptionSlider.noUiSlider.on('update', function(values) {
+      const minValue = parseInt(values[0]).toLocaleString();
+      const maxValue = parseInt(values[1]).toLocaleString();
+      document.getElementById('subscription-value').textContent = `${minValue}원 - ${maxValue}원`;
+
+      document.getElementById('yearly_fee_min').value = parseInt(values[0]);
+      document.getElementById('yearly_fee_max').value = parseInt(values[1]);
     });
 
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const filterForm = document.querySelector(".filter-panel form");
-      var acc = document.getElementsByClassName("accordion");
-      var i;
-
-      for (i = 0; i < acc.length; i++) {
-        acc[i].addEventListener("click", function() {
-          this.classList.toggle("active");
-          var panel = this.nextElementSibling;
-          if (panel.style.maxHeight) {
-            panel.style.maxHeight = null;
-          } else {
-            panel.style.maxHeight = panel.scrollHeight + "px";
-          }
-        });
-      }
+    subscriptionSlider.noUiSlider.on('change', function() {
+      filterForm.submit();
+    });
 
 
-      var minFee = parseInt(<?= json_encode($minFee) ?>, 10);
-      var maxFee = parseInt(<?= json_encode($maxFee) ?>, 10);
-      var startMin = <?= json_encode(isset($_GET['yearly_fee_min']) ? $_GET['yearly_fee_min'] : $minFee) ?>;
-      var startMax = <?= json_encode(isset($_GET['yearly_fee_max']) ? $_GET['yearly_fee_max'] : $maxFee) ?>;
+    const checkboxes = filterForm.querySelectorAll("input[type='checkbox']");
 
-      var subscriptionSlider = document.getElementById('subscription-slider');
-
-      noUiSlider.create(subscriptionSlider, {
-        start: [startMin, startMax],
-        connect: true,
-        step: 1000,
-        range: {
-          'min': minFee,
-          'max': maxFee
-        }
-      });
-
-      subscriptionSlider.noUiSlider.on('update', function(values) {
-        const minValue = parseInt(values[0]).toLocaleString();
-        const maxValue = parseInt(values[1]).toLocaleString();
-        document.getElementById('subscription-value').textContent = `${minValue}원 - ${maxValue}원`;
-
-        document.getElementById('yearly_fee_min').value = parseInt(values[0]);
-        document.getElementById('yearly_fee_max').value = parseInt(values[1]);
-      });
-
-
-      subscriptionSlider.noUiSlider.on('change', function() {
+    checkboxes.forEach((checkbox) => {
+      checkbox.addEventListener("change", () => {
         filterForm.submit();
       });
+    });
 
 
-      const checkboxes = filterForm.querySelectorAll("input[type='checkbox']");
+    const resetButton = document.getElementById('reset-filters');
+    resetButton.addEventListener('click', () => {
+      window.location.href = 'dryer.php';
+    });
 
-      checkboxes.forEach((checkbox) => {
-        checkbox.addEventListener("change", () => {
-          filterForm.submit();
+
+    const reviewModal = document.getElementById("review-modal");
+    const closeModal = document.getElementById("close-modal");
+    const modalContent = document.getElementById("review-modal-content");
+
+    function attachSortEventListener(modelId) {
+      const sortElement = document.getElementById("sort");
+      if (sortElement) {
+        sortElement.addEventListener("change", function() {
+          const sortOption = this.value;
+          fetch(`load_reviews.php?model_id=${modelId}&sort=${sortOption}`)
+            .then((response) => response.text())
+            .then((data) => {
+              modalContent.innerHTML = data;
+              attachSortEventListener(modelId);
+            })
+            .catch((error) => {
+              console.error("리뷰 데이터를 불러오는 데 실패했습니다:", error);
+            });
         });
-      });
-
-
-      const resetButton = document.getElementById('reset-filters');
-      resetButton.addEventListener('click', () => {
-        window.location.href = 'dryer.php';
-      });
-
-
-      const reviewModal = document.getElementById("review-modal");
-      const closeModal = document.getElementById("close-modal");
-      const modalContent = document.getElementById("review-modal-content");
-
-      function attachSortEventListener(modelId) {
-        const sortElement = document.getElementById("sort");
-        if (sortElement) {
-          sortElement.addEventListener("change", function() {
-            const sortOption = this.value;
-            fetch(`load_reviews.php?model_id=${modelId}&sort=${sortOption}`)
-              .then((response) => response.text())
-              .then((data) => {
-                modalContent.innerHTML = data;
-                attachSortEventListener(modelId);
-              })
-              .catch((error) => {
-                console.error("리뷰 데이터를 불러오는 데 실패했습니다:", error);
-              });
-          });
-        } else {
-          console.error("ID가 'sort'인 요소를 찾을 수 없습니다.");
-        }
+      } else {
+        console.error("ID가 'sort'인 요소를 찾을 수 없습니다.");
       }
+    }
 
-      document.querySelectorAll(".review-button").forEach((button) => {
-        button.addEventListener("click", async (e) => {
-          const modelId = e.target.dataset.modelId;
+    document.querySelectorAll(".review-button").forEach((button) => {
+      button.addEventListener("click", async (e) => {
+        const modelId = e.target.dataset.modelId;
 
+        modalContent.innerHTML =
+          "<p class='text-center text-gray-500'>리뷰를 불러오는 중...</p>";
+
+        try {
+          const response = await fetch(`load_reviews.php?model_id=${modelId}`);
+          const data = await response.text();
+          modalContent.innerHTML = data;
+          attachSortEventListener(modelId);
+        } catch (error) {
           modalContent.innerHTML =
-            "<p class='text-center text-gray-500'>리뷰를 불러오는 중...</p>";
-
-          try {
-            const response = await fetch(`load_reviews.php?model_id=${modelId}`);
-            const data = await response.text();
-            modalContent.innerHTML = data;
-            attachSortEventListener(modelId);
-          } catch (error) {
-            modalContent.innerHTML =
-              "<p class='text-red-500'>리뷰 데이터를 불러오는 데 실패했습니다.</p>";
-          }
-
-
-          reviewModal.classList.remove("hidden");
-          reviewModal.classList.add("show");
-          document.querySelector(".filter-panel").style.pointerEvents = "none";
-          document.body.style.overflow = "hidden";
-        });
-      });
-
-      closeModal.addEventListener("click", () => {
-        reviewModal.classList.remove("show");
-        reviewModal.classList.add("hidden");
-        document.querySelector(".filter-panel").style.pointerEvents = "auto";
-        document.body.style.overflow = "auto";
-      });
-
-
-      const filterPanel = document.querySelector(".filter-panel");
-
-      function restoreScrollPosition() {
-        const filterScroll = sessionStorage.getItem("filterScroll");
-        if (filterScroll) {
-          filterPanel.scrollTop = parseInt(filterScroll, 10);
-        }
-
-        const bodyScroll = sessionStorage.getItem("bodyScroll");
-        if (bodyScroll) {
-          window.scrollTo(0, parseInt(bodyScroll, 10));
-        }
-      }
-
-      function saveScrollPosition() {
-        sessionStorage.setItem("filterScroll", filterPanel.scrollTop);
-        sessionStorage.setItem("bodyScroll", window.scrollY);
-      }
-
-      filterPanel.addEventListener("scroll", saveScrollPosition);
-      window.addEventListener("scroll", saveScrollPosition);
-      restoreScrollPosition();
-
-      // 구독 신청 모달 관련 코드
-      const isLoggedIn =
-        <?= json_encode(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true); ?>;
-
-      const subscriptionButtons = document.querySelectorAll(".subscription-button");
-      const subscriptionModal = document.getElementById("subscription-modal");
-      const closeSubscription = document.getElementById("close-subscription");
-
-      subscriptionButtons.forEach((button) => {
-        button.addEventListener("click", (e) => {
-          if (!isLoggedIn) {
-            alert("로그인이 필요합니다.");
-            window.location.href = "<?= TEAM_PATH; ?>/pages/login/customer_login.php";
-            return;
-          }
-
-
-          const modelId = e.currentTarget.dataset.modelId;
-          document.getElementById("subscription-model-id").value = modelId;
-
-
-          subscriptionModal.style.display = "flex";
-          document.querySelector(".filter-panel").style.pointerEvents = "none";
-          document.body.style.overflow = "hidden";
-        });
-      });
-
-      closeSubscription.addEventListener("click", () => {
-        subscriptionModal.style.display = "none";
-        document.querySelector(".filter-panel").style.pointerEvents = "auto";
-        document.body.style.overflow = "auto";
-      });
-
-
-      document.getElementById("submit-subscription").addEventListener("click", function(e) {
-        const visitDate1 = document.getElementById("visit-date-1").value;
-        const visitDate2 = document.getElementById("visit-date-2").value;
-        const subscriptionPeriod = document.getElementById("subscription-period").value;
-        const additionalRequest = document.getElementById("additional-request").value;
-        const modelId = document.getElementById("subscription-model-id").value;
-
-        const minDateTime1 = document.getElementById("visit-date-1").min;
-        const minDateTime2 = document.getElementById("visit-date-2").min;
-
-
-        if (visitDate1 && new Date(visitDate1) < new Date(minDateTime1)) {
-          alert("첫 번째 방문 날짜는 현재 시각으로부터 최소 24시간 이후여야 합니다.");
-          e.preventDefault();
-          return;
+            "<p class='text-red-500'>리뷰 데이터를 불러오는 데 실패했습니다.</p>";
         }
 
 
-        if (visitDate2 && new Date(visitDate2) < new Date(minDateTime2)) {
-          alert("두 번째 방문 날짜는 현재 시각으로부터 최소 24시간 이후여야 합니다.");
-          e.preventDefault();
-          return;
-        }
-
-        if (!visitDate1 || !visitDate2 || !subscriptionPeriod) {
-          alert("모든 필수 항목을 입력해주세요.");
-          e.preventDefault();
-          return;
-        }
-
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", "subscription.php", true);
-        xhr.setRequestHeader("Content-Type", "application/json");
-
-        const data = JSON.stringify({
-          visit_date_1: visitDate1,
-          visit_date_2: visitDate2,
-          subscription_period: subscriptionPeriod,
-          additional_request: additionalRequest,
-          model_id: modelId,
-        });
-
-        xhr.onload = () => {
-          if (xhr.status === 200) {
-            try {
-              const response = JSON.parse(xhr.responseText);
-              if (response.success) {
-                alert("구독 신청이 완료되었습니다.");
-                window.location.href = "<?= TEAM_PATH; ?>/pages/customer/my_info/my_info.php";
-              } else {
-                alert("구독 신청 실패: " + response.message);
-              }
-            } catch (error) {
-              console.error("JSON 파싱 오류:", error);
-              alert("서버 응답이 올바르지 않습니다.");
-            }
-          } else {
-            alert("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-          }
-        };
-
-        xhr.send(data);
+        reviewModal.classList.remove("hidden");
+        reviewModal.classList.add("show");
+        document.querySelector(".filter-panel").style.pointerEvents = "none";
+        document.body.style.overflow = "hidden";
       });
     });
-  </script>
+
+    closeModal.addEventListener("click", () => {
+      reviewModal.classList.remove("show");
+      reviewModal.classList.add("hidden");
+      document.querySelector(".filter-panel").style.pointerEvents = "auto";
+      document.body.style.overflow = "auto";
+    });
 
 
-  <?php
-  include BASE_PATH . '/includes/footer.php';
-  ?>
+    const filterPanel = document.querySelector(".filter-panel");
+
+    function restoreScrollPosition() {
+      const filterScroll = sessionStorage.getItem("filterScroll");
+      if (filterScroll) {
+        filterPanel.scrollTop = parseInt(filterScroll, 10);
+      }
+
+      const bodyScroll = sessionStorage.getItem("bodyScroll");
+      if (bodyScroll) {
+        window.scrollTo(0, parseInt(bodyScroll, 10));
+      }
+    }
+
+    function saveScrollPosition() {
+      sessionStorage.setItem("filterScroll", filterPanel.scrollTop);
+      sessionStorage.setItem("bodyScroll", window.scrollY);
+    }
+
+    filterPanel.addEventListener("scroll", saveScrollPosition);
+    window.addEventListener("scroll", saveScrollPosition);
+    restoreScrollPosition();
+
+    // 구독 신청 모달 관련 코드
+    const isLoggedIn =
+      <?= json_encode(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true); ?>;
+
+    const subscriptionButtons = document.querySelectorAll(".subscription-button");
+    const subscriptionModal = document.getElementById("subscription-modal");
+    const closeSubscription = document.getElementById("close-subscription");
+
+    subscriptionButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        if (!isLoggedIn) {
+          alert("로그인이 필요합니다.");
+          window.location.href = "<?= TEAM_PATH; ?>/pages/login/customer_login.php";
+          return;
+        }
+
+
+        const modelId = e.currentTarget.dataset.modelId;
+        document.getElementById("subscription-model-id").value = modelId;
+
+
+        subscriptionModal.style.display = "flex";
+        document.querySelector(".filter-panel").style.pointerEvents = "none";
+        document.body.style.overflow = "hidden";
+      });
+    });
+
+    closeSubscription.addEventListener("click", () => {
+      subscriptionModal.style.display = "none";
+      document.querySelector(".filter-panel").style.pointerEvents = "auto";
+      document.body.style.overflow = "auto";
+    });
+
+
+    document.getElementById("submit-subscription").addEventListener("click", function(e) {
+      const visitDate1 = document.getElementById("visit-date-1").value;
+      const visitDate2 = document.getElementById("visit-date-2").value;
+      const subscriptionPeriod = document.getElementById("subscription-period").value;
+      const additionalRequest = document.getElementById("additional-request").value;
+      const modelId = document.getElementById("subscription-model-id").value;
+
+      const minDateTime1 = document.getElementById("visit-date-1").min;
+      const minDateTime2 = document.getElementById("visit-date-2").min;
+
+
+      if (visitDate1 && new Date(visitDate1) < new Date(minDateTime1)) {
+        alert("첫 번째 방문 날짜는 현재 시각으로부터 최소 24시간 이후여야 합니다.");
+        e.preventDefault();
+        return;
+      }
+
+
+      if (visitDate2 && new Date(visitDate2) < new Date(minDateTime2)) {
+        alert("두 번째 방문 날짜는 현재 시각으로부터 최소 24시간 이후여야 합니다.");
+        e.preventDefault();
+        return;
+      }
+
+      if (!visitDate1 || !visitDate2 || !subscriptionPeriod) {
+        alert("모든 필수 항목을 입력해주세요.");
+        e.preventDefault();
+        return;
+      }
+
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "subscription.php", true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+
+      const data = JSON.stringify({
+        visit_date_1: visitDate1,
+        visit_date_2: visitDate2,
+        subscription_period: subscriptionPeriod,
+        additional_request: additionalRequest,
+        model_id: modelId,
+      });
+
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          try {
+            const response = JSON.parse(xhr.responseText);
+            if (response.success) {
+              alert("구독 신청이 완료되었습니다.");
+              window.location.href = "<?= TEAM_PATH; ?>/pages/customer/my_info/my_info.php";
+            } else {
+              alert("구독 신청 실패: " + response.message);
+            }
+          } catch (error) {
+            console.error("JSON 파싱 오류:", error);
+            alert("서버 응답이 올바르지 않습니다.");
+          }
+        } else {
+          alert("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+        }
+      };
+
+      xhr.send(data);
+    });
+  });
+</script>
+
+
+<?php
+include BASE_PATH . '/includes/footer.php';
+?>
