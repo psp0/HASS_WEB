@@ -17,6 +17,10 @@ include BASE_PATH . '/includes/customer_header.php';
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         text-align: left;
         width: 400px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 
     .myinfo-container input {
