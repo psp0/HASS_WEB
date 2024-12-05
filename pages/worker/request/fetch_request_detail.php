@@ -233,8 +233,8 @@ echo "<h3>기사 및 방문일자 선택</h3>";
 echo "<form action='fetch_accept.php' method='POST' onsubmit='return validateVisitForm()'>";
 echo "<input type='hidden' id='request_id' name='request_id' value='" . htmlspecialchars($requestId) . "' />";
 // 전문가 선택 박스
-echo "<label for='special_worker'>설치 제품 전문기사 선택:</label>";
-echo "<select name='special_worker' id='special_worker'>";
+echo "<label for='special_worker'><span class='required-star'>*</span> 설치 제품 전문기사 선택:</label>";
+echo "<select name='special_worker' id='special_worker'required>";
 echo "<option value=''>선택하세요</option>";
 
 if ($specialWorkerData) {                              
@@ -247,8 +247,8 @@ echo "</select>";
 
 if (count($additionalData) == 2) {
     // 방문 일자 선택 박스
-    echo "<br><label for='visit_date'>방문일자 선택:</label>";
-    echo "<select name='visit_date' id='visit_date'>";
+    echo "<br><label for='visit_date'><span class='required-star'>*</span> 방문일자 선택:</label>";
+    echo "<select name='visit_date' id='visit_date'required>";
     echo "<option value=''>선택하세요</option>";    
     echo "<option value='" . htmlspecialchars($additionalData[0]['PREFER_DATE']) . "'>" . htmlspecialchars($additionalData[0]['PREFER_DATE']) . "</option>";
     echo "<option value='" . htmlspecialchars($additionalData[1]['PREFER_DATE']) . "'>" . htmlspecialchars($additionalData[1]['PREFER_DATE']) . "</option>";
@@ -266,12 +266,12 @@ echo "</form>";
         echo "<form action='fetch_visit.php' method='POST'>";
         if($requestType === '고장'){
             // 고장 증상 입력란 추가
-            echo "<label for='problem_detail'>고장 증상:</label><br>";
-            echo "<textarea id='problem_detail' name='problem_detail' rows='4' cols='50' placeholder='고장 증상을 입력하세요'></textarea><br><br>";
+            echo "<label for='problem_detail'><span class='required-star'>*</span> 고장 증상:</label><br>";
+            echo "<textarea id='problem_detail' name='problem_detail' rows='4' cols='50' placeholder='고장 증상을 입력하세요'required></textarea><br><br>";
             
             // 수리 내용 입력란 추가
-            echo "<label for='solution_detail'>수리 내용:</label><br>";
-            echo "<textarea id='solution_detail' name='solution_detail' rows='4' cols='50' placeholder='수리 내용을 입력하세요'></textarea><br><br>";
+            echo "<label for='solution_detail'><span class='required-star'>*</span> 수리 내용:</label><br>";
+            echo "<textarea id='solution_detail' name='solution_detail' rows='4' cols='50' placeholder='수리 내용을 입력하세요'required></textarea><br><br>";
     
         }
         echo "<input type='hidden' id='request_id' name='request_id' value='" . htmlspecialchars($requestId) . "' />";        

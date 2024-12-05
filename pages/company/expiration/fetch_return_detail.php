@@ -117,9 +117,9 @@ if ($subscriptionId && $customerId) {
     echo "<input type='hidden' id='subscription_id' name='subscription_id' value='" . htmlspecialchars($subscriptionId) . "' />";  
     
     echo "<div>";
-    echo "<label for='visit_date' class='visit_date'>방문 일자 및 시간:</label>";
+    echo "<label for='visit_date' class='visit_date'><span class='required-star'>*</span> 방문 일자 및 시간:</label>";
     echo "<div class='visit_date-container'>";  
-    echo "<input type='datetime-local' id='visit_date' name='visit_date' />";
+    echo "<input type='datetime-local' id='visit_date' name='visit_date' / required>";
     echo "</div>"; // visit_date-container div 닫힘
     echo "</div>"; // visit_date div 닫힘
     
@@ -130,7 +130,7 @@ if ($subscriptionId && $customerId) {
     echo "</div>"; // additional_comment-container div 닫힘
     echo "</div>"; // additional_comment div 닫힘
     
-    echo "<br><button type='submit' id='subscriptionExtendButton'>구독 연장</button>";
+    echo "<br><button type='submit' id='returnRequestButton'>회수 요청</button>";
     echo "</form>";
     
     
@@ -139,21 +139,3 @@ if ($subscriptionId && $customerId) {
     echo "<p class='error'>구독 ID가 제공되지 않았습니다.</p>";
 }
 ?>
-
-
-<!--
-<
-script >
-    function validateVisitForm() {
-        var specialWorker = document.getElementById("special_worker").value;
-        var visitDate = document.getElementById("visit_date") ? document.getElementById("visit_date").value :
-            ''; // 방문일자 선택이 있을 경우만 체크
-
-        if (specialWorker === "" || (count($additionalData) == 2 && visitDate === "")) {
-            event.preventDefault();
-            alert("모든 란을 입력해 주세요.");
-            return false; // 폼 제출을 막습니다.
-        }
-        return true; // 폼을 정상적으로 제출합니다.
-    }
-</script> -->

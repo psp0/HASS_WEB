@@ -3,68 +3,101 @@ require '../../config.php';
 include BASE_PATH . '/includes/worker_header.php';
 ?>
 <style>
-.data-container {
-    display: flex;
-    width: 100%;
-    height: 100vh;
-    overflow-y: auto;
-}
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+    }
 
-.left-section, .right-section {
-    padding: 10px;
-    box-sizing: border-box;
-    overflow-y: auto;
-}
+    .data-container {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        height: calc(100vh - 90px); 
+        box-sizing: border-box;
+    }
 
-.left-section {
-    width: 50%;
-}
+    .left-section,
+    .right-section {
+        padding: 20px;
+        box-sizing: border-box;
+        overflow-y: auto;
+    }
 
-.right-section {
-    width: 50%;
-    border-left: 2px solid #ccc;
-}
+    .left-section {
+        flex: 1 1 70%;
+        min-width: 300px;
+    }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+    .right-section {
+        flex: 1 1 30%;
+        min-width: 300px;
+        border-left: 2px solid #ccc;
+    }
 
-table, th, td {
-    border: 1px solid #ddd;
-}
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #fff;
+        margin-bottom: 20px;
+    }
 
-th {
-    background-color: #f2f2f2;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-}
+    th,
+    td {
+        padding: 12px 15px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
 
-.table-container {
-    max-height: 50vh;
-    overflow-y: auto;
-}
+    th {
+        background-color: #d1d5db;
+        color: #4b5563;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        font-size: 1em;
+        border-bottom: 2px solid #ddd;
+    }
 
-th, td {
-    padding: 8px;
-    text-align: left;
-}
 
-h3 {
-    margin-top: 0;
-    font-size: 1.2em;
-}
+    tr {
+        border-bottom: 1px solid #ddd;
+    }
+
+
+    tr:last-child {
+        border-bottom: none;
+    }
+
+    .table-container {
+        max-height: 50vh;
+        overflow-y: auto;
+    }
+
+    h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        font-size: 1.5em;
+        color: #007bff;
+    }
+    
 </style>
 <div class="data-container">
-    <?php     
-    $config = require '../../config.php'; 
-    $dsn = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST={$config['host']})(PORT={$config['port']}))(CONNECT_DATA=(SID={$config['sid']})))";      
+    <?php
+    $config = require '../../config.php';
+    $dsn = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST={$config['host']})(PORT={$config['port']}))(CONNECT_DATA=(SID={$config['sid']})))";
     $conn = oci_connect($config['username'], $config['password'], $dsn, 'UTF8');
 
     if (!$conn) {
         $e = oci_error();
         echo "<p class='error'>연결 실패: " . htmlspecialchars($e['message']) . "</p>";
+        exit;
+    }
+
+    if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'worker') {
+        echo "<script>alert('기사 전용 페이지 입니다. 기사 로그인을 해주세요.');</script>";
+        echo "<script>location.href='" . TEAM_PATH . "/pages/login/worker_login.php';</script>";
         exit;
     }
 
@@ -132,52 +165,90 @@ ORDER BY
     oci_execute($stmtC);
 
     ?>
-    
+
     <div class="data-container">
-    <div class="left-section">
-        <div class="section" id="A">
-            <h3>대기중인 요청</h3>
-            <div class="table-container">
-                <table>
-                    <tr>
-                        <th>구독 ID</th>
-                        <th>가전제품 종류</th>
-                        <th>요청 종류</th>
-                        <th>생성일</th>
-                    </tr>
-                    <?php while ($row = oci_fetch_assoc($stmtA)): ?>
+        <div class="left-section">
+            <div class="section" id="A">
+                <h3>대기중인 요청</h3>
+                <div class="table-container">
+                    <table>
                         <tr>
-                            <td><?= htmlspecialchars($row['SUBSCRIPTION_ID']) ?></td>
-                            <td><?= htmlspecialchars($row['MODEL_TYPE']) ?></td>
-                            <td><?= htmlspecialchars($row['REQUEST_TYPE']) ?></td>
-                            <td><?= htmlspecialchars($row['DATE_CREATED']) ?></td>
+                            <th>구독 ID</th>
+                            <th>가전제품 종류</th>
+                            <th>요청 종류</th>
+                            <th>생성일</th>
                         </tr>
-                    <?php endwhile; ?>
-                </table>
+                        <?php while ($row = oci_fetch_assoc($stmtA)): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($row['SUBSCRIPTION_ID']) ?></td>
+                                <td><?= htmlspecialchars($row['MODEL_TYPE']) ?></td>
+                                <td><?= htmlspecialchars($row['REQUEST_TYPE']) ?></td>
+                                <td><?= htmlspecialchars($row['DATE_CREATED']) ?></td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </table>
+                </div>
+            </div>
+
+            <div class="section" id="B">
+                <h3>방문예정</h3>
+                <div class="table-container">
+                    <table>
+                        <tr>
+
+                            <th>고객 이름</th>
+                            <th>메인 전화 번호</th>
+                            <th>주소</th>
+                            <th>방문 예정 일자</th>
+                            <th>요청 종류</th>
+                            <th>기사 이름</th>
+                        </tr>
+                        <?php while ($row = oci_fetch_assoc($stmtB)): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($row['CUSTOMER_NAME']) ?></td>
+                                <td><?= htmlspecialchars($row['MAIN_PHONE_NUMBER']) ?></td>
+                                <td><?= htmlspecialchars($row['STREET_ADDRESS']) ?> <?= htmlspecialchars($row['DETAILED_ADDRESS']) ?></td>
+                                <td><?= htmlspecialchars($row['VISIT_DATE_FORMATTED']) ?></td>
+                                <td><?= htmlspecialchars($row['REQUEST_TYPE']) ?></td>
+                                <td><?= htmlspecialchars($row['WORKER_NAME']) ?></td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <div class="section" id="B">
-            <h3>방문예정</h3>
+        <div class="right-section">
+            <h3>재고 및 구독 현황</h3>
             <div class="table-container">
                 <table>
                     <tr>
-                       
-                        <th>고객 이름</th>
-                        <th>메인 전화 번호</th>
-                        <th>주소</th>      
-                        <th>방문 예정 일자</th>
-                        <th>요청 종류</th>
-                        <th>기사 이름</th>
+                        <th>제품 종류</th>
+                        <th>모델 ID</th>
+                        <th>재고량</th>
+                        <th>구독중</th>
                     </tr>
-                    <?php while ($row = oci_fetch_assoc($stmtB)): ?>
+                    <?php
+                    $previousModelType = '';
+                    while ($row = oci_fetch_assoc($stmtC)):
+                        if ($previousModelType != $row['MODEL_TYPE']):
+                            $rowspan = 1;
+                            $previousModelType = $row['MODEL_TYPE'];
+                            $checkRow = oci_parse($conn, "SELECT COUNT(*) FROM MODEL WHERE MODEL_TYPE = '{$row['MODEL_TYPE']}'");
+                            oci_execute($checkRow);
+                            $modelCount = oci_fetch_assoc($checkRow)['COUNT(*)'];
+                            $rowspan = $modelCount;
+                        else:
+                            $rowspan = 0;
+                        endif;
+                    ?>
                         <tr>
-                            <td><?= htmlspecialchars($row['CUSTOMER_NAME']) ?></td>
-                            <td><?= htmlspecialchars($row['MAIN_PHONE_NUMBER']) ?></td>
-                            <td><?= htmlspecialchars($row['STREET_ADDRESS']) ?> <?= htmlspecialchars($row['DETAILED_ADDRESS']) ?></td>                    
-                            <td><?= htmlspecialchars($row['VISIT_DATE_FORMATTED']) ?></td>
-                            <td><?=htmlspecialchars($row['REQUEST_TYPE'])?></td>
-                            <td><?= htmlspecialchars($row['WORKER_NAME']) ?></td>
+                            <?php if ($rowspan > 0): ?>
+                                <td rowspan="<?= $rowspan ?>"><?= htmlspecialchars($row['MODEL_TYPE']) ?></td>
+                            <?php endif; ?>
+                            <td><?= htmlspecialchars($row['MODEL_ID']) ?></td>
+                            <td><?= htmlspecialchars($row['STOCK_COUNT']) ?></td>
+                            <td><?= htmlspecialchars($row['SUBSCRIPTION_COUNT']) ?></td>
                         </tr>
                     <?php endwhile; ?>
                 </table>
@@ -185,45 +256,7 @@ ORDER BY
         </div>
     </div>
 
-    <div class="right-section">
-        <h3>재고 및 구독 현황</h3>
-        <div class="table-container">
-            <table>
-                <tr>
-                    <th>제품 종류</th>
-                    <th>모델 ID</th>
-                    <th>재고량</th>
-                    <th>구독중</th>
-                </tr>
-                <?php 
-                $previousModelType = '';  
-                while ($row = oci_fetch_assoc($stmtC)): 
-                    if ($previousModelType != $row['MODEL_TYPE']):
-                        $rowspan = 1; 
-                        $previousModelType = $row['MODEL_TYPE'];
-                        $checkRow = oci_parse($conn, "SELECT COUNT(*) FROM MODEL WHERE MODEL_TYPE = '{$row['MODEL_TYPE']}'");
-                        oci_execute($checkRow);
-                        $modelCount = oci_fetch_assoc($checkRow)['COUNT(*)'];
-                        $rowspan = $modelCount;
-                    else:
-                        $rowspan = 0;
-                    endif;
-                ?>
-                    <tr>
-                        <?php if ($rowspan > 0): ?>
-                            <td rowspan="<?= $rowspan ?>"><?= htmlspecialchars($row['MODEL_TYPE']) ?></td>
-                        <?php endif; ?>
-                        <td><?= htmlspecialchars($row['MODEL_ID']) ?></td>
-                        <td><?= htmlspecialchars($row['STOCK_COUNT']) ?></td>
-                        <td><?= htmlspecialchars($row['SUBSCRIPTION_COUNT']) ?></td>
-                    </tr>
-                <?php endwhile; ?>
-            </table>
-        </div>
-    </div>
-</div>
-
-    <?php 
+    <?php
     oci_free_statement($stmtA);
     oci_free_statement($stmtB);
     oci_free_statement($stmtC);
@@ -231,6 +264,6 @@ ORDER BY
     ?>
 </div>
 
-    <?php
-    include BASE_PATH . '/includes/footer.php';
+<?php
+include BASE_PATH . '/includes/footer.php';
 ?>

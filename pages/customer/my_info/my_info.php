@@ -25,6 +25,11 @@ if (!isset($_SESSION['auth_id']) || empty($_SESSION['auth_id'])) {
     echo "<script>location.href='" . TEAM_PATH . "/pages/login/customer_login.php';</script>";
     exit;
 }
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'customer') {
+    echo "<script>alert('고객 전용 페이지 입니다. 고객 로그인을 해주세요.');</script>";
+    echo "<script>location.href='" . TEAM_PATH . "/pages/login/customer_login.php';</script>";
+    exit;
+}
 
 $currentUserID = $_SESSION['auth_id'];
 $customer_name = '';
@@ -338,7 +343,7 @@ if (!empty($model_ids_requests)) {
         </div>
 
 
-   
+
         <div class="right-section">
 
             <div class="mb-6">
@@ -407,7 +412,7 @@ if (!empty($model_ids_requests)) {
                             $is_pending = ($request_status == '대기중');
                             ?>
                             <div class="product-card">
-                            
+
                                 <div class="product-details">
                                     <p>
                                         구독번호: <span class="detail-value"><?= htmlspecialchars($subscription_id) ?></span>&emsp;
@@ -441,7 +446,7 @@ if (!empty($model_ids_requests)) {
                                 </div>
 
 
-                          
+
                                 <?php if ($is_pending) : ?>
                                     <div class="product-actions">
                                         <button class="edit-button" onclick="openEditModal(<?= htmlspecialchars($request_id) ?>)">수정</button>
@@ -478,7 +483,7 @@ if (!empty($model_ids_requests)) {
                             }
                             ?>
                             <div class="product-card">
-                        
+
                                 <div class="product-details">
                                     <p>
                                         구독번호: <span class="detail-value"><?= htmlspecialchars($subscription_id) ?></span>&emsp;
@@ -503,15 +508,15 @@ if (!empty($model_ids_requests)) {
                                 </div>
 
 
-                         
+
                             </div>
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </div>
             </div>
-       
 
-         
+
+
             <div class="mb-6">
                 <div class="section-title">나의 구독 목록</div>
                 <div class="tabs" data-group="subscriptions">
@@ -540,7 +545,7 @@ if (!empty($model_ids_requests)) {
                             $hasOngoingRequest = $row['HAS_ONGOING_REQUEST'];
                             ?>
                             <div class="product-card">
-                         
+
                                 <div class="product-details">
                                     <p class="text-lg font-medium">
                                         구독번호: <span class="detail-value"><?= htmlspecialchars($row['SUBSCRIPTION_ID']) ?></span>&emsp;
@@ -561,13 +566,13 @@ if (!empty($model_ids_requests)) {
 
 
 
-                     
+
                                 <div class="product-actions">
                                     <?php if ($hasOngoingRequest) : ?>
                                         <!-- 진행 중인 수리 요청이 있는 경우 버튼 글자 -->
                                         <button class="repair-button disabled" disabled>진행 중인 수리 요청이 있습니다</button>
                                     <?php else : ?>
-                               
+
                                         <button class="repair-button"
                                             data-serial-number="<?= htmlspecialchars($row['SERIAL_NUMBER']) ?>"
                                             data-subscription-id="<?= htmlspecialchars($row['SUBSCRIPTION_ID']) ?>">
@@ -575,7 +580,7 @@ if (!empty($model_ids_requests)) {
                                         </button>
                                     <?php endif; ?>
 
-                               
+
                                     <button class="review-button" data-model-id="<?= htmlspecialchars($row['MODEL_ID']) ?>" data-has-review="<?= $hasReview ? '1' : '0' ?>">
                                         <?= $buttonText ?>
                                     </button>
@@ -598,7 +603,7 @@ if (!empty($model_ids_requests)) {
                             $buttonText = $hasReview ? '리뷰 수정' : '리뷰 작성';
                             ?>
                             <div class="product-card">
-                         
+
                                 <div class="product-details">
                                     <p class="text-lg font-medium">
                                         구독번호: <span class="detail-value"><?= htmlspecialchars($row['SUBSCRIPTION_ID']) ?></span>&emsp;
@@ -620,9 +625,9 @@ if (!empty($model_ids_requests)) {
 
 
 
-                          
+
                                 <div class="product-actions">
-                    
+
                                     <button class="review-button" data-model-id="<?= htmlspecialchars($row['MODEL_ID']) ?>" data-has-review="<?= $hasReview ? '1' : '0' ?>">
                                         <?= $buttonText ?>
                                     </button>
@@ -677,7 +682,7 @@ if (!empty($model_ids_requests)) {
                 </label>
                 <div class="star-container">
                     <input type="hidden" name="rating" id="rating-input" value="">
-   
+
                     <?php for ($i = 1; $i <= 5; $i++) : ?>
                         <svg class="star" data-value="<?= $i ?>" viewBox="0 0 24 24">
                             <path
@@ -723,7 +728,7 @@ if (!empty($model_ids_requests)) {
                 <label>
                     <span class="text-red-500">*</span> 증상 (최대 1000자)
                 </label>
-     
+
                 <textarea name="symptom" rows="6" maxlength="980" required></textarea>
             </div>
             <input type="hidden" name="subscription_id" id="repair-subscription-id" value="">
@@ -736,7 +741,6 @@ if (!empty($model_ids_requests)) {
 </div>
 
 <script>
- 
     function showContent(contentId, group) {
         const contentBoxes = document.querySelectorAll(`.content-box[data-group="${group}"]`);
         contentBoxes.forEach((box) => box.classList.add('hidden'));
