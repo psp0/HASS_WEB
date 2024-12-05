@@ -3,6 +3,23 @@ require '../../../config.php';
 include BASE_PATH . '/includes/company_header.php';
 ?>
 <style>
+    .error-icon {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: red;
+        font-weight: bold;
+        font-size: 20px;
+        pointer-events: none;
+        display: none; /* 기본적으로 숨김 */
+    }
+
+    /* 입력 필드 오류 상태 */
+    .input-error {
+        border-color: red;
+    }
+
     /* 데이터 컨테이너 스타일 */
     .data-container {
         display: block;
@@ -69,14 +86,12 @@ include BASE_PATH . '/includes/company_header.php';
     .modal {
         display: none;
         position: fixed;
-        z-index: 1;
+        z-index: 100; /* 다른 요소 위에 표시되도록 높게 설정 */
         left: 0;
         top: 0;
         width: 100%;
         height: 100%;
         overflow: auto;
-        background-color: rgba(0, 0, 0, 0.4);
-        background-color: rgba(0, 0, 0, 0.4);
         background-color: rgba(0, 0, 0, 0.4);
     }
 
@@ -88,21 +103,24 @@ include BASE_PATH . '/includes/company_header.php';
         width: 80%;
         max-height: 90vh;
         overflow-y: auto;
+        position: relative;
     }
 
     /* 닫기 버튼 스타일 */
     .close {
         color: #aaa;
-        float: right;
+        position: absolute;
+        right: 20px;
+        top: 10px;
         font-size: 28px;
         font-weight: bold;
+        cursor: pointer;
     }
 
     .close:hover,
     .close:focus {
         color: black;
         text-decoration: none;
-        cursor: pointer;
     }
 
     .btn-detail {
@@ -121,15 +139,9 @@ include BASE_PATH . '/includes/company_header.php';
 
     .modal-content form {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         gap: 15px;
         width: 100%;
-        flex-wrap: wrap;
-        justify-content: space-around;
-    }
-
-    .modal-content form br {
-        display: none;
     }
 
     .modal-content form label {
@@ -153,17 +165,8 @@ include BASE_PATH . '/includes/company_header.php';
 
     .modal-content form input,
     .modal-content form textarea {
-
-        width: 30vw;
-        max-width: 1200px;
         padding: 12px;
-        margin-bottom: 20px;
-        box-sizing: border-box;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        resize: vertical;
         font-size: 16px;
-
     }
 
     .modal-content form button {
@@ -178,15 +181,14 @@ include BASE_PATH . '/includes/company_header.php';
         align-self: flex-start;
     }
 
-
     .modal-content form button:hover {
         background-color: #0056b3;
     }
+
     .required-star {
         color: red;
         margin-right: 2px;
     }
-
 </style>
 
 <div class="data-container">
@@ -202,35 +204,36 @@ include BASE_PATH . '/includes/company_header.php';
         exit;
     }
 
+    // 회사 전용 페이지 확인
+    session_start(); // 세션 시작을 먼저 해야 합니다.
     if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'company') {
         echo "<script>alert('회사 전용 페이지 입니다. 회사 로그인을 해주세요.');</script>";
         echo "<script>location.href='" . TEAM_PATH . "/pages/login/company_login.php';</script>";
         exit;
     }
 
-    // A 쿼리 실행
+    // A 쿼리 실행: 만료된 구독 정보 조회
     $queryA = "SELECT
-    SUBSCRIPTION.SUBSCRIPTION_ID,    
-    TO_CHAR(SUBSCRIPTION.EXPIRED_DATE, 'YY.MM.DD HH24:MI') AS EXPIRED_DATE,    
-    CUSTOMER.CUSTOMER_ID,
-    CUSTOMER_NAME,
-    MAIN_PHONE_NUMBER,
-    SUB_PHONE_NUMBER
-FROM
-    SUBSCRIPTION
-JOIN CUSTOMER ON SUBSCRIPTION.CUSTOMER_ID = CUSTOMER.CUSTOMER_ID
-LEFT JOIN REQUEST ON SUBSCRIPTION.SUBSCRIPTION_ID = REQUEST.SUBSCRIPTION_ID
-    AND REQUEST.REQUEST_TYPE = '회수'
-WHERE
-    SUBSCRIPTION.EXPIRED_DATE < SYSDATE
-    AND REQUEST.SUBSCRIPTION_ID IS NULL
-ORDER BY
-    EXPIRED_DATE ASC
-";
+        SUBSCRIPTION.SUBSCRIPTION_ID,    
+        TO_CHAR(SUBSCRIPTION.EXPIRED_DATE, 'YY.MM.DD HH24:MI') AS EXPIRED_DATE,    
+        CUSTOMER.CUSTOMER_ID,
+        CUSTOMER.CUSTOMER_NAME,
+        CUSTOMER.MAIN_PHONE_NUMBER,
+        CUSTOMER.SUB_PHONE_NUMBER
+    FROM
+        SUBSCRIPTION
+    JOIN CUSTOMER ON SUBSCRIPTION.CUSTOMER_ID = CUSTOMER.CUSTOMER_ID
+    LEFT JOIN REQUEST ON SUBSCRIPTION.SUBSCRIPTION_ID = REQUEST.SUBSCRIPTION_ID
+        AND REQUEST.REQUEST_TYPE = '회수'
+    WHERE
+        SUBSCRIPTION.EXPIRED_DATE < SYSDATE
+        AND REQUEST.SUBSCRIPTION_ID IS NULL
+    ORDER BY
+        SUBSCRIPTION.EXPIRED_DATE ASC
+    ";
 
     $stmtA = oci_parse($conn, $queryA);
     oci_execute($stmtA);
-
 
     // A 쿼리 결과를 테이블로 출력
     echo "<div class='section'>
@@ -242,10 +245,10 @@ ORDER BY
                         <th>구독 ID</th>
                         <th>만료 일수</th>                    
                         <th>구독 만료일</th>            
-                         <th>고객 ID</th>                             
+                        <th>고객 ID</th>                             
                         <th>고객 이름</th>
                         <th>고객 전화번호</th>
-                         <th>보조 전화번호</th>            
+                        <th>보조 전화번호</th>            
                         <th></th>
                         <th></th>
                     </tr>
@@ -285,7 +288,7 @@ ORDER BY
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>구독 연장</h2>
-        <p id="extendModalContent"></p>
+        <div id="extendModalContent"></div> <!-- <div> 태그로 변경 -->
     </div>
 </div>
 
@@ -294,7 +297,7 @@ ORDER BY
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>회수 요청</h2>
-        <p id="returnModalContent"></p>
+        <div id="returnModalContent"></div> <!-- <div> 태그로 변경 -->
     </div>
 </div>
 
@@ -309,7 +312,7 @@ ORDER BY
     const returnModal = document.getElementById('returnModal');
     const returnModalContent = document.getElementById('returnModalContent');
 
-    // 모달 닫기
+    // 모달 닫기 버튼 이벤트
     const closeBtns = document.querySelectorAll('.close');
     closeBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -318,7 +321,14 @@ ORDER BY
         });
     });
 
-    // 연장 버튼 클릭 시
+    // 모달 외부 클릭 시 닫기
+    window.addEventListener('click', (event) => {
+        if (event.target === extendModal || event.target === returnModal) {
+            extendModal.style.display = 'none';
+            returnModal.style.display = 'none';
+        }
+    });
+
     // 연장 버튼 클릭 시
     extendButtons.forEach(button => {
         button.addEventListener('click', function() {
@@ -348,7 +358,7 @@ ORDER BY
         button.addEventListener('click', function() {
             const row = this.closest('.request-row'); // 클릭한 버튼의 부모 tr
             const subscriptionId = row.getAttribute('data-id');
-            const customerId = row.getAttribute('data-customer-id'); // 여기에서 customer_id를 가져옵니다.
+            const customerId = row.getAttribute('data-customer-id'); // customer_id를 가져옵니다.
 
             // AJAX 요청을 통해 회수에 대한 세부 정보를 가져옵니다.
             fetch('fetch_return_detail.php', {
@@ -356,25 +366,140 @@ ORDER BY
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
-                    body: `subscriptionId=${subscriptionId}&customerId=${customerId}`
+                    body: `subscriptionId=${encodeURIComponent(subscriptionId)}&customerId=${encodeURIComponent(customerId)}`
                 })
                 .then(response => response.text())
                 .then(data => {
                     returnModalContent.innerHTML = data;
                     returnModal.style.display = 'block';
+
+                    // 회수 폼에 이벤트 리스너 추가
+                    const returnForm = document.getElementById('returnForm');
+                    if (returnForm) {
+                        const visitDateInput = document.getElementById('visit_date');
+                        const visitDateErrorIcon = document.getElementById('visit_date_error');
+
+                        // 사용자 정의 오류 메시지 설정
+                        const customInvalidMessage = '방문 일자는 현재 시각 기준 24시간 이후로, 오전 9시부터 오후 6시 사이로 선택해주세요.';
+
+                        // Set min attribute to current time +24h
+                        function setMinDateTime() {
+                            const now = new Date();
+                            now.setHours(now.getHours() + 24);
+                            const year = now.getFullYear();
+                            const month = String(now.getMonth() + 1).padStart(2, '0');
+                            const day = String(now.getDate()).padStart(2, '0');
+                            const hours = String(now.getHours()).padStart(2, '0');
+                            const minutes = String(now.getMinutes()).padStart(2, '0');
+                            const minDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+                            visitDateInput.setAttribute('min', minDateTime);
+                        }
+
+                        setMinDateTime();
+
+                        // 입력 시 유효성 검사 및 오류 아이콘 표시
+                        function validateVisitDate() {
+                            const selectedDateStr = visitDateInput.value;
+
+                            if (!selectedDateStr) {
+                                visitDateInput.setCustomValidity('');
+                                visitDateInput.classList.remove('input-error');
+                                visitDateErrorIcon.style.display = 'none';
+                                return;
+                            }
+
+                            // Parse selected date and time
+                            const selectedDate = new Date(selectedDateStr);
+                            if (isNaN(selectedDate.getTime())) {
+                                visitDateInput.setCustomValidity('유효한 날짜와 시간을 선택해주세요.');
+                                visitDateInput.classList.add('input-error');
+                                visitDateErrorIcon.style.display = 'inline';
+                                return;
+                            }
+
+                            // Get minDate from the input's min attribute
+                            const minDateStr = visitDateInput.getAttribute('min');
+                            const minDate = new Date(minDateStr);
+
+                            // Check if selectedDate is before minDate
+                            if (selectedDate < minDate) {
+                                visitDateInput.setCustomValidity(customInvalidMessage);
+                                visitDateInput.classList.add('input-error');
+                                visitDateErrorIcon.style.display = 'inline';
+                                return;
+                            }
+
+                            // Check if time is between 09:00 and 18:00
+                            const hours = selectedDate.getHours();
+                            if (hours < 9 || hours >= 18) {
+                                visitDateInput.setCustomValidity(customInvalidMessage);
+                                visitDateInput.classList.add('input-error');
+                                visitDateErrorIcon.style.display = 'inline';
+                                return;
+                            }
+
+                            // If all checks pass, reset the custom validity and hide error icon
+                            visitDateInput.setCustomValidity('');
+                            visitDateInput.classList.remove('input-error');
+                            visitDateErrorIcon.style.display = 'none';
+                        }
+
+                        // Validate on input and change
+                        visitDateInput.addEventListener('input', validateVisitDate);
+                        visitDateInput.addEventListener('change', validateVisitDate);
+
+                        // Handle form submission via AJAX
+                        returnForm.addEventListener('submit', function(event) {
+                            event.preventDefault(); // Prevent default form submission
+
+                            validateVisitDate();
+
+                            if (!visitDateInput.checkValidity()) {
+                                alert(visitDateInput.validationMessage);
+                                return;
+                            }
+
+                            // Collect form data
+                            const formData = new FormData(returnForm);
+                            const formParams = new URLSearchParams();
+                            for (const pair of formData) {
+                                formParams.append(pair[0], pair[1]);
+                            }
+
+                            // Send AJAX request
+                            fetch('fetch_return.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                },
+                                body: formParams.toString()
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'success') {
+                                    alert('회수 요청이 성공적으로 제출되었습니다.');
+                                    // Close the modal
+                                    returnModal.style.display = 'none';
+                                    // Optionally, refresh the table or update the UI
+                                    location.reload(); // Reload the page to update the table
+                                } else if (data.status === 'error') {
+                                    alert(data.message);
+                                    // Optionally, show the error icon
+                                    visitDateInput.classList.add('input-error');
+                                    visitDateErrorIcon.style.display = 'inline';
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('회수 요청 처리 중 오류가 발생했습니다.');
+                            });
+                        });
+                    }
                 })
                 .catch(error => console.error('Error:', error));
         });
     });
 
-
-    // 모달 밖을 클릭하면 모달 닫기
-    window.addEventListener('click', (event) => {
-        if (event.target === extendModal || event.target === returnModal) {
-            extendModal.style.display = 'none';
-            returnModal.style.display = 'none';
-        }
-    });
 </script>
 
 <?php

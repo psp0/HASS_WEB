@@ -643,22 +643,25 @@ if (!empty($model_ids_requests)) {
     </div>
 </div>
 
-<!-- 요청 수정 모달 -->
+<!-- 요청 수정 모달-->
 <div id="edit-modal" class="modal-overlay">
-    <div class="modal-container">
-        <h2>요청 수정</h2>
+    <div class="modal-container edit-modal">
+        <h2 style="text-align: center;">요청 수정</h2>
+        <div style="text-align: center;">
+            <h4><span style="font-size: 0.9em; color: red;">(현재 시각 기준 24시간 이후 9:00 - 18:00 선택)</span></h4>
+        </div>
         <form id="edit-form">
             <input type="hidden" name="request_id" id="edit-request-id" value="">
             <input type="hidden" name="preference_id_1" id="edit-preference-id-1" value="">
             <input type="hidden" name="preference_id_2" id="edit-preference-id-2" value="">
 
             <div class="form-group">
-                <label for="prefer-date1">선호일자 1</label>
+                <label for="prefer-date1"><span class="text-red-500">*</span> 선호일자 1</label>
                 <input type="datetime-local" name="prefer_date1" id="edit-prefer-date1" required>
             </div>
 
             <div class="form-group">
-                <label for="prefer-date2">선호일자 2</label>
+                <label for="prefer-date2"><span class="text-red-500">*</span> 선호일자 2</label>
                 <input type="datetime-local" name="prefer_date2" id="edit-prefer-date2" required>
             </div>
 
@@ -669,6 +672,8 @@ if (!empty($model_ids_requests)) {
         </form>
     </div>
 </div>
+
+
 
 
 <!-- 리뷰 작성/수정 모달 -->
@@ -708,6 +713,9 @@ if (!empty($model_ids_requests)) {
 <div id="repair-modal" class="modal-overlay">
     <div class="modal-container">
         <h1>수리 신청</h1>
+        <div style="text-align: center;">
+            <h4><span style="font-size: 0.9em; color: red;">(현재 시각 기준 24시간 이후 9:00 - 18:00 선택)</span></h4>
+        </div>
         <form id="repair-form">
             <div class="mb-4">
                 <label>
@@ -716,11 +724,11 @@ if (!empty($model_ids_requests)) {
                 <div class="space-y-2">
                     <div class="flex items-center">
                         <span>1</span>
-                        <input type="datetime-local" name="preferred_datetime1" class="flex-1" required>
+                        <input type="datetime-local" name="preferred_datetime1" id="preferred-datetime1" class="flex-1" required>
                     </div>
                     <div class="flex items-center">
                         <span>2</span>
-                        <input type="datetime-local" name="preferred_datetime2" class="flex-1" required>
+                        <input type="datetime-local" name="preferred_datetime2" id="preferred-datetime2" class="flex-1" required>
                     </div>
                 </div>
             </div>
@@ -728,8 +736,7 @@ if (!empty($model_ids_requests)) {
                 <label>
                     <span class="text-red-500">*</span> 증상 (최대 1000자)
                 </label>
-
-                <textarea name="symptom" rows="6" maxlength="980" required></textarea>
+                <textarea name="symptom" rows="6" maxlength="1000" required></textarea>
             </div>
             <input type="hidden" name="subscription_id" id="repair-subscription-id" value="">
             <div class="flex space-x-2">
@@ -739,6 +746,7 @@ if (!empty($model_ids_requests)) {
         </form>
     </div>
 </div>
+
 
 <script>
     function showContent(contentId, group) {
@@ -757,6 +765,53 @@ if (!empty($model_ids_requests)) {
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+        // 24시간 이후 + 9시 ~ 18시 제한 설정
+        const now = new Date();
+        now.setHours(now.getHours() + 24); // 현재 시간 기준으로 24시간 이후
+
+        const minDate = new Date(now.setHours(9, 0, 0, 0)); // 최소값: 오전 9시
+        const maxDate = new Date(now.setHours(18, 0, 0, 0)); // 최대값: 오후 6시
+
+        const datetime1 = document.getElementById("preferred-datetime1");
+        const datetime2 = document.getElementById("preferred-datetime2");
+
+        const setMinDateTime = (input) => {
+            const isoMinDate = minDate.toISOString().slice(0, 16);
+            input.min = isoMinDate;
+        };
+
+        setMinDateTime(datetime1);
+        setMinDateTime(datetime2);
+
+        const validateDateTime = (input) => {
+            const value = input.value;
+            if (!value) {
+                input.setCustomValidity("필수 항목입니다.");
+                input.classList.add("border-red-500");
+            } else {
+                const selectedDate = new Date(value);
+                const minDate = new Date(input.min);
+
+                // 최소 날짜와 시간 조건
+                if (selectedDate < minDate) {
+                    input.setCustomValidity("방문 날짜는 현재 시간으로부터 최소 24시간 이후여야 합니다.");
+                    input.classList.add("border-red-500");
+                }
+                // 9시 ~ 18시 조건
+                else if (selectedDate.getHours() < 9 || selectedDate.getHours() >= 18) {
+                    input.setCustomValidity("방문 시간은 오전 9시부터 오후 6시 사이여야 합니다.");
+                    input.classList.add("border-red-500");
+                } else {
+                    input.setCustomValidity("");
+                    input.classList.remove("border-red-500");
+                }
+            }
+            input.reportValidity();
+        };
+
+        datetime1.addEventListener("input", () => validateDateTime(datetime1));
+        datetime2.addEventListener("input", () => validateDateTime(datetime2));
+
         // 모달 열기 (리뷰 모달)
         document.querySelectorAll('.review-button').forEach(function(button) {
             button.addEventListener('click', function() {
