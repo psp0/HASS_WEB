@@ -182,6 +182,11 @@ include BASE_PATH . '/includes/company_header.php';
     .modal-content form button:hover {
         background-color: #0056b3;
     }
+    .required-star {
+        color: red;
+        margin-right: 2px;
+    }
+
 </style>
 
 <div class="data-container">

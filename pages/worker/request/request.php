@@ -10,6 +10,11 @@ include BASE_PATH . '/includes/worker_header.php';
         overflow-y: auto;
     }
 
+    .required-star {
+        color: red;
+        margin-right: 2px;
+    }
+
     #modal-content form {
         display: flex;
         flex-direction: column;

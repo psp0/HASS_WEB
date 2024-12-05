@@ -114,13 +114,13 @@ if ($subscriptionId && $customerId) {
      
  
 
-    echo "<h3>연장할 년수 선택</h3>";
+    echo "<h3><span class='required-star'>*</span> 연장할 년수 선택</h3>";
     echo "<form action='fetch_extend.php' method='POST'>";
     echo "<input type='hidden' id='subscriptionId' name='subscriptionId' value='" . htmlspecialchars($subscriptionId) . "' />";  
         
     // 전문가 선택 박스
-    echo "<select name='extension_years' id='extension_years'>";
-    echo "<option value='' selected disabled>선택하세요</option>";  // 디폴트로 '선택하세요' 옵션 추가
+    echo "<select name='extension_years' id='extension_years'required>";
+    echo "<option value='' selected disabled>선택하세요</option>"; 
     echo "<option value='1'>+1년</option>";
     echo "<option value='2'>+2년</option>";
     echo "<option value='3'>+3년</option>";
