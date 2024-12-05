@@ -96,7 +96,7 @@ include BASE_PATH . '/includes/customer_header.php';
     }
 
     .signup-button:hover {
-            background-color: lightskyblue; 
+        background-color: lightskyblue; 
     }
 </style>
 
@@ -160,7 +160,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     oci_close($conn);
 ?>
  
-
 <?php
 include BASE_PATH . '/includes/footer.php';
 ?>
