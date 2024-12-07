@@ -46,9 +46,8 @@ try {
                 'message' => '회원탈퇴가 정상적으로 처리되었습니다.'
             ]);
         } else {
-            $e = oci_error($stmtB);
             oci_rollback($conn);
-            throw new Exception('회원 탈퇴 처리 중 오류가 발생했습니다. 오류 : ' .$e['message']);
+            throw new Exception('회원 탈퇴 처리 중 오류가 발생했습니다.');
         }
     } else {
         echo json_encode([
