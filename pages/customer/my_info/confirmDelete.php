@@ -19,7 +19,7 @@ $customer_id = $_SESSION['customer_id'];
 try {
     $queryA = "SELECT 
                     CASE
-                        WHEN COUNT(*) = 0 THEN 'No Subscription'
+                        WHEN EXPIRED_DATE < SYSDATE THEN 'Expired'
                         ELSE 'Subscribed'
                     END AS SUBSCRIPTION_STATUS
                 FROM SUBSCRIPTION
@@ -32,35 +32,35 @@ try {
     }
 
     $row = oci_fetch_array($stmtA);
-    if ($row['SUBSCRIPTION_STATUS'] === 'Subscribed') {
-        echo json_encode([ 
+    if ($row['SUBSCRIPTION_STATUS'] === 'Expired') {
+        $queryB = "DELETE FROM CUSTOMER WHERE CUSTOMER_ID = :customer_id";
+        $stmtB = oci_parse($conn, $queryB);
+        oci_bind_by_name($stmtB, ':customer_id', $customer_id);
+
+        if (oci_execute($stmtB)) {
+            oci_commit($conn);
+            session_unset();
+            session_destroy();
+            echo json_encode([
+                'status' => 'success',
+                'message' => '회원탈퇴가 정상적으로 처리되었습니다.'
+            ]);
+        } else {
+            $e = oci_error($stmtB);
+            oci_rollback($conn);
+            throw new Exception('회원 탈퇴 처리 중 오류가 발생했습니다. 오류 : ' .$e['message']);
+        }
+    } else {
+        echo json_encode([
             'status' => 'error',
-            'message' => '현재 구독 중인 상품이 있어 회원 탈퇴를 처리할 수 없습니다.'
+            'message' => '현재 구독이 만료되지 않았습니다.'
         ]);
         exit;
-    }
-
-    $queryB = "DELETE FROM CUSTOMER WHERE CUSTOMER_ID = :customer_id";
-    $stmtB = oci_parse($conn, $queryB);
-    oci_bind_by_name($stmtB, ':customer_id', $customer_id);
-
-    if (oci_execute($stmtB)) {
-        oci_commit($conn);
-        session_unset();
-        session_destroy();
-        echo json_encode([
-            'status' => 'success',
-            'message' => '회원탈퇴가 정상적으로 처리되었습니다.'
-        ]);
-    } else {
-        oci_rollback($conn);
-        throw new Exception('회원 탈퇴 처리 중 오류가 발생했습니다.');
     }
 } catch (Exception $e) {
     oci_rollback($conn);
     echo json_encode(['status' => 'error', 'message' => '예외 발생: ' . $e->getMessage()]);
 }
-
 oci_free_statement($stmtA);
 oci_free_statement($stmtB);
 oci_close($conn);
