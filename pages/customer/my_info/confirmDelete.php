@@ -19,7 +19,7 @@ $customer_id = $_SESSION['customer_id'];
 try {
     $queryA = "SELECT 
                     CASE
-                        WHEN EXPIRED_DATE < SYSDATE THEN 'Expired'
+                        WHEN ADD_MONTHS(BEGIN_DATE, SUBSCRIPTION_YEAR * 12) < SYSDATE THEN 'Expired'
                         ELSE 'Subscribed'
                     END AS SUBSCRIPTION_STATUS
                 FROM SUBSCRIPTION
