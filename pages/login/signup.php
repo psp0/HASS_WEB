@@ -8,14 +8,15 @@ include BASE_PATH . '/includes/customer_header.php';
     .c-main-content {
         display: flex;
         justify-content: center;
-
+        align-items: center;
+        height: auto;
     }
 
     .signup-container {
         background-color: white;
         padding: 20px;
         border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
         text-align: left;
         width: 400px;
     }
@@ -25,6 +26,7 @@ include BASE_PATH . '/includes/customer_header.php';
         padding: 3px;
         margin: 5px 0;
         font-size: 13px;
+        box-sizing: border-box;
     }
 
     .signup-container button {
@@ -106,9 +108,16 @@ include BASE_PATH . '/includes/customer_header.php';
         margin-left: -5px;
         vertical-align: super;
     }
+    
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    }
 </style>
 
 <div class="signup-container">
+        <h3 style="text-align: center; margin-bottom: 0px;">회원가입</h3>
         <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" onsubmit="return validateForm()">
             <label for="userID">ID <span class="required">*</span></label>
             <div class="postal-container">

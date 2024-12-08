@@ -8,19 +8,18 @@ include BASE_PATH . '/includes/customer_header.php';
     .c-main-content{
         display: flex;
         justify-content: center;
-        
+        align-items: center;
+        height: auto;
+        margin: 0;
+        padding: 0;
     }
     .myinfo-container {
         background-color: white;
         padding: 20px;
         border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
         text-align: left;
         width: 400px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
     }
 
     .myinfo-container input {
@@ -108,12 +107,12 @@ include BASE_PATH . '/includes/customer_header.php';
         margin-left: -5px;
         vertical-align: super;
     }
+
     * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
+    }
 </style>
 <script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -214,7 +213,7 @@ oci_free_statement($stmtB);
 
 
 <div class="myinfo-container">
-    <h3 style="text-align: center; margin-bottom: 20px;">회원정보 수정</h3>
+    <h3 style="text-align: center; margin-bottom: 0px;">회원정보 수정</h3>
     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
         <label for="userID">ID</label>
         <input type="text" name="id" value="<?php echo htmlspecialchars($currentUserID); ?>" readonly>

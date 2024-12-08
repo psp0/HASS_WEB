@@ -78,7 +78,7 @@ include BASE_PATH . '/includes/customer_header.php';
 
     .signup-button {
         padding: 10px;
-        background-color: gray;
+        background-color: lightblue;
         color: white;
         border: none;
         border-radius: 5px;
