@@ -105,7 +105,7 @@ include BASE_PATH . '/includes/worker_header.php';
 
             $subscriptionQuery = "SELECT 
             SUBSCRIPTION_ID, CUSTOMER_ID, TO_CHAR(BEGIN_DATE, 'YYYY-MM-DD HH24:MI:SS') AS BEGIN_DATE, 
-            TO_CHAR(EXPIRED_DATE, 'YYYY-MM-DD HH24:MI:SS') AS EXPIRED_DATE
+            TO_CHAR(ADD_MONTHS(BEGIN_DATE, SUBSCRIPTION_YEAR * 12), 'YYYY-MM-DD HH24:MI:SS') AS EXPIRED_DATE
             FROM SUBSCRIPTION
             WHERE SERIAL_NUMBER = :serial";
 
