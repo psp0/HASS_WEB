@@ -433,3 +433,35 @@
 .modal-overlay.show {
     display: flex;
 }
+/* 수정 완료 및 취소 버튼 스타일 */
+.edit-modal .submit-btn {
+    background-color: #3b82f6;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: bold;
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+}
+
+.edit-modal .submit-btn:hover {
+    background-color: #2563eb;
+}
+
+.edit-modal .close-btn {
+    background-color: #6b7280;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: bold;
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+}
+
+.edit-modal .close-btn:hover {
+    background-color: #4b5563;
+}

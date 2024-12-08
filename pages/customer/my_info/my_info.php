@@ -166,8 +166,7 @@ oci_free_statement($stmtB);
 oci_free_statement($review_stmt);
 
 
-
-// 진행 중인 요청 가져오기 (REQUEST_STATUS가 '방문완료'가 아닌 것) 
+// 진행 중인 요청 가져오기 (REQUEST_STATUS가 '방문완료'가 아닌 것)
 $ongoing_requests_query = "
     SELECT 
         r.REQUEST_ID,
@@ -307,9 +306,6 @@ if (!empty($model_ids_requests)) {
 } else {
     $models_requests = [];
 }
-
-// 관련된 VISIT 정보 가져오기 (요청용)
-// 이미 VISIT_DATE를 ongoing_requests와 expired_requests 쿼리에서 가져왔으므로 별도 조회 불필요함
 ?>
 
 <div class="container">
@@ -369,7 +365,7 @@ if (!empty($model_ids_requests)) {
                             $prefer_date2 = '';
                             $visit_date = '';
 
-                            // 선호일자 가져오기 (순서대로 할당)
+                            // 선호일자 가져오기
                             $pref_query = "
                                 SELECT PREFERENCE_ID, TO_CHAR(PREFER_DATE, 'YYYY-MM-DD HH24:MI:SS') AS PREFER_DATE
                                 FROM REQUEST_PREFERENCE_DATE
@@ -392,8 +388,8 @@ if (!empty($model_ids_requests)) {
                             if (count($pref_dates) >= 2) {
                                 $prefer_date2 = $pref_dates[1];
                             }
+                            
 
-                            // VISIT_DATE 가져오기
                             if ($request_status == '방문예정' || $request_status == '방문완료') {
                                 $visit_date_str = $request['VISIT_DATE'] ?? 'N/A';
                                 if ($visit_date_str != 'N/A') {
@@ -410,6 +406,9 @@ if (!empty($model_ids_requests)) {
 
                             // 요청 상태에 따른 버튼 표시 여부
                             $is_pending = ($request_status == '대기중');
+
+                            // 회수요청은 버튼 하나도 나오지 않도록
+                            $hideButtons = ($request_type === '회수');
                             ?>
                             <div class="product-card">
 
@@ -430,10 +429,16 @@ if (!empty($model_ids_requests)) {
                                     </p>
 
                                     <?php if ($request_status == '대기중') : ?>
-                                        <p>
-                                            선호일자 1: <span class="detail-value"><?= htmlspecialchars($prefer_date1) ?></span>&emsp;
-                                            선호일자 2: <span class="detail-value"><?= htmlspecialchars($prefer_date2) ?></span>
-                                        </p>
+                                        <?php if ($request_type === '회수'): ?>
+                                            <p>
+                                                선호일자: <span class="detail-value"><?= htmlspecialchars($prefer_date1) ?></span>
+                                            </p>
+                                        <?php else: ?>
+                                            <p>
+                                                선호일자 1: <span class="detail-value"><?= htmlspecialchars($prefer_date1) ?></span>&emsp;
+                                                선호일자 2: <span class="detail-value"><?= htmlspecialchars($prefer_date2) ?></span>
+                                            </p>
+                                        <?php endif; ?>
                                     <?php elseif ($request_status == '방문예정') : ?>
                                         <p>
                                             방문 예정일: <span class="detail-value"><?= htmlspecialchars($visit_date) ?></span>
@@ -445,9 +450,7 @@ if (!empty($model_ids_requests)) {
                                     <?php endif; ?>
                                 </div>
 
-
-
-                                <?php if ($is_pending) : ?>
+                                <?php if (!$hideButtons && $is_pending) : ?>
                                     <div class="product-actions">
                                         <button class="edit-button" onclick="openEditModal(<?= htmlspecialchars($request_id) ?>)">수정</button>
                                         <button class="cancel-button" onclick="cancelRequest(<?= htmlspecialchars($request_id) ?>, '<?= htmlspecialchars($request_type) ?>')">취소</button>
@@ -530,18 +533,15 @@ if (!empty($model_ids_requests)) {
                         <?php foreach ($current_subscriptions as $row) : ?>
                             <?php
                             $modelId = $row['MODEL_ID'];
-                            $imagePath = TEAM_PATH . "/pages/customer/model/model_img/model" . htmlspecialchars($modelId) . ".jpg?" . time();
                             $beginDate = DateTime::createFromFormat('Y-m-d H:i:s', $row['BEGIN_DATE']);
                             $expiredDate = DateTime::createFromFormat('Y-m-d H:i:s', $row['EXPIRED_DATE']);
                             $currentDate = new DateTime();
                             $diff = $currentDate->diff($expiredDate);
                             $daysRemaining = $diff->days;
 
-                            // 리뷰 존재 여부 확인
                             $hasReview = array_key_exists($modelId, $existing_reviews);
                             $buttonText = $hasReview ? '리뷰 수정' : '리뷰 작성';
 
-                            // 진행 중인 수리 요청 여부
                             $hasOngoingRequest = $row['HAS_ONGOING_REQUEST'];
                             ?>
                             <div class="product-card">
@@ -564,22 +564,16 @@ if (!empty($model_ids_requests)) {
                                     </ul>
                                 </div>
 
-
-
-
                                 <div class="product-actions">
                                     <?php if ($hasOngoingRequest) : ?>
-                                        <!-- 진행 중인 수리 요청이 있는 경우 버튼 글자 -->
                                         <button class="repair-button disabled" disabled>진행 중인 수리 요청이 있습니다</button>
                                     <?php else : ?>
-
                                         <button class="repair-button"
                                             data-serial-number="<?= htmlspecialchars($row['SERIAL_NUMBER']) ?>"
                                             data-subscription-id="<?= htmlspecialchars($row['SUBSCRIPTION_ID']) ?>">
                                             수리 신청
                                         </button>
                                     <?php endif; ?>
-
 
                                     <button class="review-button" data-model-id="<?= htmlspecialchars($row['MODEL_ID']) ?>" data-has-review="<?= $hasReview ? '1' : '0' ?>">
                                         <?= $buttonText ?>
@@ -596,9 +590,6 @@ if (!empty($model_ids_requests)) {
                         <?php foreach ($expired_subscriptions as $row) : ?>
                             <?php
                             $modelId = $row['MODEL_ID'];
-                            $imagePath = TEAM_PATH . "/pages/customer/model/model_img/model" . htmlspecialchars($modelId) . ".jpg?" . time();
-
-                            // 리뷰 존재 여부 확인
                             $hasReview = array_key_exists($modelId, $existing_reviews);
                             $buttonText = $hasReview ? '리뷰 수정' : '리뷰 작성';
                             ?>
@@ -622,12 +613,7 @@ if (!empty($model_ids_requests)) {
                                     </ul>
                                 </div>
 
-
-
-
-
                                 <div class="product-actions">
-
                                     <button class="review-button" data-model-id="<?= htmlspecialchars($row['MODEL_ID']) ?>" data-has-review="<?= $hasReview ? '1' : '0' ?>">
                                         <?= $buttonText ?>
                                     </button>
@@ -643,22 +629,28 @@ if (!empty($model_ids_requests)) {
     </div>
 </div>
 
-<!-- 요청 수정 모달 -->
+<!-- 요청 수정 모달-->
 <div id="edit-modal" class="modal-overlay">
-    <div class="modal-container">
-        <h2>요청 수정</h2>
+    <div class="modal-container edit-modal">
+        <h2 style="text-align: center;">요청 수정</h2>
+        <div style="text-align: center;">
+
+            <h4 id="edit-modal-info" style="font-size:0.9em; color:red;">
+            </h4>
+        </div>
+
         <form id="edit-form">
             <input type="hidden" name="request_id" id="edit-request-id" value="">
             <input type="hidden" name="preference_id_1" id="edit-preference-id-1" value="">
             <input type="hidden" name="preference_id_2" id="edit-preference-id-2" value="">
 
             <div class="form-group">
-                <label for="prefer-date1">선호일자 1</label>
+                <label for="edit-prefer-date1"><span class="text-red-500">*</span> 선호일자 1</label>
                 <input type="datetime-local" name="prefer_date1" id="edit-prefer-date1" required>
             </div>
 
             <div class="form-group">
-                <label for="prefer-date2">선호일자 2</label>
+                <label for="edit-prefer-date2"><span class="text-red-500">*</span> 선호일자 2</label>
                 <input type="datetime-local" name="prefer_date2" id="edit-prefer-date2" required>
             </div>
 
@@ -669,6 +661,8 @@ if (!empty($model_ids_requests)) {
         </form>
     </div>
 </div>
+
+
 
 
 <!-- 리뷰 작성/수정 모달 -->
@@ -708,6 +702,9 @@ if (!empty($model_ids_requests)) {
 <div id="repair-modal" class="modal-overlay">
     <div class="modal-container">
         <h1>수리 신청</h1>
+        <div style="text-align: center;">
+            <h4><span style="font-size: 0.9em; color: red;">(현재 시각 기준 24시간 이후 9:00 - 18:00 선택)</span></h4>
+        </div>
         <form id="repair-form">
             <div class="mb-4">
                 <label>
@@ -716,11 +713,11 @@ if (!empty($model_ids_requests)) {
                 <div class="space-y-2">
                     <div class="flex items-center">
                         <span>1</span>
-                        <input type="datetime-local" name="preferred_datetime1" class="flex-1" required>
+                        <input type="datetime-local" name="preferred_datetime1" id="preferred-datetime1" class="flex-1" required>
                     </div>
                     <div class="flex items-center">
                         <span>2</span>
-                        <input type="datetime-local" name="preferred_datetime2" class="flex-1" required>
+                        <input type="datetime-local" name="preferred_datetime2" id="preferred-datetime2" class="flex-1" required>
                     </div>
                 </div>
             </div>
@@ -728,8 +725,7 @@ if (!empty($model_ids_requests)) {
                 <label>
                     <span class="text-red-500">*</span> 증상 (최대 1000자)
                 </label>
-
-                <textarea name="symptom" rows="6" maxlength="980" required></textarea>
+                <textarea name="symptom" rows="6" maxlength="1000" required></textarea>
             </div>
             <input type="hidden" name="subscription_id" id="repair-subscription-id" value="">
             <div class="flex space-x-2">
@@ -741,6 +737,8 @@ if (!empty($model_ids_requests)) {
 </div>
 
 <script>
+    let editMinDateTime = null; // 요청 수정 시 적용할 최소 날짜/시간 저장
+
     function showContent(contentId, group) {
         const contentBoxes = document.querySelectorAll(`.content-box[data-group="${group}"]`);
         contentBoxes.forEach((box) => box.classList.add('hidden'));
@@ -757,7 +755,51 @@ if (!empty($model_ids_requests)) {
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        // 모달 열기 (리뷰 모달)
+        const preferredDatetime1 = document.getElementById('preferred-datetime1');
+        const preferredDatetime2 = document.getElementById('preferred-datetime2');
+        const editPreferDate1 = document.getElementById('edit-prefer-date1');
+        const editPreferDate2 = document.getElementById('edit-prefer-date2');
+
+        // 24시간제, YYYY-MM-DD HH:MM:SS 형태로 포맷팅하는 함수
+        function formatDateTime(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hour = String(date.getHours()).padStart(2, '0');
+            const minute = String(date.getMinutes()).padStart(2, '0');
+            const second = String(date.getSeconds()).padStart(2, '0');
+
+            return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+        }
+
+        function validateDateTime(input) {
+            input.setCustomValidity("");
+            input.classList.remove("border-red-500");
+
+            const value = input.value;
+            if (!value) {
+                input.setCustomValidity("필수 항목입니다.");
+                input.classList.add("border-red-500");
+            } else {
+                const selectedDate = new Date(value);
+
+                if (selectedDate < editMinDateTime) {
+                    input.setCustomValidity("방문 날짜는 요청 생성 시간으로부터 최소 24시간 이후여야 합니다.");
+                    input.classList.add("border-red-500");
+                } else if (selectedDate.getHours() < 9 || selectedDate.getHours() >= 18) {
+                    input.setCustomValidity("방문 시간은 오전 9시부터 오후 6시 사이여야 합니다.");
+                    input.classList.add("border-red-500");
+                }
+            }
+
+            input.reportValidity();
+        };
+
+        if (preferredDatetime1) preferredDatetime1.addEventListener("input", () => validateDateTime(preferredDatetime1));
+        if (preferredDatetime2) preferredDatetime2.addEventListener("input", () => validateDateTime(preferredDatetime2));
+        if (editPreferDate1) editPreferDate1.addEventListener("input", () => validateDateTime(editPreferDate1));
+        if (editPreferDate2) editPreferDate2.addEventListener("input", () => validateDateTime(editPreferDate2));
+
         document.querySelectorAll('.review-button').forEach(function(button) {
             button.addEventListener('click', function() {
                 const modelId = button.getAttribute('data-model-id');
@@ -765,17 +807,14 @@ if (!empty($model_ids_requests)) {
                 document.getElementById('model-id-input').value = modelId;
                 document.getElementById('review-modal').classList.add('show');
 
-                // 모달 제목 변경
                 const modalTitle = document.getElementById('modal-title');
                 modalTitle.textContent = hasReview ? '리뷰 수정' : '리뷰 작성';
 
-                // 기존 리뷰가 있다면 값 채우기
                 if (hasReview) {
                     fetch(`get_review.php?model_id=${modelId}`)
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                // 별점 설정
                                 const rating = parseInt(data.rating);
                                 const ratingInput = document.getElementById('rating-input');
                                 ratingInput.value = rating;
@@ -785,7 +824,6 @@ if (!empty($model_ids_requests)) {
                                     s.classList.toggle('selected', index < rating);
                                 });
 
-                                // 추가 코멘트 설정
                                 const additionalComment = document.getElementById('additional-comment');
                                 additionalComment.value = data.additional_comment;
                             } else {
@@ -797,7 +835,6 @@ if (!empty($model_ids_requests)) {
                             alert('리뷰 정보를 불러오는 중 오류가 발생했습니다.');
                         });
                 } else {
-                    // 기존 값 초기화
                     document.getElementById('rating-input').value = '';
                     document.getElementById('additional-comment').value = '';
                     document.querySelectorAll('.star').forEach(s => s.classList.remove('selected'));
@@ -805,7 +842,6 @@ if (!empty($model_ids_requests)) {
             });
         });
 
-        // 모달 닫기 (리뷰, 수정, 수리 신청 모달)
         document.querySelectorAll('.close-btn').forEach(function(button) {
             button.addEventListener('click', function() {
                 document.getElementById('review-modal').classList.remove('show');
@@ -814,7 +850,6 @@ if (!empty($model_ids_requests)) {
             });
         });
 
-        // 별점 선택 기능
         const stars = document.querySelectorAll('.star');
         const ratingInput = document.getElementById('rating-input');
 
@@ -833,18 +868,14 @@ if (!empty($model_ids_requests)) {
             });
         });
 
-        // 리뷰 폼 제출 처리
         const reviewForm = document.getElementById('review-form');
         reviewForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // 기본 폼 제출 동작 방지
-
-            // 별점 유효성 검사
+            event.preventDefault();
             if (!ratingInput.value) {
                 alert('별점을 선택해주세요.');
                 return;
             }
 
-            // 서버로 폼 데이터 전송
             const formData = new FormData(reviewForm);
 
             fetch('submit_review.php', {
@@ -855,15 +886,13 @@ if (!empty($model_ids_requests)) {
                 .then(result => {
                     if (result.trim() === 'success') {
                         alert('리뷰가 등록되었습니다.');
-                        // 폼 초기화 및 모달 닫기
                         reviewForm.reset();
                         ratingInput.value = '';
                         stars.forEach((s) => s.classList.remove('selected'));
                         document.getElementById('review-modal').classList.remove('show');
-                        // 페이지 새로고침하여 버튼 텍스트 업데이트
                         location.reload();
                     } else {
-                        alert(result); // 서버로부터 받은 에러 메시지 표시
+                        alert(result);
                     }
                 })
                 .catch(error => {
@@ -872,10 +901,8 @@ if (!empty($model_ids_requests)) {
                 });
         });
 
-        // 수리 신청 버튼 클릭 시 모달 열기 또는 알림 표시
         document.querySelectorAll('.repair-button').forEach(function(button) {
             button.addEventListener('click', function() {
-                // 버튼이 비활성화된 경우 (진행 중인 수리 요청이 있는 경우)
                 if (button.classList.contains('disabled')) {
                     alert('현재 진행 중인 수리 요청이 있습니다.');
                     return;
@@ -887,47 +914,25 @@ if (!empty($model_ids_requests)) {
             });
         });
 
-        // 수리 신청 모달 닫기
         document.querySelectorAll('#repair-modal .close-button').forEach(function(button) {
             button.addEventListener('click', function() {
                 document.getElementById('repair-modal').classList.remove('show');
             });
         });
 
-        // 수리 신청 폼 제출 처리
-        document.getElementById('repair-form').addEventListener('submit', function(event) {
+        const repairForm = document.getElementById('repair-form');
+        repairForm.addEventListener('submit', function(event) {
             event.preventDefault();
 
-            // 폼 데이터 가져오기
+            validateDateTime(preferredDatetime1);
+            validateDateTime(preferredDatetime2);
+
+            if (!preferredDatetime1.checkValidity() || !preferredDatetime2.checkValidity()) {
+                return;
+            }
+
             const formData = new FormData(this);
 
-            // 입력 검증
-            const preferredDatetime1 = formData.get('preferred_datetime1');
-            const preferredDatetime2 = formData.get('preferred_datetime2');
-            const symptom = formData.get('symptom');
-
-            if (!preferredDatetime1 || !preferredDatetime2 || !symptom) {
-                alert('모든 필수 항목을 입력해주세요.');
-                return;
-            }
-
-            // 현재 시간 기준 24시간 이후인지 확인
-            const now = new Date();
-            const koreaTimeOffset = 9 * 60; // UTC+9 시간차를 분 단위로 계산
-            const nowKorea = new Date(now.getTime() + (now.getTimezoneOffset() + koreaTimeOffset) * 60000);
-
-            const datetime1 = new Date(preferredDatetime1);
-            const datetime2 = new Date(preferredDatetime2);
-
-            const diff1 = datetime1 - nowKorea;
-            const diff2 = datetime2 - nowKorea;
-
-            if (diff1 < 24 * 60 * 60 * 1000 || diff2 < 24 * 60 * 60 * 1000) {
-                alert('선호 방문 일자 및 시간은 현재로부터 24시간 이후여야 합니다.');
-                return;
-            }
-
-            // 서버로 전송 (AJAX)
             fetch('submit_repair_request.php', {
                     method: 'POST',
                     body: formData
@@ -936,13 +941,11 @@ if (!empty($model_ids_requests)) {
                 .then(result => {
                     if (result.trim() === 'success') {
                         alert('수리 신청이 완료되었습니다.');
-                        // 폼 초기화 및 모달 닫기
                         this.reset();
                         document.getElementById('repair-modal').classList.remove('show');
-                        // 페이지 새로고침하여 버튼 상태 업데이트
                         location.reload();
                     } else {
-                        alert(result); // 서버로부터 받은 에러 메시지 표시
+                        alert(result);
                     }
                 })
                 .catch(error => {
@@ -951,9 +954,7 @@ if (!empty($model_ids_requests)) {
                 });
         });
 
-        // 요청 수정 모달 열기 함수
         window.openEditModal = function(requestId) {
-            // 현재 요청의 상세 정보 가져오기 via AJAX
             fetch(`get_request_details.php?request_id=${requestId}`)
                 .then(response => response.json())
                 .then(data => {
@@ -968,16 +969,27 @@ if (!empty($model_ids_requests)) {
                             alert('선호일자 정보가 충분하지 않습니다.');
                             return;
                         }
-                        // 선호일자 1 설정
+
+                        // 요청 생성일로부터 24시간 후 계산
+                        const requestCreated = new Date(request.DATE_CREATED.replace(' ', 'T'));
+                        const requestMinDateTime = new Date(requestCreated.getTime() + 24 * 60 * 60 * 1000);
+                        editMinDateTime = requestMinDateTime;
+
                         document.getElementById('edit-request-id').value = request.REQUEST_ID;
                         document.getElementById('edit-preference-id-1').value = preferences[0].preference_id;
                         document.getElementById('edit-prefer-date1').value = preferences[0].prefer_date.replace(' ', 'T').substring(0, 16);
-
-                        // 선호일자 2 설정
                         document.getElementById('edit-preference-id-2').value = preferences[1].preference_id;
                         document.getElementById('edit-prefer-date2').value = preferences[1].prefer_date.replace(' ', 'T').substring(0, 16);
 
+                        const infoSpan = document.getElementById('edit-modal-info');
+                        const formattedTime = formatDateTime(editMinDateTime);
+                        infoSpan.textContent = `(${formattedTime} 이후 9:00 ~ 18:00 선택)`;
+
                         document.getElementById('edit-modal').classList.add('show');
+
+                        if (editPreferDate1) editPreferDate1.addEventListener("input", () => validateDateTime(editPreferDate1));
+                        if (editPreferDate2) editPreferDate2.addEventListener("input", () => validateDateTime(editPreferDate2));
+
                     } else {
                         alert('요청 정보를 불러오는 데 실패했습니다: ' + data.message);
                     }
@@ -988,33 +1000,28 @@ if (!empty($model_ids_requests)) {
                 });
         }
 
-        // 수정 모달 닫기
         document.querySelectorAll('#edit-modal .close-btn').forEach(function(button) {
             button.addEventListener('click', function() {
                 document.getElementById('edit-modal').classList.remove('show');
             });
         });
 
-        // 수정 폼 제출 처리
-        document.getElementById('edit-form').addEventListener('submit', function(event) {
+        const editForm = document.getElementById('edit-form');
+        editForm.addEventListener('submit', function(event) {
             event.preventDefault();
 
-            const formData = new FormData(this);
+            const preferDate1Input = document.getElementById('edit-prefer-date1');
+            const preferDate2Input = document.getElementById('edit-prefer-date2');
+            validateDateTime(preferDate1Input);
+            validateDateTime(preferDate2Input);
 
-            // 선호일자 유효성 검사 (24시간 이후)
-            const preferDate1 = new Date(formData.get('prefer_date1'));
-            const preferDate2 = new Date(formData.get('prefer_date2'));
-            const now = new Date();
-            const koreaOffset = 9 * 60; // UTC+9
-            const nowKorea = new Date(now.getTime() + (now.getTimezoneOffset() + koreaOffset) * 60000);
-
-            if (preferDate1 - nowKorea < 24 * 60 * 60 * 1000 || preferDate2 - nowKorea < 24 * 60 * 60 * 1000) {
-                alert('선호일자는 현재 시간으로부터 24시간 이후여야 합니다.');
+            if (!preferDate1Input.checkValidity() || !preferDate2Input.checkValidity()) {
                 return;
             }
 
-            // 선호일자와 preference_id를 배열로 구성
-            const preferences = [{
+            const formData = new FormData(this);
+            const preferences = [
+                {
                     preference_id: formData.get('preference_id_1'),
                     prefer_date: formData.get('prefer_date1'),
                 },
@@ -1024,7 +1031,6 @@ if (!empty($model_ids_requests)) {
                 },
             ];
 
-            // 서버로 전송 (JSON 형식)
             fetch('update_request_preferences.php', {
                     method: 'POST',
                     headers: {
@@ -1037,7 +1043,7 @@ if (!empty($model_ids_requests)) {
                 })
                 .then(response => response.text())
                 .then(text => {
-                    console.log('Update Response text:', text); // 응답 텍스트 출력
+                    console.log('Update Response text:', text);
                     try {
                         const data = JSON.parse(text);
                         if (data.success) {
@@ -1075,7 +1081,7 @@ if (!empty($model_ids_requests)) {
                 })
                 .then(response => response.text())
                 .then(text => {
-                    console.log('Cancel Response text:', text); // 응답 텍스트 출력
+                    console.log('Cancel Response text:', text);
                     try {
                         const data = JSON.parse(text);
                         if (data.success) {
@@ -1096,6 +1102,12 @@ if (!empty($model_ids_requests)) {
         };
     });
 </script>
+
+
+
+
+
+
 
 
 
