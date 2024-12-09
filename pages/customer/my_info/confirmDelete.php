@@ -32,7 +32,7 @@ try {
     }
 
     $row = oci_fetch_array($stmtA);
-    if ($row['SUBSCRIPTION_STATUS'] === 'Expired') {
+    if (!$row || $row['SUBSCRIPTION_STATUS'] === 'Expired') {
         $queryB = "DELETE FROM CUSTOMER WHERE CUSTOMER_ID = :customer_id";
         $stmtB = oci_parse($conn, $queryB);
         oci_bind_by_name($stmtB, ':customer_id', $customer_id);
