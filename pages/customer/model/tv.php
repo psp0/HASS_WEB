@@ -750,6 +750,14 @@ include BASE_PATH . '/includes/customer_header.php';
       document.querySelector(".filter-panel").style.pointerEvents = "auto";
       document.body.style.overflow = "auto";
     });
+    const filterForm = document.querySelector(".filter-panel form");
+    const checkboxes = filterForm.querySelectorAll("input[type=checkbox]");
+
+    checkboxes.forEach((checkbox) => {
+      checkbox.addEventListener("change", () => {
+        filterForm.submit();
+      });
+    });
   });
 </script>
 
