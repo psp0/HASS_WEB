@@ -119,7 +119,7 @@ ORDER BY
                                 if (empty($row['EXPIRED_DATE'])) {
                                     echo '구독대기';
                                 } else {  
-                                    $expiredDate = DateTime::createFromFormat('y.m.d H:i', $row['EXPIRED_DATE']);            
+                                    $expiredDate = DateTime::createFromFormat('Y-m-d H:i:s', $row['EXPIRED_DATE']);                       
                                         $currentDate = new DateTime(); 
                                         if ($expiredDate > $currentDate) {
                                             echo '구독중';
