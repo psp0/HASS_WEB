@@ -388,7 +388,7 @@ if (!empty($model_ids_requests)) {
                             if (count($pref_dates) >= 2) {
                                 $prefer_date2 = $pref_dates[1];
                             }
-                            
+
 
                             if ($request_status == '방문예정' || $request_status == '방문완료') {
                                 $visit_date_str = $request['VISIT_DATE'] ?? 'N/A';
@@ -754,6 +754,29 @@ if (!empty($model_ids_requests)) {
         }
     }
 
+    function getKoreaTimePlus24() {
+        const now = new Date();
+
+        // UTC 시간으로 변환
+        const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+
+        // 한국은 UTC+9
+        const koreaOffset = 9 * 60 * 60 * 1000;
+        const koreaTime = new Date(utc + koreaOffset);
+
+        // 24시간 추가
+        koreaTime.setHours(koreaTime.getHours() + 24);
+
+        // YYYY-MM-DDTHH:MM 형식으로 포맷팅
+        const year = koreaTime.getFullYear();
+        const month = String(koreaTime.getMonth() + 1).padStart(2, '0');
+        const day = String(koreaTime.getDate()).padStart(2, '0');
+        const hours = String(koreaTime.getHours()).padStart(2, '0');
+        const minutes = String(koreaTime.getMinutes()).padStart(2, '0');
+
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         const preferredDatetime1 = document.getElementById('preferred-datetime1');
         const preferredDatetime2 = document.getElementById('preferred-datetime2');
@@ -783,8 +806,12 @@ if (!empty($model_ids_requests)) {
             } else {
                 const selectedDate = new Date(value);
 
-                if (selectedDate < editMinDateTime) {
-                    input.setCustomValidity("방문 날짜는 요청 생성 시간으로부터 최소 24시간 이후여야 합니다.");
+                // 현재 한국 시각 기준 24시간 후
+                const minDateTime = new Date(getKoreaTimePlus24().replace('T', ' '));
+                const koreaNowPlus24 = minDateTime;
+
+                if (selectedDate < koreaNowPlus24) {
+                    input.setCustomValidity("방문 날짜는 현재 한국 시각 기준으로 최소 24시간 이후여야 합니다.");
                     input.classList.add("border-red-500");
                 } else if (selectedDate.getHours() < 9 || selectedDate.getHours() >= 18) {
                     input.setCustomValidity("방문 시간은 오전 9시부터 오후 6시 사이여야 합니다.");
@@ -793,7 +820,7 @@ if (!empty($model_ids_requests)) {
             }
 
             input.reportValidity();
-        };
+        }
 
         if (preferredDatetime1) preferredDatetime1.addEventListener("input", () => validateDateTime(preferredDatetime1));
         if (preferredDatetime2) preferredDatetime2.addEventListener("input", () => validateDateTime(preferredDatetime2));
@@ -910,6 +937,11 @@ if (!empty($model_ids_requests)) {
 
                 const subscriptionId = button.getAttribute('data-subscription-id');
                 document.getElementById('repair-subscription-id').value = subscriptionId;
+
+                const minDateTime = getKoreaTimePlus24();
+                document.getElementById('preferred-datetime1').min = minDateTime;
+                document.getElementById('preferred-datetime2').min = minDateTime;
+
                 document.getElementById('repair-modal').classList.add('show');
             });
         });
@@ -1020,8 +1052,7 @@ if (!empty($model_ids_requests)) {
             }
 
             const formData = new FormData(this);
-            const preferences = [
-                {
+            const preferences = [{
                     preference_id: formData.get('preference_id_1'),
                     prefer_date: formData.get('prefer_date1'),
                 },
